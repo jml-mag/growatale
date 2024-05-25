@@ -5,7 +5,7 @@ import { Amplify } from "aws-amplify";
 import "@aws-amplify/ui-react/styles.css";
 import outputs from "../amplify_outputs.json";
 import Image from "next/image";
-import defaultBackground from "@/public/home-bg.webp";
+import defaultBackground from "@/public/home-bg-2.png";
 import logo from "@/public/logo.png";
 
 Amplify.configure(outputs);
@@ -23,11 +23,16 @@ export default function Home() {
           priority
         />
       </div>
-      <div className="w-full">
-        <Image className="pt-12 mx-auto sm:ml-12 md:ml-32" src={logo} alt="Grow A Tale logo" />
-      </div>
-      <main>
-        <div className="text-center text-blue-100 text-5xl font-extrabold px-7 py-4 mt-6 border-2 border-blue-100 rounded-3xl bg-blue-900 bg-opacity-70 inline-block">
+      <main className="">
+        <div className="w-full sm:w-auto sm:mr-4">
+          <Image
+            className="pt-12 sm:pt-0 mx-auto sm:ml-0"
+            src={logo}
+            alt="Grow A Tale logo"
+          />
+        </div>
+
+        <div className="mt-20 sm:mt-0 sm:ml-4 text-center text-sky-300 text-3xl sm:text-4xl md:text-6xl font-extrabold px-7 py-3 sm:py-4 border-4 border-sky-500 rounded-3xl bg-stone-950 bg-opacity-80 inline-block hover:text-sky-100 hover:border-sky-300">
           <Link href="/play">Play</Link>
         </div>
       </main>

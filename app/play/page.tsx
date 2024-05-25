@@ -1,37 +1,93 @@
+// File Path: app/play/page.tsx
+
 "use client";
-import { Authenticator } from "@aws-amplify/ui-react";
-import { Amplify } from "aws-amplify";
-import "@aws-amplify/ui-react/styles.css";
-import outputs from "@/amplify_outputs.json";
-import Image from "next/image";
-import defaultBackground from "@/public/home-bg.webp";
-import logo from "@/public/logo.png";
+import { useState, useEffect } from "react";
+import Link from "next/link";
+import { useAuth } from "@/context/AuthContext";
+import { generateClient, Client } from "aws-amplify/data";
+import { type Schema } from "@/amplify/data/resource";
+import { generateInitialPrompt } from "@/GameEngine/generatePrompt2";
 
-Amplify.configure(outputs);
+const client: Client<Schema> = generateClient<Schema>();
 
-export default function Home() {
-  return (
-    <Authenticator className="bg-none" variation="modal">
-      {({ signOut, user }) => (
-        <>
-          <div className="w-screen h-screen fixed -z-30">
-            <Image
-              src={defaultBackground}
-              alt="Welcome to Grow a Tale"
-              fill
-              style={{ objectFit: "cover" }}
-              priority
-            />
-          </div>
-          <div className="center top-10 left-8">
-            <Image src={logo} alt="Grow A Tale logo" />
-          </div>
-          <main className="flex min-h-screen flex-col items-center justify-between">
-            <h1>Hello {user?.username}</h1>
-            <button onClick={signOut}>Sign out</button>
-          </main>
-        </>
-      )}
-    </Authenticator>
-  );
+interface Game {
+  id: string;
+  title: string;
+  userId: string;
+  user: any;
 }
+
+const Play = () => {
+  const { signOut, user } = useAuth();
+  const [previousGames, setPreviousGames] = useState<Game[]>([]);
+  const [aiResponse, setAiResponse] = useState<string | null>(null);
+
+  useEffect(() => {
+    async function fetchPreviousGames() {
+      try {
+        const { data: games, errors } = await client.models.Story.list({
+          filter: { userId: { eq: user.id } },
+        });
+        if (!errors) {
+          setPreviousGames(games as Game[]);
+        } else {
+          console.error("Errors fetching games: ", errors);
+        }
+      } catch (error) {
+        console.error("Error fetching previous games: ", error);
+      }
+    }
+
+    fetchPreviousGames();
+  }, [user.id, user]);
+
+  const handleStartNewGame = async () => {
+    try {
+      const prompt = generateInitialPrompt();
+      const response = await fetch('/api/openai', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ prompt: prompt[0].content }),
+      });
+      const data = await response.json();
+      setAiResponse(data.message);
+    } catch (error) {
+      console.error("Error starting new game:", error);
+    }
+  };
+
+  useEffect(() => {
+    console.log(aiResponse);
+  }, [aiResponse]);
+
+  return (
+    <div className="text-center text-white">
+      <div>
+        <button onClick={signOut}>Sign Out</button>
+        <p>Welcome, {user.username}</p>
+      </div>
+      <h1 className="text-3xl font-bold">Your Games</h1>
+      <div>
+        {previousGames.length > 0 ? (
+          <ul>
+            {previousGames.map((game) => (
+              <li key={game.id}>
+                <Link href={`/play/${game.id}`}>{game.title}</Link>
+              </li>
+            ))}
+          </ul>
+        ) : (
+          <p>No previous games found.</p>
+        )}
+      </div>
+      <div>
+        <button onClick={handleStartNewGame}>Start New Game</button>
+      </div>
+      {aiResponse && <div className="mt-4"><p>{aiResponse}</p></div>}
+    </div>
+  );
+};
+
+export default Play;
