@@ -1,0 +1,23 @@
+{
+  "story": "In the heart of the Whispering Pine Forest, dense trees tower above like silent guardians. Sunlight filters through the thick canopy, casting intricate patterns on the forest floor. A narrow path, barely visible among the undergrowth, twists and turns, leading deeper into the woods. In the distance, the majestic silhouette of mountains rises against the azure sky. The air is filled with the earthy scent of pine and the occasional chirping of birds, crafting a sense of serene mystery.",
+  "scene_description": "Tall pine trees surround, their branches gently swaying in the midday breeze. Sunlight dances through the leaves, casting flickering shadows on the ground. A narrow, winding path stretches ahead, disappearing into the forest's embrace. Far away, the rugged outlines of mountains loom, their peaks kissed by wisps of clouds. The soft rustle of leaves and distant bird calls add an enigmatic touch to this serene landscape.",
+  "player_options": {
+    "directions": [
+      {
+        "direction": "forward",
+        "command_text": "Venture deeper",
+        "transition_text": "Step forward along the winding path, and journey deeper into the forest."
+      },
+      {
+        "direction": "right",
+        "command_text": "Turn right",
+        "transition_text": "Shift right, following a small trail covered in pine needles."
+      },
+      {
+        "direction": "left",
+        "command_text": "Turn left",
+        "transition_text": "Veer left, navigating around a mossy boulder and into thicker woods."
+      }
+    ]
+  }
+}

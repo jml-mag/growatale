@@ -13,10 +13,13 @@
     "aws-amplify": "^6.3.2",
     "framer-motion": "^11.2.6",
     "next": "14.2.3",
+    "node-fetch": "^3.3.2",
     "openai": "^4.47.1",
+    "path": "^0.12.7",
     "react": "^18",
     "react-dom": "^18",
-    "sharp": "^0.33.4"
+    "sharp": "^0.33.4",
+    "uuid": "^9.0.1"
   },
   "devDependencies": {
     "@aws-amplify/backend": "^1.0.2",

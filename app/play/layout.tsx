@@ -8,7 +8,9 @@ import { AuthProvider } from "@/context/AuthContext";
 
 Amplify.configure(outputs);
 
-export default function Layout({ children }: Readonly<{ children: React.ReactNode; }>) {
+export default function Layout({
+  children,
+}: Readonly<{ children: React.ReactNode }>) {
   return (
     <Authenticator variation="modal">
       {({ signOut = () => {}, user }) => {

@@ -4,6 +4,6 @@
 
 @layer base {
   body {
-    @apply bg-gradient-to-b from-stone-950 via-stone-900 to-stone-800 h-screen;
+    @apply bg-gradient-to-br from-black via-black to-gray-900 h-screen;
   }
 }

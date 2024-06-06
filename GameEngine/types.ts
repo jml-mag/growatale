@@ -9,18 +9,11 @@ export interface Attributes {
 export interface PlayerState {
     health: number;
     inventory: string[];
-    attributes: Attributes;
 }
 
 export type InteractionType = 'conflict' | 'opportunity';
 
 export type EffectFunction = (player: PlayerState) => PlayerState;
-
-export interface Interaction {
-    type: InteractionType;
-    description: string;
-    effect: EffectFunction;
-}
 
 export interface PlayerOption {
     direction: string;
@@ -29,7 +22,6 @@ export interface PlayerOption {
 }
 
 export interface Scene {
-    id: string;
     writer: string;
     artist: string;
     scene_description: string;
@@ -39,7 +31,6 @@ export interface Scene {
     player_move: string;
     image: string;
     audio: string;
-    interactions: Interaction[];
     story: string;
     playerOptions: PlayerOption[];
 }
