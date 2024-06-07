@@ -5,7 +5,7 @@ const schema = a.schema({
     id: a.id().required(),
     image: a.string().required(),
     audio: a.string().required(),
-    actions_available: a.json().required(), // Use a.json() to store an array of objects
+    actions_available: a.string().required().array(),
     primary_text: a.string().required(),
     scene_description: a.string().required(),
     time: a.string().required(),
@@ -22,7 +22,7 @@ const schema = a.schema({
     artist: a.string().required(),
     current_scene: a.string().required(),
     player_health: a.integer().required(),
-    player_inventory: a.json().required(), // Use a.json() to store an array of strings
+    player_inventory: a.string().required().array(),
     primary_ai: a.string().required(),
     audio_ai: a.string().required(),
     image_ai: a.string().required(),

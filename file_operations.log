@@ -176,3 +176,31 @@
 2024-05-27 10:11:15,706 - INFO - Searched through /Users/jmlima/Desktop/working/growatale-2/GameEngine
 2024-05-27 10:11:15,707 - INFO - Searched through /Users/jmlima/Desktop/working/growatale-2/utils
 2024-05-27 10:11:15,707 - INFO - Operation completed. All code written to current-code.txt
+2024-06-07 07:56:59,400 - INFO - Appended content from amplify/backend.ts
+2024-06-07 07:56:59,400 - INFO - Appended content from amplify/auth/resource.ts
+2024-06-07 07:56:59,401 - INFO - Appended content from amplify/data/resource.ts
+2024-06-07 07:56:59,401 - INFO - Searched through /Users/jmlima/Desktop/working/growatale-1/amplify
+2024-06-07 07:56:59,401 - INFO - Appended content from app/layout.tsx
+2024-06-07 07:56:59,401 - INFO - Appended content from app/page.tsx
+2024-06-07 07:56:59,402 - INFO - Appended content from app/globals.css
+2024-06-07 07:56:59,402 - INFO - Appended content from app/api/openai/image/route.ts
+2024-06-07 07:56:59,402 - INFO - Appended content from app/api/openai/audio/route.ts
+2024-06-07 07:56:59,402 - INFO - Appended content from app/api/openai/primary/route.ts
+2024-06-07 07:56:59,402 - INFO - Appended content from app/play/layout.tsx
+2024-06-07 07:56:59,402 - INFO - Appended content from app/play/page.tsx
+2024-06-07 07:56:59,403 - INFO - Appended content from app/play/[gameId]/layout.tsx
+2024-06-07 07:56:59,403 - INFO - Appended content from app/play/[gameId]/page.tsx
+2024-06-07 07:56:59,403 - INFO - Searched through /Users/jmlima/Desktop/working/growatale-1/app
+2024-06-07 07:56:59,403 - INFO - Searched through /Users/jmlima/Desktop/working/growatale-1/public
+2024-06-07 07:56:59,403 - INFO - Appended content from components/generatePrompt.ts
+2024-06-07 07:56:59,403 - INFO - Appended content from components/GameScreen.tsx
+2024-06-07 07:56:59,403 - INFO - Searched through /Users/jmlima/Desktop/working/growatale-1/components
+2024-06-07 07:56:59,404 - INFO - Appended content from context/AuthContext.tsx
+2024-06-07 07:56:59,404 - INFO - Searched through /Users/jmlima/Desktop/working/growatale-1/context
+2024-06-07 07:56:59,404 - INFO - Appended content from GameEngine/generatePrompt.ts
+2024-06-07 07:56:59,404 - INFO - Appended content from GameEngine/generatePrompt2.ts
+2024-06-07 07:56:59,405 - INFO - Appended content from GameEngine/engine.ts
+2024-06-07 07:56:59,405 - INFO - Appended content from GameEngine/types.ts
+2024-06-07 07:56:59,405 - INFO - Appended content from GameEngine/index.ts
+2024-06-07 07:56:59,405 - INFO - Searched through /Users/jmlima/Desktop/working/growatale-1/GameEngine
+2024-06-07 07:56:59,405 - INFO - Operation completed. All code written to current-code.txt
