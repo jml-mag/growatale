@@ -1,8 +1,9 @@
+// /api/openai/audio/route.ts
 import { NextRequest, NextResponse } from 'next/server';
 import OpenAI from 'openai';
 
 const openai = new OpenAI({
-    apiKey: process.env.OPENAI_API_KEY, // Use a server-side environment variable
+    apiKey: process.env.OPENAI_API_KEY,
 });
 
 export async function POST(req: NextRequest) {
@@ -21,8 +22,9 @@ export async function POST(req: NextRequest) {
         }
 
         const buffer = Buffer.from(await response.arrayBuffer());
+        const audioBase64 = buffer.toString('base64');
 
-        return NextResponse.json(buffer);
+        return NextResponse.json({ audio_base64: audioBase64 });
     } catch (error: any) {
         console.error('OpenAI API call error:', error.message);
         return NextResponse.json({ error: 'OpenAI API call error', details: error.message }, { status: 500 });

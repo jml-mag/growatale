@@ -1,8 +1,9 @@
+// /api/openai/image/route.ts
 import { NextRequest, NextResponse } from 'next/server';
 import OpenAI from 'openai';
 
 const openai = new OpenAI({
-    apiKey: process.env.OPENAI_API_KEY, // Use a server-side environment variable
+    apiKey: process.env.OPENAI_API_KEY,
 });
 
 export async function POST(req: NextRequest) {
@@ -14,7 +15,7 @@ export async function POST(req: NextRequest) {
             model,
             n,
             quality,
-            response_format,
+            response_format: 'b64_json', // Request base64 format
             size,
             style
         });
@@ -23,10 +24,8 @@ export async function POST(req: NextRequest) {
             throw new Error("Failed to generate image");
         }
 
-        //const imageBase64 = response.data[0].b64_json;
-
-        //return NextResponse.json({ image_base64: imageBase64 });
-        return NextResponse.json(response.data[0].url);
+        const imageBase64 = response.data[0].b64_json;
+        return NextResponse.json({ image_base64: imageBase64 });
     } catch (error: any) {
         console.error('OpenAI API call error:', error);
         return NextResponse.json({ error: 'OpenAI API call error' }, { status: 500 });

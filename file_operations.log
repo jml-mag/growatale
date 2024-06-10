@@ -204,3 +204,151 @@
 2024-06-07 07:56:59,405 - INFO - Appended content from GameEngine/index.ts
 2024-06-07 07:56:59,405 - INFO - Searched through /Users/jmlima/Desktop/working/growatale-1/GameEngine
 2024-06-07 07:56:59,405 - INFO - Operation completed. All code written to current-code.txt
+2024-06-07 14:08:16,291 - INFO - Appended content from amplify/backend.ts
+2024-06-07 14:08:16,291 - INFO - Appended content from amplify/auth/resource.ts
+2024-06-07 14:08:16,291 - INFO - Appended content from amplify/data/resource.ts
+2024-06-07 14:08:16,291 - INFO - Searched through /Users/jmlima/Desktop/working/growatale-1/amplify
+2024-06-07 14:08:16,292 - INFO - Appended content from app/layout.tsx
+2024-06-07 14:08:16,292 - INFO - Appended content from app/page.tsx
+2024-06-07 14:08:16,292 - INFO - Appended content from app/globals.css
+2024-06-07 14:08:16,292 - INFO - Appended content from app/api/openai/image/route.ts
+2024-06-07 14:08:16,292 - INFO - Appended content from app/api/openai/audio/route.ts
+2024-06-07 14:08:16,292 - INFO - Appended content from app/api/openai/primary/route.ts
+2024-06-07 14:08:16,293 - INFO - Appended content from app/play/layout.tsx
+2024-06-07 14:08:16,293 - INFO - Appended content from app/play/page.tsx
+2024-06-07 14:08:16,293 - INFO - Appended content from app/play/[gameId]/layout.tsx
+2024-06-07 14:08:16,293 - INFO - Appended content from app/play/[gameId]/page.tsx
+2024-06-07 14:08:16,293 - INFO - Searched through /Users/jmlima/Desktop/working/growatale-1/app
+2024-06-07 14:08:16,293 - INFO - Searched through /Users/jmlima/Desktop/working/growatale-1/public
+2024-06-07 14:08:16,293 - INFO - Appended content from components/generatePrompt.ts
+2024-06-07 14:08:16,293 - INFO - Appended content from components/GameScreen.tsx
+2024-06-07 14:08:16,293 - INFO - Searched through /Users/jmlima/Desktop/working/growatale-1/components
+2024-06-07 14:08:16,294 - INFO - Appended content from context/AuthContext.tsx
+2024-06-07 14:08:16,294 - INFO - Searched through /Users/jmlima/Desktop/working/growatale-1/context
+2024-06-07 14:08:16,294 - INFO - Appended content from GameEngine/generatePrompt.ts
+2024-06-07 14:08:16,294 - INFO - Appended content from GameEngine/generatePrompt2.ts
+2024-06-07 14:08:16,294 - INFO - Appended content from GameEngine/engine.ts
+2024-06-07 14:08:16,294 - INFO - Appended content from GameEngine/types.ts
+2024-06-07 14:08:16,295 - INFO - Appended content from GameEngine/index.ts
+2024-06-07 14:08:16,295 - INFO - Searched through /Users/jmlima/Desktop/working/growatale-1/GameEngine
+2024-06-07 14:08:16,296 - INFO - Operation completed. All code written to current-code.txt
+2024-06-07 14:33:00,378 - INFO - Appended content from amplify/backend.ts
+2024-06-07 14:33:00,378 - INFO - Appended content from amplify/auth/resource.ts
+2024-06-07 14:33:00,378 - INFO - Appended content from amplify/data/resource.ts
+2024-06-07 14:33:00,378 - INFO - Searched through /Users/jmlima/Desktop/working/growatale-1/amplify
+2024-06-07 14:33:00,379 - INFO - Appended content from app/layout.tsx
+2024-06-07 14:33:00,379 - INFO - Appended content from app/page.tsx
+2024-06-07 14:33:00,380 - INFO - Appended content from app/globals.css
+2024-06-07 14:33:00,380 - INFO - Appended content from app/api/openai/image/route.ts
+2024-06-07 14:33:00,380 - INFO - Appended content from app/api/openai/audio/route.ts
+2024-06-07 14:33:00,380 - INFO - Appended content from app/api/openai/primary/route.ts
+2024-06-07 14:33:00,380 - INFO - Appended content from app/play/layout.tsx
+2024-06-07 14:33:00,380 - INFO - Appended content from app/play/page.tsx
+2024-06-07 14:33:00,380 - INFO - Appended content from app/play/[gameId]/layout.tsx
+2024-06-07 14:33:00,381 - INFO - Appended content from app/play/[gameId]/page.tsx
+2024-06-07 14:33:00,381 - INFO - Searched through /Users/jmlima/Desktop/working/growatale-1/app
+2024-06-07 14:33:00,381 - INFO - Searched through /Users/jmlima/Desktop/working/growatale-1/public
+2024-06-07 14:33:00,381 - INFO - Appended content from components/generatePrompt.ts
+2024-06-07 14:33:00,381 - INFO - Appended content from components/GameScreen.tsx
+2024-06-07 14:33:00,381 - INFO - Searched through /Users/jmlima/Desktop/working/growatale-1/components
+2024-06-07 14:33:00,381 - INFO - Appended content from context/AuthContext.tsx
+2024-06-07 14:33:00,381 - INFO - Searched through /Users/jmlima/Desktop/working/growatale-1/context
+2024-06-07 14:33:00,381 - INFO - Appended content from GameEngine/generatePrompt.ts
+2024-06-07 14:33:00,381 - INFO - Appended content from GameEngine/generatePrompt2.ts
+2024-06-07 14:33:00,382 - INFO - Appended content from GameEngine/engine.ts
+2024-06-07 14:33:00,382 - INFO - Appended content from GameEngine/types.ts
+2024-06-07 14:33:00,382 - INFO - Appended content from GameEngine/index.ts
+2024-06-07 14:33:00,382 - INFO - Searched through /Users/jmlima/Desktop/working/growatale-1/GameEngine
+2024-06-07 14:33:00,383 - INFO - Operation completed. All code written to current-code.txt
+2024-06-08 12:01:44,331 - INFO - Appended content from amplify/backend.ts
+2024-06-08 12:01:44,339 - INFO - Appended content from amplify/auth/resource.ts
+2024-06-08 12:01:44,342 - INFO - Appended content from amplify/data/resource.ts
+2024-06-08 12:01:44,342 - INFO - Searched through /Users/jmlima/Desktop/working/growatale-1/amplify
+2024-06-08 12:01:44,343 - INFO - Appended content from app/layout.tsx
+2024-06-08 12:01:44,345 - INFO - Appended content from app/page.tsx
+2024-06-08 12:01:44,346 - INFO - Appended content from app/globals.css
+2024-06-08 12:01:44,349 - INFO - Appended content from app/api/openai/image/route.ts
+2024-06-08 12:01:44,350 - INFO - Appended content from app/api/openai/audio/route.ts
+2024-06-08 12:01:44,353 - INFO - Appended content from app/api/openai/primary/route.ts
+2024-06-08 12:01:44,358 - INFO - Appended content from app/play/layout.tsx
+2024-06-08 12:01:44,358 - INFO - Appended content from app/play/page.tsx
+2024-06-08 12:01:44,360 - INFO - Appended content from app/play/[gameId]/layout.tsx
+2024-06-08 12:01:44,361 - INFO - Appended content from app/play/[gameId]/page.tsx
+2024-06-08 12:01:44,361 - INFO - Searched through /Users/jmlima/Desktop/working/growatale-1/app
+2024-06-08 12:01:44,361 - INFO - Searched through /Users/jmlima/Desktop/working/growatale-1/public
+2024-06-08 12:01:44,364 - INFO - Appended content from components/generatePrompt.ts
+2024-06-08 12:01:44,365 - INFO - Appended content from components/GameScreen.tsx
+2024-06-08 12:01:44,365 - INFO - Searched through /Users/jmlima/Desktop/working/growatale-1/components
+2024-06-08 12:01:44,368 - INFO - Appended content from context/AuthContext.tsx
+2024-06-08 12:01:44,368 - INFO - Searched through /Users/jmlima/Desktop/working/growatale-1/context
+2024-06-08 12:01:44,369 - INFO - Appended content from GameEngine/generatePrompt.ts
+2024-06-08 12:01:44,372 - INFO - Appended content from GameEngine/generatePrompt2.ts
+2024-06-08 12:01:44,373 - INFO - Appended content from GameEngine/engine.ts
+2024-06-08 12:01:44,376 - INFO - Appended content from GameEngine/types.ts
+2024-06-08 12:01:44,377 - INFO - Appended content from GameEngine/index.ts
+2024-06-08 12:01:44,377 - INFO - Appended content from GameEngine/sceneManager.ts
+2024-06-08 12:01:44,377 - INFO - Appended content from GameEngine/storyManager.ts
+2024-06-08 12:01:44,377 - INFO - Searched through /Users/jmlima/Desktop/working/growatale-1/GameEngine
+2024-06-08 12:01:44,408 - INFO - Operation completed. All code written to current-code.txt
+2024-06-08 12:14:57,800 - INFO - Appended content from amplify/backend.ts
+2024-06-08 12:14:57,800 - INFO - Appended content from amplify/auth/resource.ts
+2024-06-08 12:14:57,800 - INFO - Appended content from amplify/data/resource.ts
+2024-06-08 12:14:57,800 - INFO - Searched through /Users/jmlima/Desktop/working/growatale-1/amplify
+2024-06-08 12:14:57,801 - INFO - Appended content from app/layout.tsx
+2024-06-08 12:14:57,801 - INFO - Appended content from app/page.tsx
+2024-06-08 12:14:57,802 - INFO - Appended content from app/globals.css
+2024-06-08 12:14:57,802 - INFO - Appended content from app/api/openai/image/route.ts
+2024-06-08 12:14:57,802 - INFO - Appended content from app/api/openai/audio/route.ts
+2024-06-08 12:14:57,802 - INFO - Appended content from app/api/openai/primary/route.ts
+2024-06-08 12:14:57,802 - INFO - Appended content from app/play/layout.tsx
+2024-06-08 12:14:57,802 - INFO - Appended content from app/play/page.tsx
+2024-06-08 12:14:57,802 - INFO - Appended content from app/play/[gameId]/layout.tsx
+2024-06-08 12:14:57,803 - INFO - Appended content from app/play/[gameId]/page.tsx
+2024-06-08 12:14:57,803 - INFO - Searched through /Users/jmlima/Desktop/working/growatale-1/app
+2024-06-08 12:14:57,803 - INFO - Searched through /Users/jmlima/Desktop/working/growatale-1/public
+2024-06-08 12:14:57,803 - INFO - Appended content from components/generatePrompt.ts
+2024-06-08 12:14:57,803 - INFO - Appended content from components/GameScreen.tsx
+2024-06-08 12:14:57,803 - INFO - Searched through /Users/jmlima/Desktop/working/growatale-1/components
+2024-06-08 12:14:57,803 - INFO - Appended content from context/AuthContext.tsx
+2024-06-08 12:14:57,803 - INFO - Searched through /Users/jmlima/Desktop/working/growatale-1/context
+2024-06-08 12:14:57,803 - INFO - Appended content from GameEngine/generatePrompt.ts
+2024-06-08 12:14:57,803 - INFO - Appended content from GameEngine/generatePrompt2.ts
+2024-06-08 12:14:57,804 - INFO - Appended content from GameEngine/engine.ts
+2024-06-08 12:14:57,804 - INFO - Appended content from GameEngine/types.ts
+2024-06-08 12:14:57,804 - INFO - Appended content from GameEngine/index.ts
+2024-06-08 12:14:57,804 - INFO - Appended content from GameEngine/sceneManager.ts
+2024-06-08 12:14:57,804 - INFO - Appended content from GameEngine/storyManager.ts
+2024-06-08 12:14:57,804 - INFO - Searched through /Users/jmlima/Desktop/working/growatale-1/GameEngine
+2024-06-08 12:14:57,805 - INFO - Appended content from utils/amplifyClientConfig.ts
+2024-06-08 12:14:57,805 - INFO - Appended content from utils/amplifyServerConfig.ts
+2024-06-08 12:14:57,805 - INFO - Searched through /Users/jmlima/Desktop/working/growatale-1/utils
+2024-06-08 12:14:57,805 - INFO - Operation completed. All code written to current-code.txt
+2024-06-08 13:11:23,052 - INFO - Appended content from amplify/backend.ts
+2024-06-08 13:11:23,052 - INFO - Appended content from amplify/auth/resource.ts
+2024-06-08 13:11:23,052 - INFO - Appended content from amplify/data/resource.ts
+2024-06-08 13:11:23,052 - INFO - Searched through /Users/jmlima/Desktop/working/growatale-1/amplify
+2024-06-08 13:11:23,053 - INFO - Appended content from app/layout.tsx
+2024-06-08 13:11:23,053 - INFO - Appended content from app/page.tsx
+2024-06-08 13:11:23,054 - INFO - Appended content from app/globals.css
+2024-06-08 13:11:23,054 - INFO - Appended content from app/api/openai/image/route.ts
+2024-06-08 13:11:23,054 - INFO - Appended content from app/api/openai/audio/route.ts
+2024-06-08 13:11:23,054 - INFO - Appended content from app/api/openai/primary/route.ts
+2024-06-08 13:11:23,054 - INFO - Appended content from app/play/layout.tsx
+2024-06-08 13:11:23,055 - INFO - Appended content from app/play/page.tsx
+2024-06-08 13:11:23,055 - INFO - Appended content from app/play/[gameId]/layout.tsx
+2024-06-08 13:11:23,055 - INFO - Appended content from app/play/[gameId]/page.tsx
+2024-06-08 13:11:23,055 - INFO - Searched through /Users/jmlima/Desktop/working/growatale-1/app
+2024-06-08 13:11:23,055 - INFO - Searched through /Users/jmlima/Desktop/working/growatale-1/public
+2024-06-08 13:11:23,055 - INFO - Appended content from components/generatePrompt.ts
+2024-06-08 13:11:23,055 - INFO - Appended content from components/GameScreen.tsx
+2024-06-08 13:11:23,055 - INFO - Searched through /Users/jmlima/Desktop/working/growatale-1/components
+2024-06-08 13:11:23,055 - INFO - Appended content from context/AuthContext.tsx
+2024-06-08 13:11:23,055 - INFO - Searched through /Users/jmlima/Desktop/working/growatale-1/context
+2024-06-08 13:11:23,055 - INFO - Appended content from GameEngine/generatePrompt.ts
+2024-06-08 13:11:23,056 - INFO - Appended content from GameEngine/generatePrompt2.ts
+2024-06-08 13:11:23,056 - INFO - Appended content from GameEngine/engine.ts
+2024-06-08 13:11:23,056 - INFO - Appended content from GameEngine/types.ts
+2024-06-08 13:11:23,056 - INFO - Appended content from GameEngine/index.ts
+2024-06-08 13:11:23,056 - INFO - Searched through /Users/jmlima/Desktop/working/growatale-1/GameEngine
+2024-06-08 13:11:23,057 - INFO - Searched through /Users/jmlima/Desktop/working/growatale-1/utils
+2024-06-08 13:11:23,058 - INFO - Operation completed. All code written to current-code.txt

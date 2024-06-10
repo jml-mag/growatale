@@ -1,22 +1,23 @@
+
 {
-  "story": "In the heart of the Whispering Pine Forest, dense trees tower above like silent guardians. Sunlight filters through the thick canopy, casting intricate patterns on the forest floor. A narrow path, barely visible among the undergrowth, twists and turns, leading deeper into the woods. In the distance, the majestic silhouette of mountains rises against the azure sky. The air is filled with the earthy scent of pine and the occasional chirping of birds, crafting a sense of serene mystery.",
-  "scene_description": "Tall pine trees surround, their branches gently swaying in the midday breeze. Sunlight dances through the leaves, casting flickering shadows on the ground. A narrow, winding path stretches ahead, disappearing into the forest's embrace. Far away, the rugged outlines of mountains loom, their peaks kissed by wisps of clouds. The soft rustle of leaves and distant bird calls add an enigmatic touch to this serene landscape.",
+  "story": "A dense forest stretches as far as the eye can see, with towering trees blocking out most of the midday sun. Vivid green leaves rustle gently in the breeze, and the smell of damp earth fills the air. Sounds of birds chirping and the occasional rustle of small animals create a natural symphony. To the left, a narrow path winds deeper into the woods, while straight ahead, a small clearing can be seen. To the right, the faint outline of a scenic trail appears, promising a view of the distant mountains.",
+  "scene_description": "A forest flooded with vivid green leaves and the sounds of chirping birds. Tall trees create a canopy, casting dappled shadows on the forest floor. To the left, a narrow path winds into the deeper woods. Straight ahead, a small sunlit clearing breaks the monotony. To the right, a scenic trail leads towards the distant, majestic mountains. The air is fresh, filled with the scents of pine and damp earth.",
   "player_options": {
     "directions": [
       {
+        "direction": "left",
+        "command_text": "Enter woods",
+        "transition_text": "The path narrows as the trees grow denser."
+      },
+      {
         "direction": "forward",
-        "command_text": "Venture deeper",
-        "transition_text": "Step forward along the winding path, and journey deeper into the forest."
+        "command_text": "Enter clearing",
+        "transition_text": "Sunlight streams into the small clearing ahead."
       },
       {
         "direction": "right",
-        "command_text": "Turn right",
-        "transition_text": "Shift right, following a small trail covered in pine needles."
-      },
-      {
-        "direction": "left",
-        "command_text": "Turn left",
-        "transition_text": "Veer left, navigating around a mossy boulder and into thicker woods."
+        "command_text": "Follow trail",
+        "transition_text": "The scenic trail offers a promising view of the mountains."
       }
     ]
   }
