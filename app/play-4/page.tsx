@@ -1,3 +1,4 @@
+// @/app/play-4/page
 'use client';
 import { Scene, Story } from "@/app/play-4/types";
 import { useState, useEffect } from "react";

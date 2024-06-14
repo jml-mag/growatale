@@ -1,4 +1,4 @@
-// File Path: app/play-4/[gameId]/page.tsx
+// @/app/play-4/[gameId]/page.tsx
 
 "use client";
 import { useState, useEffect } from "react";

@@ -1,4 +1,4 @@
-// @/app/play-3/types.ts
+// @/app/play-4/types.ts
 
 export interface Action {
   direction: string;

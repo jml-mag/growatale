@@ -1,3 +1,4 @@
+// @/play-4/gameSettings
 // Define the structure of the game settings
 interface GameSettings {
     author: string;
