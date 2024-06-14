@@ -1,4 +1,4 @@
-// @/components/GameScreen3
+// @/components/GameScreen4
 
 "use client";
 import Image from "next/image";

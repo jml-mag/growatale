@@ -144,10 +144,11 @@ export async function fetchCurrentSceneId(gameId: string): Promise<any> {
 
 export function processTurn() { }
 export function createScene() {
+    //
 }
 
 
-export function generateInitialPrompt() {
+export function generatePrompt() {
     let sceneDescription = gameSettings.starting_scene_description
     let genre = gameSettings.genre
     let time = gameSettings.time

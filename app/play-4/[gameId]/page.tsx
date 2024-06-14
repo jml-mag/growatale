@@ -42,8 +42,10 @@ export default function Game() {
             ...fetchedScene,
           });
         } else {
+          // Generate the scene data using apiCalls.ts and gameUtils.ts
           console.log("Need to generate scene data!");
-          console.log(fetchedScene)
+          // createScene() from gameUtils.ts. 
+          // update the scene state with the generated returned scene data
         }
       } catch (err) {
         setError("Failed to fetch scene data.");
