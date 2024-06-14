@@ -352,3 +352,64 @@
 2024-06-08 13:11:23,056 - INFO - Searched through /Users/jmlima/Desktop/working/growatale-1/GameEngine
 2024-06-08 13:11:23,057 - INFO - Searched through /Users/jmlima/Desktop/working/growatale-1/utils
 2024-06-08 13:11:23,058 - INFO - Operation completed. All code written to current-code.txt
+2024-06-12 10:51:24,934 - INFO - Appended content from app/play-3/types.ts
+2024-06-12 10:51:24,935 - INFO - Appended content from app/play-3/layout.tsx
+2024-06-12 10:51:24,935 - INFO - Appended content from app/play-3/page.tsx
+2024-06-12 10:51:24,935 - INFO - Appended content from app/play-3/utils/apiCalls.ts
+2024-06-12 10:51:24,936 - INFO - Appended content from app/play-3/utils/gameUtils.ts
+2024-06-12 10:51:24,936 - INFO - Appended content from app/play-3/[gameId]/layout.tsx
+2024-06-12 10:51:24,936 - INFO - Appended content from app/play-3/[gameId]/page.tsx
+2024-06-12 10:51:24,936 - INFO - Searched through /Users/jmlima/Desktop/working/growatale-1/app/play-3
+2024-06-12 10:51:24,936 - INFO - Operation completed. All code written to current-code.txt
+2024-06-12 11:00:05,191 - INFO - Appended content from app/play-3/types.ts
+2024-06-12 11:00:05,192 - INFO - Appended content from app/play-3/layout.tsx
+2024-06-12 11:00:05,192 - INFO - Appended content from app/play-3/page.tsx
+2024-06-12 11:00:05,192 - INFO - Appended content from app/play-3/utils/apiCalls.ts
+2024-06-12 11:00:05,192 - INFO - Appended content from app/play-3/utils/gameUtils.ts
+2024-06-12 11:00:05,193 - INFO - Appended content from app/play-3/[gameId]/layout.tsx
+2024-06-12 11:00:05,193 - INFO - Appended content from app/play-3/[gameId]/page.tsx
+2024-06-12 11:00:05,193 - INFO - Searched through /Users/jmlima/Desktop/working/growatale-1/app/play-3
+2024-06-12 11:00:05,193 - INFO - Appended content from components/generatePrompt.ts
+2024-06-12 11:00:05,193 - INFO - Appended content from components/GameScreen.tsx
+2024-06-12 11:00:05,193 - INFO - Appended content from components/GameScreen3.tsx
+2024-06-12 11:00:05,194 - INFO - Appended content from components/GameScreen2.tsx
+2024-06-12 11:00:05,194 - INFO - Searched through /Users/jmlima/Desktop/working/growatale-1/components
+2024-06-12 11:00:05,195 - INFO - Operation completed. All code written to current-code.txt
+2024-06-12 11:21:09,178 - INFO - Appended content from app/play-3/types.ts
+2024-06-12 11:21:09,178 - INFO - Appended content from app/play-3/layout.tsx
+2024-06-12 11:21:09,178 - INFO - Appended content from app/play-3/page.tsx
+2024-06-12 11:21:09,179 - INFO - Appended content from app/play-3/utils/apiCalls.ts
+2024-06-12 11:21:09,179 - INFO - Appended content from app/play-3/utils/gameUtils.ts
+2024-06-12 11:21:09,179 - INFO - Appended content from app/play-3/[gameId]/layout.tsx
+2024-06-12 11:21:09,179 - INFO - Appended content from app/play-3/[gameId]/page.tsx
+2024-06-12 11:21:09,179 - INFO - Searched through /Users/jmlima/Desktop/working/growatale-1/app/play-3
+2024-06-12 11:21:09,179 - INFO - Appended content from components/generatePrompt.ts
+2024-06-12 11:21:09,180 - INFO - Appended content from components/GameScreen.tsx
+2024-06-12 11:21:09,180 - INFO - Appended content from components/GameScreen3.tsx
+2024-06-12 11:21:09,180 - INFO - Appended content from components/GameScreen2.tsx
+2024-06-12 11:21:09,180 - INFO - Searched through /Users/jmlima/Desktop/working/growatale-1/components
+2024-06-12 11:21:09,180 - INFO - Appended content from amplify/backend.ts
+2024-06-12 11:21:09,180 - INFO - Appended content from amplify/auth/resource.ts
+2024-06-12 11:21:09,181 - INFO - Appended content from amplify/storage/resource.ts
+2024-06-12 11:21:09,181 - INFO - Appended content from amplify/data/resource.ts
+2024-06-12 11:21:09,181 - INFO - Searched through /Users/jmlima/Desktop/working/growatale-1/amplify
+2024-06-12 11:21:09,181 - INFO - Operation completed. All code written to current-code.txt
+2024-06-12 12:12:54,695 - INFO - Appended content from app/play-3/types.ts
+2024-06-12 12:12:54,696 - INFO - Appended content from app/play-3/layout.tsx
+2024-06-12 12:12:54,696 - INFO - Appended content from app/play-3/page.tsx
+2024-06-12 12:12:54,696 - INFO - Appended content from app/play-3/utils/apiCalls.ts
+2024-06-12 12:12:54,697 - INFO - Appended content from app/play-3/utils/gameUtils.ts
+2024-06-12 12:12:54,697 - INFO - Appended content from app/play-3/[gameId]/layout.tsx
+2024-06-12 12:12:54,697 - INFO - Appended content from app/play-3/[gameId]/page.tsx
+2024-06-12 12:12:54,697 - INFO - Searched through /Users/jmlima/Desktop/working/growatale-1/app/play-3
+2024-06-12 12:12:54,697 - INFO - Appended content from components/generatePrompt.ts
+2024-06-12 12:12:54,698 - INFO - Appended content from components/GameScreen.tsx
+2024-06-12 12:12:54,698 - INFO - Appended content from components/GameScreen3.tsx
+2024-06-12 12:12:54,698 - INFO - Appended content from components/GameScreen2.tsx
+2024-06-12 12:12:54,698 - INFO - Searched through /Users/jmlima/Desktop/working/growatale-1/components
+2024-06-12 12:12:54,699 - INFO - Appended content from amplify/backend.ts
+2024-06-12 12:12:54,699 - INFO - Appended content from amplify/auth/resource.ts
+2024-06-12 12:12:54,699 - INFO - Appended content from amplify/storage/resource.ts
+2024-06-12 12:12:54,699 - INFO - Appended content from amplify/data/resource.ts
+2024-06-12 12:12:54,699 - INFO - Searched through /Users/jmlima/Desktop/working/growatale-1/amplify
+2024-06-12 12:12:54,700 - INFO - Operation completed. All code written to current-code.txt

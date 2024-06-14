@@ -1,22 +1,21 @@
 // @/app/play-3/page
+
 "use client";
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/context/AuthContext";
 import { generateClient, Client } from "aws-amplify/data";
-import { uploadData, getUrl } from "@aws-amplify/storage";
-import { type Schema } from "@/amplify/data/resource";
 import { getAudio, getImage } from "@/app/play-3/utils/apiCalls";
+import { Schema } from "@/amplify/data/resource";
 import {
   initializeGame,
-  saveBufferToStorage,
   saveScene,
   updateStoryCurrentScene,
   fetchScene,
   convertToActions,
 } from "@/app/play-3/utils/gameUtils";
-import { Action, Scene, Story } from "./types";
+import { Scene, Story } from "@/app/play-3/types";
 import Image from "next/image";
 
 const client: Client<Schema> = generateClient<Schema>();
@@ -26,6 +25,7 @@ const Play = () => {
   const router = useRouter();
   const [previousGames, setPreviousGames] = useState<Story[]>([]);
   const [initialScene, setInitialScene] = useState<Scene>({
+    id: "",
     image: "",
     audio: "",
     actions_available: [],
@@ -35,11 +35,12 @@ const Play = () => {
     previous_scene: "",
     story_id: "",
   });
+
   const [showScene, setShowScene] = useState(false);
 
   useEffect(() => {
-    console.log(initialScene);
-  }, [initialScene]);
+    console.log(`Next step state: ${JSON.stringify(initialScene, null, 2)}`);
+}, [initialScene]);
 
   useEffect(() => {
     async function fetchPreviousGames() {
@@ -107,95 +108,68 @@ const Play = () => {
 
   const handleStartNewGame = async () => {
     try {
+      // Step 1: Initialize the game
       const newStoryId = await initializeGame(user.username);
+      console.log("New Story ID:", newStoryId);
+
+      // Step 2: Set initial scene state with the new story ID
+      console.log('Step 2')
       setInitialScene((prevState) => ({
         ...prevState,
         story_id: newStoryId,
       }));
-
+  
+      // Step 3: Generate the initial prompt and get the primary response
       const initialPrompt = generateInitialPrompt();
       const primaryResponseString = await getPrimaryResponse(initialPrompt);
-
+      console.log("Primary Response String:", primaryResponseString);
+  
       // Parsing the response
       const primaryResponse = JSON.parse(primaryResponseString.message);
-
-      console.log(
-        `primaryResponse: ${JSON.stringify(primaryResponse, null, 2)}`
-      );
-
+      console.log("Primary Response:", primaryResponse);
+  
+      // Step 4: Update the scene state with the primary response data
+      console.log('Step 4')
       setInitialScene((prevState) => ({
         ...prevState,
         primary_text: primaryResponse.story,
         scene_description: primaryResponse.scene_description,
-        actions_available: primaryResponse.player_options.directions,
+        actions_available: convertToActions(primaryResponse.player_options.directions),
       }));
-
-      // Fetch image and audio asynchronously
-      const [imageData, audioData] = await Promise.all([
+  
+      // Step 5: Fetch image and audio URLs asynchronously
+      const [imageUrl, audioUrl] = await Promise.all([
         getImage(primaryResponse.scene_description),
         getAudio(primaryResponse.story),
       ]);
-
-      // Ensure imageData and audioData are not null
-      if (!imageData || !(imageData instanceof Uint8Array)) {
-        throw new Error("Invalid image data");
-      }
-
-      if (!audioData || !(audioData instanceof ArrayBuffer)) {
-        throw new Error("Invalid audio data");
-      }
-
-      // Log detailed image and audio data
-      console.log("Detailed Image data:", imageData);
-      console.log("Image data type:", typeof imageData);
-      if (imageData instanceof Uint8Array) {
-        console.log("Image data is a Uint8Array");
-      } else {
-        console.log("Image data is not a Uint8Array");
-      }
-
-      console.log("Detailed Audio data:", audioData);
-      console.log("Audio data type:", typeof audioData);
-      if (audioData instanceof ArrayBuffer) {
-        console.log("Audio data is an ArrayBuffer");
-      } else {
-        console.log("Audio data is not an ArrayBuffer");
-      }
-
-      // Save image and audio to storage
-      const imageUrl = await saveBufferToStorage(
-        imageData,
-        `images/${newStoryId}.jpg`,
-        "image/jpeg"
-      );
-      const audioUrl = await saveBufferToStorage(
-        new Uint8Array(audioData),
-        `audio/${newStoryId}.mp3`,
-        "audio/mpeg"
-      );
-
-      // Save the scene data
+  
+      // Step 6: Update the scene state with image and audio URLs
+      console.log('Step 6')
+      setInitialScene((prevState) => ({
+        ...prevState,
+        image: imageUrl || "",
+        audio: audioUrl || "",
+      }));
+  
+      // Step 7: Save the scene data
       const sceneData: Scene = {
-        //id: "",
-        image: imageUrl,
-        audio: audioUrl,
-        actions_available: primaryResponse.player_options.directions,
-        primary_text: primaryResponse.story,
-        scene_description: primaryResponse.scene_description,
-        time: initialScene.time,
-        previous_scene: "",
-        story_id: newStoryId,
+        ...initialScene,
+        actions_available: initialScene.actions_available,
       };
-
-      const sceneId = await saveScene(sceneData);
-
-      // Update the story with the current scene
-      await updateStoryCurrentScene(newStoryId, sceneId);
-
-      // Fetch the scene data to present
-      const fetchedScene = await fetchScene(sceneId);
-
-      // Update the scene state with the fetched scene data
+      console.log("Step 7, Scene Data to Save:", sceneData);
+  
+      const savedSceneData = await saveScene(sceneData);
+      console.log("Saved Scene Data:", savedSceneData);
+  
+      // Step 8: Update the story with the current scene
+      await updateStoryCurrentScene(newStoryId, savedSceneData.id);
+  
+      // Step 9: Fetch the scene data to present
+      const fetchedScene = await fetchScene(savedSceneData.id);
+      console.log("Fetched Scene Data:", fetchedScene);
+  
+      // Step 10: Update the scene state with the fetched scene data
+      console.log('Step 10')
       setInitialScene((prevState) => ({
         ...prevState,
         id: fetchedScene.id,
@@ -208,13 +182,16 @@ const Play = () => {
         previous_scene: fetchedScene.previous_scene,
         story_id: fetchedScene.story_id,
       }));
-
-      // Display the scene data
+  
+      // Step 11: Display the scene data
       setShowScene(true);
     } catch (error) {
       console.error("Error starting new game:", error);
     }
   };
+  
+  
+  
 
   return (
     <div className="text-center text-white">
@@ -222,7 +199,7 @@ const Play = () => {
         <div>
           <h1 className="text-3xl font-bold">Scene</h1>
           <p>{initialScene.primary_text}</p>
-          {/*<Image
+          <Image
             src={initialScene.image}
             alt="Scene Image"
             width={600}
@@ -231,9 +208,7 @@ const Play = () => {
           <audio controls>
             <source src={initialScene.audio} type="audio/mpeg" />
             Your browser does not support the audio element.
-          </audio>*/}
-          {initialScene.image && (<div>image received</div>)}
-          {initialScene.audio && (<div>audio received</div>)}
+          </audio>
           <ul>
             {initialScene.actions_available.map((action) => (
               <li key={action.direction}>{action.command_text}</li>

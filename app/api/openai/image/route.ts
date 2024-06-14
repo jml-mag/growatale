@@ -1,4 +1,5 @@
-// /api/openai/image/route.ts
+// @/app/api/openai/image/route.ts
+
 import { NextRequest, NextResponse } from 'next/server';
 import OpenAI from 'openai';
 
@@ -7,15 +8,15 @@ const openai = new OpenAI({
 });
 
 export async function POST(req: NextRequest) {
-    const { prompt, model, n, quality, response_format, size, style } = await req.json();
+    const { prompt, model, n, quality, response_format = 'b64_json', size, style } = await req.json();
 
     try {
         const response = await openai.images.generate({
-            prompt,
+            prompt: prompt,
             model,
             n,
             quality,
-            response_format: 'b64_json', // Request base64 format
+            response_format: response_format, // Request base64 format
             size,
             style
         });
@@ -24,8 +25,28 @@ export async function POST(req: NextRequest) {
             throw new Error("Failed to generate image");
         }
 
-        const imageBase64 = response.data[0].b64_json;
-        return NextResponse.json({ image_base64: imageBase64 });
+        const base64Image = response.data[0].b64_json;
+
+        if (!base64Image) {
+            throw new Error("Base64 image data is undefined");
+        }
+
+        // Decode base64 image
+        const byteCharacters = atob(base64Image);
+        const byteNumbers = new Array(byteCharacters.length);
+        for (let i = 0; i < byteCharacters.length; i++) {
+            byteNumbers[i] = byteCharacters.charCodeAt(i);
+        }
+        const byteArray = new Uint8Array(byteNumbers);
+        const buffer = Buffer.from(byteArray.buffer);
+
+        // Set appropriate headers for image response
+        return new NextResponse(buffer, {
+            headers: {
+                'Content-Type': 'image/png',
+                'Content-Length': buffer.length.toString(),
+            },
+        });
     } catch (error: any) {
         console.error('OpenAI API call error:', error);
         return NextResponse.json({ error: 'OpenAI API call error' }, { status: 500 });

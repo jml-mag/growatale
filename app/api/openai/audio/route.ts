@@ -1,4 +1,5 @@
-// /api/openai/audio/route.ts
+// @/app/api/openai/audio/route.ts
+
 import { NextRequest, NextResponse } from 'next/server';
 import OpenAI from 'openai';
 
@@ -7,22 +8,23 @@ const openai = new OpenAI({
 });
 
 export async function POST(req: NextRequest) {
-    const { text, model, voice } = await req.json();
+    const { text, model, voice, response_format, speed } = await req.json();
 
     try {
         const response = await openai.audio.speech.create({
-            model: model || "tts-1-hd",
+            model: model,
             input: text,
-            voice: voice || "nova",
-            response_format: "mp3",
+            voice: voice,
+            response_format: response_format,
+            speed: speed,
         });
 
         if (!response) {
             throw new Error("Failed to generate TTS audio");
         }
 
-        const buffer = Buffer.from(await response.arrayBuffer());
-        const audioBase64 = buffer.toString('base64');
+        const audioBuffer = await response.arrayBuffer();
+        const audioBase64 = Buffer.from(audioBuffer).toString('base64');
 
         return NextResponse.json({ audio_base64: audioBase64 });
     } catch (error: any) {

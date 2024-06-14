@@ -1,16 +1,24 @@
-// amplify/data/resource.ts
 import { type ClientSchema, a, defineData } from '@aws-amplify/backend';
 
 const schema = a.schema({
+  Action: a.customType({
+    direction: a.string().required(),
+    command_text: a.string().required(),
+    transition_text: a.string().required(),
+}),
+Inventory: a.customType({
+  item: a.string().required(),
+  amount: a.string().required(),
+}),
   Scene: a.model({
     id: a.id().required(),
     image: a.string().required(),
     audio: a.string().required(),
-    actions_available: a.string().required().array(),
+    actions_available: a.ref('Action').array().required(),
     primary_text: a.string().required(),
     scene_description: a.string().required(),
     time: a.string().required(),
-    previous_scene: a.string().required(),
+    previous_scene: a.string(),
     story_id: a.string().required(),
     story: a.belongsTo('Story', 'story_id'),
   }).authorization(allow => [
@@ -23,7 +31,7 @@ const schema = a.schema({
     artist: a.string().required(),
     current_scene: a.string().required(),
     player_health: a.integer().required(),
-    player_inventory: a.string().required().array(),
+    player_inventory: a.ref('Inventory').array().required(),
     primary_ai: a.string().required(),
     audio_ai: a.string().required(),
     image_ai: a.string().required(),
