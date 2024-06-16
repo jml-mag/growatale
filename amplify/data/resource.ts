@@ -5,11 +5,11 @@ const schema = a.schema({
     direction: a.string().required(),
     command_text: a.string().required(),
     transition_text: a.string().required(),
-}),
-Inventory: a.customType({
-  item: a.string().required(),
-  amount: a.string().required(),
-}),
+  }),
+  Inventory: a.customType({
+    item: a.string().required(),
+    amount: a.string().required(),
+  }),
   Scene: a.model({
     id: a.id().required(),
     image: a.string().required(),

@@ -28,17 +28,6 @@ interface GameState {
     image: string;
     audio: string;
   };
-  /*
-  displayScene: {
-    id: string,
-    story: string,
-    audio: string,
-    image: string,
-    playerOptions: {
-      directions: [{ direction: string, commandText: string, transitionText: string }],
-    },
-  },
-  */
 }
 
 interface Prompt {

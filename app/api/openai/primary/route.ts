@@ -11,13 +11,13 @@ const openai = new OpenAI({
 const client = generateClient<Schema>();
 
 export async function POST(req: NextRequest) {
-  const { prompt } = await req.json();
+  const { prompt, model, messages } = await req.json();
 
   try {
     // Step 1: Call OpenAI for text generation
     const response = await openai.chat.completions.create({
-      model: 'gpt-4o', 
-      messages: [{ role: 'user', content: prompt }],
+      model: model, 
+      messages: messages,
     });
 
     let textContent = response.choices[0].message.content || '{}'; // Ensure it's a string

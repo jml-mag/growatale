@@ -28,12 +28,7 @@ const GameScreen: React.FC<GameScreenProps> = ({ signOut, user, gameId, scene })
       <div>
         <h1 className="text-3xl font-bold">Scene</h1>
         <p>{scene.primary_text}</p>
-        <Image
-          src={scene.image}
-          alt="Scene Image"
-          width={600}
-          height={400}
-        />
+        <p>{`image file: ${scene.image}`}</p>
         <audio controls>
           <source src={scene.audio} type="audio/mpeg" />
           Your browser does not support the audio element.

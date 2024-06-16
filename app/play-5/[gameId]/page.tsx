@@ -1,3 +1,5 @@
+// @/app/play-5/[gameId]/page
+
 "use client";
 import { useState, useEffect, useCallback } from "react";
 import { usePathname } from "next/navigation";
@@ -8,10 +10,12 @@ import { Scene } from "@/app/play-4/types";
 
 // Custom hook for game logic
 const useGameLogic = (gameId: string | undefined) => {
+  // State Initialization
   const [scene, setScene] = useState<Scene | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
+  // Function: Fetch Current Scene
   const fetchCurrentScene = useCallback(async () => {
     try {
       if (!gameId) throw new Error("Game ID is required");
@@ -34,6 +38,7 @@ const useGameLogic = (gameId: string | undefined) => {
     }
   }, [gameId]);
 
+  // Function: Generate Scene
   const generateScene = useCallback(async (scene: Scene) => {
     try {
       console.log(`Generating scene for: ${scene.id}`);
@@ -62,18 +67,22 @@ const useGameLogic = (gameId: string | undefined) => {
     }
   }, []);
 
+  // Effect: Fetch Current Scene on Mount
   useEffect(() => {
     fetchCurrentScene();
   }, [fetchCurrentScene]);
 
+  // Effect: Generate Scene if Needed
   useEffect(() => {
     if (scene && scene.id && !scene.primary_text) {
       generateScene(scene);
     }
   }, [scene, generateScene]);
 
+  // Return State and Functions
   return { scene, loading, error };
 };
+
 
 const Game = () => {
   const { signOut, user } = useAuth();
