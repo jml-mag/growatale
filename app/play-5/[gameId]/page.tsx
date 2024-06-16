@@ -5,8 +5,8 @@ import { useState, useEffect, useCallback } from "react";
 import { usePathname } from "next/navigation";
 import { useAuth } from "@/context/AuthContext";
 import GameScreen from "@/components/GameScreen4";
-import { fetchScene, fetchStory, createScene } from "@/app/play-4/utils/gameUtils";
-import { Scene } from "@/app/play-4/types";
+import { fetchScene, fetchStory, createScene } from "@/app/play-5/utils/gameUtils";
+import { Scene } from "@/app/play-5/types";
 
 // Custom hook for game logic
 const useGameLogic = (gameId: string | undefined) => {
