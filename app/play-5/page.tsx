@@ -85,7 +85,7 @@ const Play = () => {
               <ul>
                 {previousGames.map((game) => (
                   <li key={game.id}>
-                    <Link href={`/play-4/${game.id}`}>{game.id}</Link>
+                    <Link href={`/play-5/${game.id}`}>{game.id}</Link>
                   </li>
                 ))}
               </ul>
