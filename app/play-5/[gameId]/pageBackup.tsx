@@ -1,7 +1,5 @@
-// @/app/play-5/[gameId]/page
-
 "use client";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { usePathname } from "next/navigation";
 import { useAuth } from "@/context/AuthContext";
 import GameScreen from "@/components/GameScreen4";
@@ -12,22 +10,22 @@ import { Scene } from "@/app/play-5/types";
 const fetchCurrentStory = async (gameId: string | undefined) => {
   if (!gameId) throw new Error("Game ID is required");
   const data = await fetchStory(gameId);
-  console.log(`const fetchCurrentStory: ${JSON.stringify(data, null, 2)}`);
+  console.log(`Story: ${JSON.stringify(data, null, 2)}`);
   return data;
 };
 
 // Function to fetch the current scene
 const fetchCurrentScene = async (currentSceneId: string) => {
   const fetchedScene = await fetchScene(currentSceneId);
-  console.log(`const fetchCurrentScene: ${JSON.stringify(fetchedScene, null, 2)}`);
+  console.log(`Scene: ${JSON.stringify(fetchedScene, null, 2)}`);
   return fetchedScene;
 };
 
 // Function to generate a new scene if necessary
-const generateScene = async (scene: Scene) => {
-  console.log(`const generateScene: ${scene.id}`);
+const generateScene = async (scene: Scene, setScene: (scene: Scene) => void) => {
+  console.log(`Generating scene for: ${scene.id}`);
   const newScene = await createScene(scene);
-  console.log(`const newScene = await createScene(scene): ${JSON.stringify(newScene, null, 2)}`);
+  console.log(`New Scene Data: ${JSON.stringify(newScene, null, 2)}`);
 
   const updatedScene: Scene = {
     ...scene,
@@ -36,32 +34,24 @@ const generateScene = async (scene: Scene) => {
     actions_available: newScene.player_options.directions || [], // Ensure actions_available is always an array
   };
 
-  console.log(`const updatedScene: ${JSON.stringify(updatedScene, null, 2)}`);
-  return updatedScene;
+  console.log(`Updated Scene: ${JSON.stringify(updatedScene, null, 2)}`);
+  setScene(updatedScene);
+
+  // TODO: Implement data saving logic here
+  console.log('NEED TO SAVE STATE TO DATA');
 };
 
-// Function to handle fetching and generating scenes as needed
-const handleSceneGeneration = async (
-  gameId: string | undefined,
-  setScene: (scene: Scene) => void,
-  setLoading: (loading: boolean) => void,
-  setError: (error: string | null) => void
-) => {
-  if (!gameId) {
-    setError("Game ID is required");
-    return;
-  }
-
+// Handler function for each turn
+const handleTurn = async (gameId: string | undefined, setScene: (scene: Scene) => void, setLoading: (loading: boolean) => void, setError: (error: string | null) => void) => {
   setLoading(true);
-
   try {
     const story = await fetchCurrentStory(gameId);
-    let currentScene = await fetchCurrentScene(story.current_scene);
+    const currentScene = await fetchCurrentScene(story.current_scene);
+    setScene(currentScene);
     if (!currentScene.primary_text) {
       console.log("Need to generate scene data!");
-      currentScene = await generateScene(currentScene);
+      await generateScene(currentScene, setScene);
     }
-    setScene(currentScene);
   } catch (error) {
     console.error("Failed to handle turn:", error);
     setError("Failed to handle turn.");
@@ -75,14 +65,16 @@ const useGameLogic = (gameId: string | undefined) => {
   const [scene, setScene] = useState<Scene | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
-  const initializedRef = useRef<boolean>(false); // Track if initialization has occurred
 
-  useEffect(() => {
-    if (!initializedRef.current && gameId) {
-      initializedRef.current = true;
-      handleSceneGeneration(gameId, setScene, setLoading, setError);
-    }
+  // Function to handle fetching and generating scenes as needed
+  const handleSceneGeneration = useCallback(async () => {
+    await handleTurn(gameId, setScene, setLoading, setError);
   }, [gameId]);
+
+  // Effect: Fetch and generate scene on mount
+  useEffect(() => {
+    handleSceneGeneration();
+  }, [handleSceneGeneration]);
 
   return { scene, loading, error };
 };

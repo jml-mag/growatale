@@ -12,7 +12,7 @@ import { Schema } from "@/amplify/data/resource";
 import {
   initializeGame,
   saveStateToScene,
-} from "@/app/play-4/utils/gameUtils";
+} from "@/app/play-5/utils/gameUtils";
 
 const client = generateClient<Schema>();
 
