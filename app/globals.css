@@ -6,4 +6,10 @@
   body {
     @apply text-white bg-gradient-to-br from-black via-black to-gray-900 h-screen;
   }
+  .gamescreen-component {
+    @apply bg-black bg-opacity-30 p-2 rounded-2xl;
+  }
+  .gamescreen-button {
+    @apply bg-green-950 bg-opacity-75 hover:bg-opacity-90 text-white font-bold py-2 px-4 m-4 rounded-2xl max-w-min;
+  }
 }

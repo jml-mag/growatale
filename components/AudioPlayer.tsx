@@ -1,6 +1,4 @@
-// @/components/AudioPlayer.tsx
-
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from "react";
 
 interface AudioPlayerProps {
   audioFile: File;
@@ -10,16 +8,17 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({ audioFile }) => {
   const audioRef = useRef<HTMLAudioElement>(null);
   const [isPlaying, setIsPlaying] = useState<boolean>(true);
   const [isMuted, setIsMuted] = useState<boolean>(false);
-  const [currentTime, setCurrentTime] = useState<string>('0:00');
-  const [duration, setDuration] = useState<string>('0:00');
+  const [currentTime, setCurrentTime] = useState<string>("0:00");
+  const [duration, setDuration] = useState<string>("0:00");
   const [volume, setVolume] = useState<number>(100);
   const [progress, setProgress] = useState<number>(0);
-  const [audioSrc, setAudioSrc] = useState<string>('');
+  const [audioSrc, setAudioSrc] = useState<string>("");
+  const [previousVolume, setPreviousVolume] = useState<number>(100);
 
   useEffect(() => {
     const objectUrl = URL.createObjectURL(audioFile);
     setAudioSrc(objectUrl);
-    
+
     return () => {
       URL.revokeObjectURL(objectUrl);
     };
@@ -43,12 +42,12 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({ audioFile }) => {
 
     if (audio) {
       audio.play();
-      audio.addEventListener('timeupdate', handleTimeUpdate);
-      audio.addEventListener('loadedmetadata', handleMetadata);
+      audio.addEventListener("timeupdate", handleTimeUpdate);
+      audio.addEventListener("loadedmetadata", handleMetadata);
 
       return () => {
-        audio.removeEventListener('timeupdate', handleTimeUpdate);
-        audio.removeEventListener('loadedmetadata', handleMetadata);
+        audio.removeEventListener("timeupdate", handleTimeUpdate);
+        audio.removeEventListener("loadedmetadata", handleMetadata);
       };
     }
   }, [audioSrc]);
@@ -69,17 +68,32 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({ audioFile }) => {
   const handleMuteUnmute = () => {
     const audio = audioRef.current;
     if (audio) {
-      audio.muted = !audio.muted;
-      setIsMuted(audio.muted);
+      if (audio.muted) {
+        audio.muted = false;
+        setIsMuted(false);
+        setVolume(previousVolume);
+        audio.volume = previousVolume / 100;
+      } else {
+        setPreviousVolume(volume);
+        audio.muted = true;
+        setIsMuted(true);
+        setVolume(0);
+        audio.volume = 0;
+      }
     }
   };
 
   const handleVolumeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const audio = audioRef.current;
-    const volume = parseInt(e.target.value);
+    const newVolume = parseInt(e.target.value);
     if (audio) {
-      audio.volume = volume / 100;
-      setVolume(volume);
+      if (!isMuted) {
+        audio.volume = newVolume / 100;
+      }
+      setVolume(newVolume);
+      if (isMuted && newVolume > 0) {
+        handleMuteUnmute();
+      }
     }
   };
 
@@ -93,40 +107,114 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({ audioFile }) => {
 
   const formatTime = (time: number): string => {
     const minutes = Math.floor(time / 60);
-    const seconds = Math.floor(time % 60).toString().padStart(2, '0');
+    const seconds = Math.floor(time % 60)
+      .toString()
+      .padStart(2, "0");
     return `${minutes}:${seconds}`;
   };
 
-  return (
-    <div className="audio-player flex flex-col items-center bg-blue-950 bg-opacity-70 p-4 rounded-2xl text-white w-96">
-      <audio ref={audioRef} src={audioSrc} autoPlay loop />
+  const playIcon = (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      fill="none"
+      viewBox="0 0 24 24"
+      strokeWidth={1.5}
+      stroke="currentColor"
+      className="size-6"
+    >
+      <path
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        d="M5.25 5.653c0-.856.917-1.398 1.667-.986l11.54 6.347a1.125 1.125 0 0 1 0 1.972l-11.54 6.347a1.125 1.125 0 0 1-1.667-.986V5.653Z"
+      />
+    </svg>
+  );
+  const pauseIcon = (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      fill="none"
+      viewBox="0 0 24 24"
+      strokeWidth={1.5}
+      stroke="currentColor"
+      className="size-6"
+    >
+      <path
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        d="M15.75 5.25v13.5m-7.5-13.5v13.5"
+      />
+    </svg>
+  );
+  const muteIcon = (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      fill="none"
+      viewBox="0 0 24 24"
+      strokeWidth={1.5}
+      stroke="currentColor"
+      className="size-6"
+    >
+      <path
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        d="M17.25 9.75 19.5 12m0 0 2.25 2.25M19.5 12l2.25-2.25M19.5 12l-2.25 2.25m-10.5-6 4.72-4.72a.75.75 0 0 1 1.28.53v15.88a.75.75 0 0 1-1.28.53l-4.72-4.72H4.51c-.88 0-1.704-.507-1.938-1.354A9.009 9.009 0 0 1 2.25 12c0-.83.112-1.633.322-2.396C2.806 8.756 3.63 8.25 4.51 8.25H6.75Z"
+      />
+    </svg>
+  );
+  const unMuteIcon = (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      fill="none"
+      viewBox="0 0 24 24"
+      strokeWidth={1.5}
+      stroke="currentColor"
+      className="size-6"
+    >
+      <path
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        d="M19.114 5.636a9 9 0 0 1 0 12.728M16.463 8.288a5.25 5.25 0 0 1 0 7.424M6.75 8.25l4.72-4.72a.75.75 0 0 1 1.28.53v15.88a.75.75 0 0 1-1.28.53l-4.72-4.72H4.51c-.88 0-1.704-.507-1.938-1.354A9.009 9.009 0 0 1 2.25 12c0-.83.112-1.633.322-2.396C2.806 8.756 3.63 8.25 4.51 8.25H6.75Z"
+      />
+    </svg>
+  );
 
-      <div className="controls flex items-center justify-between w-full mt-4">
-        <button onClick={handlePlayPause} className="player-button">
-          {isPlaying ? 'Pause' : 'Play'}
-        </button>
-        <button onClick={handleMuteUnmute} className="player-button">
-          {isMuted ? 'Unmute' : 'Mute'}
-        </button>
+  return (
+    <div className="gamescreen-component flex flex-col items-center w-full pt-2">
+      <audio ref={audioRef} src={audioSrc} autoPlay />
+      <div className="flex justify-between w-full text-xs">
+        <span className="">{currentTime}</span>
         <input
           type="range"
-          className="timeline w-2/3"
+          className="w-2/3"
           max="100"
           value={progress}
           onChange={handleSeek}
         />
-        <input
-          type="range"
-          className="volume-slider w-1/3"
-          max="100"
-          value={volume}
-          onChange={handleVolumeChange}
-        />
+        <span className="">{duration}</span>
       </div>
-
-      <div className="time-info flex justify-between w-full mt-2">
-        <span className="current-time">{currentTime}</span>
-        <span className="duration">{duration}</span>
+      <div className="flex text-center items-center justify-center w-full mt-2">
+        <button
+          onClick={handlePlayPause}
+          className="p-4 bg-black bg-opacity-10 hover:bg-opacity-50 flex items-center justify-center"
+        >
+          {isPlaying ? pauseIcon : playIcon}
+        </button>
+        <button
+          onClick={handleMuteUnmute}
+          className="p-4 bg-black bg-opacity-10 hover:bg-opacity-50 flex items-center justify-center"
+        >
+          {isMuted ? unMuteIcon : muteIcon}
+        </button>
+        <div className="flex justify-around items-center w-full ml-4">
+          <div className="text-xs mr-2">Volume</div>
+          <input
+            type="range"
+            className="w-40 sm:w-36"
+            max="100"
+            value={volume}
+            onChange={handleVolumeChange}
+          />
+        </div>
       </div>
     </div>
   );

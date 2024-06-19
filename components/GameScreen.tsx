@@ -62,7 +62,7 @@ const GameScreen: React.FC<GameScreenProps> = ({
   }
 
   return (
-    <div className="text-white">
+    <div className="text-white w-full">
       <div className="fixed top-0 left-0 w-full h-full -z-50">
         {imageURL && (
           <Image
@@ -73,25 +73,21 @@ const GameScreen: React.FC<GameScreenProps> = ({
           />
         )}
       </div>
-      <div className="max-w-min p-4 rounded-2xl bg-blue-950 bg-opacity-70">
+      <div className="hidden bg-blue-950 bg-opacity-70 p-4 rounded-2xl">
         <button onClick={signOut}>Sign Out</button>
-        <p>Welcome, {user.username}</p>
       </div>
       <div>
-        <div className="bg-blue-950 bg-opacity-70 p-4 m-5 rounded-2xl max-w-screen-sm">
+        <div className="gamescreen-component text-xs fixed left-2 top-16 w-1/2 max-h-fit overflow-y-auto">
           {scene.primary_text}
         </div>
         <div>
-          <div className="flex justify-center mt-10">
-            {audioFile && <AudioPlayer audioFile={audioFile} />}
+          <div className="fixed bottom-0 w-full sm:w-1/2">
+            <div className="">{audioFile && <AudioPlayer audioFile={audioFile} />}</div>
           </div>
         </div>
         <div className="max-w-fit">
           {scene.actions_available.map((action) => (
-            <button
-              className="bg-blue-950 bg-opacity-75 hover:bg-opacity-90 text-white font-bold py-2 px-4 m-4 rounded-2xl max-w-min"
-              key={action.direction}
-            >
+            <button className="gamescreen-button" key={action.direction}>
               {action.command_text}
             </button>
           ))}
