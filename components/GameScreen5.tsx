@@ -63,6 +63,9 @@ const GameScreen: React.FC<GameScreenProps> = ({
 
   return (
     <div className="text-white">
+      <div className="fixed top-0 left-0 w-full h-full -z-50">
+        {imageURL && <Image className="object-cover" src={imageURL} alt="Scene Image" fill />}
+      </div>
       <div>
         <button onClick={signOut}>Sign Out</button>
         <p>Welcome, {user.username}</p>
@@ -70,24 +73,26 @@ const GameScreen: React.FC<GameScreenProps> = ({
       <div>
         <h1 className="text-3xl font-bold">Scene</h1>
         <p>{scene.primary_text}</p>
-        {imageURL && (
-          <Image src={imageURL} alt="Scene Image" width={400} height={400} />
-        )}
+
         {audioURL && (
           <audio controls>
             <source src={audioURL} type="audio/mpeg" />
             Your browser does not support the audio element.
           </audio>
         )}
-        <ul>
+        <div className="max-w-min">
           {scene.actions_available.map((action) => (
-            <li key={action.direction}>{action.command_text}</li>
+            <button
+              className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+              key={action.direction}
+            >
+              {action.command_text}
+            </button>
           ))}
-        </ul>
+        </div>
       </div>
     </div>
   );
 };
 
 export default GameScreen;
-
