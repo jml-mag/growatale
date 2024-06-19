@@ -57,7 +57,7 @@ const Play = () => {
 
   const startStory = async (user: any) => {
     const gameId = await initializeGame(user.username);
-    router.push(`/play-4/${gameId}`);
+    router.push(`/play-5/${gameId}`);
   };
 
   return (

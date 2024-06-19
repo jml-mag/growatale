@@ -4,9 +4,18 @@
 import { useState, useEffect, useRef } from "react";
 import { usePathname } from "next/navigation";
 import { useAuth } from "@/context/AuthContext";
-import GameScreen from "@/components/GameScreen4";
-import { fetchScene, fetchStory, createScene } from "@/app/play-5/utils/gameUtils";
+import GameScreen from "@/components/GameScreen5";
+import {
+  fetchScene,
+  fetchStory,
+  createScene,
+  saveScene,
+  savePrimaryCallToScene,
+  saveAssetsCallToScene,
+} from "@/app/play-5/utils/gameUtils";
 import { Scene } from "@/app/play-5/types";
+import { getAudio, getImage } from "@/app/play-5/utils/apiCalls";
+import { uploadData, getUrl } from "@aws-amplify/storage";
 
 // Function to fetch the current story
 const fetchCurrentStory = async (gameId: string | undefined) => {
@@ -19,7 +28,9 @@ const fetchCurrentStory = async (gameId: string | undefined) => {
 // Function to fetch the current scene
 const fetchCurrentScene = async (currentSceneId: string) => {
   const fetchedScene = await fetchScene(currentSceneId);
-  console.log(`const fetchCurrentScene: ${JSON.stringify(fetchedScene, null, 2)}`);
+  console.log(
+    `const fetchCurrentScene: ${JSON.stringify(fetchedScene, null, 2)}`
+  );
   return fetchedScene;
 };
 
@@ -27,8 +38,13 @@ const fetchCurrentScene = async (currentSceneId: string) => {
 const generateScene = async (scene: Scene) => {
   console.log(`const generateScene: ${scene.id}`);
   const newScene = await createScene(scene);
-  console.log(`const newScene = await createScene(scene): ${JSON.stringify(newScene, null, 2)}`);
-
+  console.log(
+    `const newScene = await createScene(scene): ${JSON.stringify(
+      newScene,
+      null,
+      2
+    )}`
+  );
   const updatedScene: Scene = {
     ...scene,
     primary_text: newScene.story,
@@ -36,7 +52,26 @@ const generateScene = async (scene: Scene) => {
     actions_available: newScene.player_options.directions || [], // Ensure actions_available is always an array
   };
 
-  console.log(`const updatedScene: ${JSON.stringify(updatedScene, null, 2)}`);
+  console.log(
+    `const updatedScene(Primary): ${JSON.stringify(updatedScene, null, 2)}`
+  );
+  //await saveScene(updatedScene); // Save the updated scene to the database
+  await savePrimaryCallToScene(updatedScene);
+
+  return updatedScene;
+};
+const generateAssets = async (scene: Scene) => {
+  const generatedAudio = await getAudio(scene.primary_text);
+  const generatedImage = await getImage(scene.scene_description);
+  const updatedScene: Scene = {
+    ...scene,
+    image: generatedImage || scene.image,
+    audio: generatedAudio || scene.audio,
+  };
+  console.log(
+    `const updatedScene(Assets): ${JSON.stringify(updatedScene, null, 2)}`
+  );
+  await saveAssetsCallToScene(updatedScene);
   return updatedScene;
 };
 
@@ -55,16 +90,31 @@ const handleSceneGeneration = async (
   setLoading(true);
 
   try {
+    console.log("Fetching current story...");
     const story = await fetchCurrentStory(gameId);
+    console.log("Current story:", story);
+
+    console.log("Fetching current scene...");
     let currentScene = await fetchCurrentScene(story.current_scene);
+    console.log("Current scene:", currentScene);
+
     if (!currentScene.primary_text) {
-      console.log("Need to generate scene data!");
+      console.log("Generating new scene...");
       currentScene = await generateScene(currentScene);
+      console.log("Newly generated scene:", currentScene);
     }
+
+    if (!currentScene.image && !currentScene.audio) {
+      console.log("Generating assets for scene...");
+      currentScene = await generateAssets(currentScene);
+      console.log("Scene with generated assets:", currentScene);
+    }
+
     setScene(currentScene);
+    console.log("Scene state updated:", currentScene);
   } catch (error) {
-    console.error("Failed to handle turn:", error);
-    setError("Failed to handle turn.");
+    console.error("Failed to handle scene generation:", error);
+    setError("Failed to handle scene generation.");
   } finally {
     setLoading(false);
   }
@@ -78,11 +128,16 @@ const useGameLogic = (gameId: string | undefined) => {
   const initializedRef = useRef<boolean>(false); // Track if initialization has occurred
 
   useEffect(() => {
+    console.log("useEffect triggered with gameId:", gameId);
     if (!initializedRef.current && gameId) {
       initializedRef.current = true;
       handleSceneGeneration(gameId, setScene, setLoading, setError);
     }
   }, [gameId]);
+
+  useEffect(() => {
+    console.log("Scene updated:", scene);
+  }, [scene]);
 
   return { scene, loading, error };
 };
@@ -92,6 +147,8 @@ const Game = () => {
   const pathname = usePathname();
   const gameId = pathname.split("/").pop();
   const { scene, loading, error } = useGameLogic(gameId);
+
+  console.log("Game Component Rendered - Scene:", scene);
 
   if (loading) {
     return <div>Loading...</div>;
