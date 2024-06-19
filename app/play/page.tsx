@@ -1,5 +1,3 @@
-// @/app/play-5/page.tsx
-
 'use client';
 import { Story } from "@/app/play/types";
 import { useState, useEffect } from "react";
@@ -56,7 +54,7 @@ const Play = () => {
 
   const startStory = async (user: any) => {
     const gameId = await initializeGame(user.username);
-    router.push(`/play-5/${gameId}`);
+    router.push(`/play/${gameId}`);
   };
 
   return (
@@ -84,7 +82,7 @@ const Play = () => {
               <ul>
                 {previousGames.map((game) => (
                   <li key={game.id}>
-                    <Link href={`/play-5/${game.id}`}>{game.id}</Link>
+                    <Link href={`/play/${game.id}`}>{game.id}</Link>
                   </li>
                 ))}
               </ul>

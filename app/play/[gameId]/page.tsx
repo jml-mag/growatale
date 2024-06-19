@@ -1,10 +1,10 @@
-// @/app/play-5/[gameId]/page
+// @/app/play/[gameId]/page
 
 "use client";
 import { useState, useEffect, useRef } from "react";
 import { usePathname } from "next/navigation";
 import { useAuth } from "@/context/AuthContext";
-import GameScreen from "@/components/GameScreen5";
+import GameScreen from "@/components/GameScreen";
 import {
   fetchScene,
   fetchStory,

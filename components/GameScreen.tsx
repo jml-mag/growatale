@@ -1,8 +1,11 @@
+// @/components/GameScreen.tsx
+
 "use client";
 import Image from "next/image";
 import { Scene } from "@/app/play/types";
 import { useState, useEffect } from "react";
 import { downloadData } from "@aws-amplify/storage";
+import AudioPlayer from "./AudioPlayer";
 
 interface GameScreenProps {
   signOut: () => void;
@@ -18,7 +21,7 @@ const GameScreen: React.FC<GameScreenProps> = ({
   scene,
 }) => {
   const [imageURL, setImageURL] = useState<string | null>(null);
-  const [audioURL, setAudioURL] = useState<string | null>(null);
+  const [audioFile, setAudioFile] = useState<File | null>(null);
 
   console.log("GameScreen Props(Scene):", scene);
 
@@ -47,9 +50,8 @@ const GameScreen: React.FC<GameScreenProps> = ({
     try {
       const result = await downloadData({ path: audioPath });
       const blob = await (await result.result).body.blob();
-      const url = URL.createObjectURL(blob);
-      setAudioURL(url);
-      console.log("Fetched audio blob URL:", url);
+      setAudioFile(new File([blob], "audio-file.mp3", { type: "audio/mpeg" }));
+      console.log("Fetched audio blob URL");
     } catch (error) {
       console.error("Error fetching audio:", error);
     }
@@ -62,26 +64,32 @@ const GameScreen: React.FC<GameScreenProps> = ({
   return (
     <div className="text-white">
       <div className="fixed top-0 left-0 w-full h-full -z-50">
-        {imageURL && <Image className="object-cover" src={imageURL} alt="Scene Image" fill />}
+        {imageURL && (
+          <Image
+            className="object-cover"
+            src={imageURL}
+            alt="Scene Image"
+            fill
+          />
+        )}
       </div>
-      <div>
+      <div className="max-w-min p-4 rounded-2xl bg-blue-950 bg-opacity-70">
         <button onClick={signOut}>Sign Out</button>
         <p>Welcome, {user.username}</p>
       </div>
       <div>
-        <h1 className="text-3xl font-bold">Scene</h1>
-        <p>{scene.primary_text}</p>
-
-        {audioURL && (
-          <audio controls>
-            <source src={audioURL} type="audio/mpeg" />
-            Your browser does not support the audio element.
-          </audio>
-        )}
-        <div className="max-w-min">
+        <div className="bg-blue-950 bg-opacity-70 p-4 m-5 rounded-2xl max-w-screen-sm">
+          {scene.primary_text}
+        </div>
+        <div>
+          <div className="flex justify-center mt-10">
+            {audioFile && <AudioPlayer audioFile={audioFile} />}
+          </div>
+        </div>
+        <div className="max-w-fit">
           {scene.actions_available.map((action) => (
             <button
-              className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+              className="bg-blue-950 bg-opacity-75 hover:bg-opacity-90 text-white font-bold py-2 px-4 m-4 rounded-2xl max-w-min"
               key={action.direction}
             >
               {action.command_text}
