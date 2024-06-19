@@ -1,6 +1,7 @@
-// @/app/play-4/utils/apiCalls.ts
+// @/app/play-5/utils/apiCalls.ts
 
-import { uploadData, getUrl } from '@aws-amplify/storage';
+import { uploadData } from '@aws-amplify/storage';
+import gameSettings from '../gameSettings';
 
 /**
  * Saves a Blob to S3 and returns the URL.
@@ -37,12 +38,12 @@ export async function getImage(prompt: string): Promise<string | null> {
       },
       body: JSON.stringify({
         prompt: prompt,
-        model: "dall-e-3",
+        model: gameSettings.image_ai,
         n: 1,
-        size: "1024x1024",
-        quality: "hd",
-        style: "vivid", // or "natural"
-        response_format: "b64_json",
+        size: gameSettings.image_size,
+        quality: gameSettings.image_quality,
+        style: gameSettings.image_style,
+        response_format: gameSettings.image_response_format,
       }),
     });
 

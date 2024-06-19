@@ -33,7 +33,7 @@ export default function Home() {
         </div>
 
         <div className="mt-20 sm:mt-0 sm:ml-4 text-center text-sky-300 text-3xl sm:text-4xl md:text-6xl font-extrabold px-7 py-3 sm:py-4 border-4 border-sky-500 rounded-3xl bg-stone-950 bg-opacity-80 inline-block hover:text-sky-100 hover:border-sky-300">
-          <Link href="/play-5">Play</Link>
+          <Link href="/play">Play</Link>
         </div>
       </main>
     </div>

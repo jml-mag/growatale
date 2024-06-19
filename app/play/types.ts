@@ -1,5 +1,3 @@
-// @/app/play-5/types.ts
-
 export interface Action {
   direction: string;
   command_text: string;
