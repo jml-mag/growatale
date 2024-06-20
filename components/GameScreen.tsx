@@ -6,7 +6,7 @@ import { Scene } from "@/app/play/types";
 import { useState, useEffect } from "react";
 import { downloadData } from "@aws-amplify/storage";
 import AudioPlayer from "./AudioPlayer";
-
+import { josefin_slab } from "@/app/fonts";
 interface GameScreenProps {
   signOut: () => void;
   user: any; // Replace `any` with the actual type if you have it
@@ -77,20 +77,26 @@ const GameScreen: React.FC<GameScreenProps> = ({
         <button onClick={signOut}>Sign Out</button>
       </div>
       <div>
-        <div className="gamescreen-component text-xs fixed left-2 top-16 w-1/2 max-h-fit overflow-y-auto">
+        <div
+          className={`${josefin_slab.className} text-lg gamescreen-component fixed left-2 top-16 w-1/2 max-h-96 overflow-y-auto`}
+        >
           {scene.primary_text}
         </div>
-        <div>
-          <div className="fixed bottom-0 w-full sm:w-1/2">
-            <div className="">{audioFile && <AudioPlayer audioFile={audioFile} />}</div>
+        <div className="">
+          <div className="fixed bottom-0 w-full">
+            <div className="">
+              {audioFile && <AudioPlayer audioFile={audioFile} />}
+            </div>
           </div>
         </div>
-        <div className="max-w-fit">
-          {scene.actions_available.map((action) => (
-            <button className="gamescreen-button" key={action.direction}>
-              {action.command_text}
-            </button>
-          ))}
+        <div className="w-full fixed bottom-24 sm:bottom-0 right-0">
+          <div className="w-full flex justify-around">
+            {scene.actions_available.map((action) => (
+              <button className="gamescreen-button" key={action.direction}>
+                {action.command_text}
+              </button>
+            ))}
+          </div>
         </div>
       </div>
     </div>

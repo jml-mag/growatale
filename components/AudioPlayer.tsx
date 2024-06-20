@@ -179,7 +179,7 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({ audioFile }) => {
   );
 
   return (
-    <div className="gamescreen-component flex flex-col items-center w-full pt-2">
+    <div className="gamescreen-component flex flex-col items-center w-80 pt-2">
       <audio ref={audioRef} src={audioSrc} autoPlay />
       <div className="flex justify-between w-full text-xs">
         <span className="">{currentTime}</span>
@@ -209,7 +209,7 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({ audioFile }) => {
           <div className="text-xs mr-2">Volume</div>
           <input
             type="range"
-            className="w-40 sm:w-36"
+            className="w-32"
             max="100"
             value={volume}
             onChange={handleVolumeChange}
