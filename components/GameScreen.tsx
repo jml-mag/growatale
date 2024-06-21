@@ -1,6 +1,8 @@
+// @/components/GameScreen
+
 import Image from "next/image";
 import { Action, Scene } from "@/app/play/types";
-import { useState, useEffect } from "react";
+import { useState, useEffect, use } from "react";
 import { downloadData } from "@aws-amplify/storage";
 import AudioPlayer from "./AudioPlayer";
 import { josefin_slab } from "@/app/fonts";
@@ -40,6 +42,10 @@ const GameScreen: React.FC<GameScreenProps> = ({
       const blob = await (await result.result).body.blob();
       const url = URL.createObjectURL(blob);
       setImageURL(url);
+
+      return () => {
+        URL.revokeObjectURL(url);
+      };
     } catch (error) {
       console.error("Error fetching image:", error);
     }
@@ -47,13 +53,14 @@ const GameScreen: React.FC<GameScreenProps> = ({
 
   const fetchAudio = async (audioPath: string) => {
     try {
-      const result = downloadData({ path: audioPath });
+      const result = await downloadData({ path: audioPath });
       const blob = await (await result.result).body.blob();
       setAudioFile(new File([blob], "audio-file.mp3", { type: "audio/mpeg" }));
     } catch (error) {
       console.error("Error fetching audio:", error);
     }
   };
+
   const playerChoice = (action: Action) => {
     setTransitionText(action.transition_text);
   };

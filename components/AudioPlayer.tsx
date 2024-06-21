@@ -6,7 +6,7 @@ interface AudioPlayerProps {
 
 const AudioPlayer: React.FC<AudioPlayerProps> = ({ audioFile }) => {
   const audioRef = useRef<HTMLAudioElement>(null);
-  const [isPlaying, setIsPlaying] = useState<boolean>(true); // Initialize as false to prevent autoplay
+  const [isPlaying, setIsPlaying] = useState<boolean>(false);
   const [isMuted, setIsMuted] = useState<boolean>(false);
   const [currentTime, setCurrentTime] = useState<string>("0:00");
   const [duration, setDuration] = useState<string>("0:00");
@@ -179,7 +179,7 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({ audioFile }) => {
 
   return (
     <div className="gamescreen-component flex flex-col items-center w-80 pt-2">
-      <audio ref={audioRef} src={audioSrc} autoPlay />
+      <audio ref={audioRef} src={audioSrc} />
       <div className="flex justify-between w-full text-xs">
         <span className="">{currentTime}</span>
         <input
