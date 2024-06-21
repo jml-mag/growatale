@@ -6,7 +6,7 @@ interface AudioPlayerProps {
 
 const AudioPlayer: React.FC<AudioPlayerProps> = ({ audioFile }) => {
   const audioRef = useRef<HTMLAudioElement>(null);
-  const [isPlaying, setIsPlaying] = useState<boolean>(true);
+  const [isPlaying, setIsPlaying] = useState<boolean>(true); // Initialize as false to prevent autoplay
   const [isMuted, setIsMuted] = useState<boolean>(false);
   const [currentTime, setCurrentTime] = useState<string>("0:00");
   const [duration, setDuration] = useState<string>("0:00");
@@ -41,7 +41,6 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({ audioFile }) => {
     };
 
     if (audio) {
-      audio.play();
       audio.addEventListener("timeupdate", handleTimeUpdate);
       audio.addEventListener("loadedmetadata", handleMetadata);
 
@@ -187,7 +186,7 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({ audioFile }) => {
           type="range"
           className="w-2/3"
           max="100"
-          value={progress}
+          value={isNaN(progress) ? 0 : progress} // Ensure progress is not NaN
           onChange={handleSeek}
         />
         <span className="">{duration}</span>
@@ -211,7 +210,7 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({ audioFile }) => {
             type="range"
             className="w-32"
             max="100"
-            value={volume}
+            value={isNaN(volume) ? 0 : volume} // Ensure volume is not NaN
             onChange={handleVolumeChange}
           />
         </div>

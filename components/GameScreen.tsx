@@ -1,12 +1,10 @@
-// @/components/GameScreen.tsx
-
-"use client";
 import Image from "next/image";
-import { Scene } from "@/app/play/types";
+import { Action, Scene } from "@/app/play/types";
 import { useState, useEffect } from "react";
 import { downloadData } from "@aws-amplify/storage";
 import AudioPlayer from "./AudioPlayer";
 import { josefin_slab } from "@/app/fonts";
+
 interface GameScreenProps {
   signOut: () => void;
   user: any; // Replace `any` with the actual type if you have it
@@ -22,25 +20,26 @@ const GameScreen: React.FC<GameScreenProps> = ({
 }) => {
   const [imageURL, setImageURL] = useState<string | null>(null);
   const [audioFile, setAudioFile] = useState<File | null>(null);
-
-  console.log("GameScreen Props(Scene):", scene);
+  const [transitionText, setTransitionText] = useState<string | null>(null);
 
   useEffect(() => {
     if (scene?.image) {
       fetchImage(scene.image);
     }
+  }, [scene?.image]);
+
+  useEffect(() => {
     if (scene?.audio) {
       fetchAudio(scene.audio);
     }
-  }, [scene]);
+  }, [scene?.audio]);
 
   const fetchImage = async (imagePath: string) => {
     try {
-      const result = await downloadData({ path: imagePath });
+      const result = downloadData({ path: imagePath });
       const blob = await (await result.result).body.blob();
       const url = URL.createObjectURL(blob);
       setImageURL(url);
-      console.log("Fetched image blob URL:", url);
     } catch (error) {
       console.error("Error fetching image:", error);
     }
@@ -48,18 +47,16 @@ const GameScreen: React.FC<GameScreenProps> = ({
 
   const fetchAudio = async (audioPath: string) => {
     try {
-      const result = await downloadData({ path: audioPath });
+      const result = downloadData({ path: audioPath });
       const blob = await (await result.result).body.blob();
       setAudioFile(new File([blob], "audio-file.mp3", { type: "audio/mpeg" }));
-      console.log("Fetched audio blob URL");
     } catch (error) {
       console.error("Error fetching audio:", error);
     }
   };
-
-  if (!scene) {
-    return <div>No scene data available.</div>;
-  }
+  const playerChoice = (action: Action) => {
+    setTransitionText(action.transition_text);
+  };
 
   return (
     <div className="text-white w-full">
@@ -78,24 +75,31 @@ const GameScreen: React.FC<GameScreenProps> = ({
       </div>
       <div>
         <div
-          className={`${josefin_slab.className} text-lg gamescreen-component fixed left-2 top-16 w-1/2 max-h-96 overflow-y-auto`}
+          className={`${josefin_slab.className} text-lg gamescreen-component fixed left-2 top-2 max-h-72 overflow-y-auto`}
         >
-          {scene.primary_text}
+          {scene?.primary_text || "Loading text..."}
         </div>
-        <div className="">
-          <div className="fixed bottom-0 w-full">
-            <div className="">
-              {audioFile && <AudioPlayer audioFile={audioFile} />}
+        <div className="fixed bottom-0 w-full text-center content-center sm:flex sm:justify-center sm:items-center sm:space-x-4">
+          <div className="w-full sm:w-1/2 sm:order-last mb-4 sm:mb-0">
+            <div className="w-full flex justify-center">
+              <div className="flex w-full max-w-sm justify-around">
+                {scene?.actions_available.map((action) => (
+                  <button
+                    onClick={() => playerChoice(action)}
+                    className="gamescreen-button m-2"
+                    key={action.direction}
+                  >
+                    {action.command_text}
+                  </button>
+                )) || <div>Loading actions...</div>}
+              </div>
+              <div className="gamescreen-component">{transitionText}</div>
             </div>
           </div>
-        </div>
-        <div className="w-full fixed bottom-24 sm:bottom-0 right-0">
-          <div className="w-full flex justify-around">
-            {scene.actions_available.map((action) => (
-              <button className="gamescreen-button" key={action.direction}>
-                {action.command_text}
-              </button>
-            ))}
+          <div className="w-full sm:w-1/2 sm:order-first">
+            <div className="w-full flex justify-center">
+              {audioFile && <AudioPlayer audioFile={audioFile} />}
+            </div>
           </div>
         </div>
       </div>
