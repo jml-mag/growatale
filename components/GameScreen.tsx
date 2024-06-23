@@ -3,10 +3,16 @@
 import Image from "next/image";
 import { Action, Scene } from "@/app/play/types";
 import { useState, useEffect } from "react";
-import { downloadData } from "@aws-amplify/storage";
 import AudioPlayer from "./AudioPlayer";
 import { josefin_slab } from "@/app/fonts";
 import { motion, AnimatePresence } from "framer-motion";
+import {
+  fetchImage,
+  fetchAudio,
+  staggerChildren,
+  initiateSceneTransition,
+  preloadSceneAssets,
+} from "@/utils/gameScreen";
 
 interface GameScreenProps {
   signOut: () => void;
@@ -14,17 +20,6 @@ interface GameScreenProps {
   gameId: string | string[] | undefined;
   scene: Scene | null; // Accept scene data as a prop
 }
-
-const staggerChildren = {
-  hidden: { opacity: 0 },
-  visible: (i = 1) => ({
-    opacity: 1,
-    transition: {
-      staggerChildren: 0.3,
-      delayChildren: 0.3 * i,
-    },
-  }),
-};
 
 const GameScreen: React.FC<GameScreenProps> = ({
   signOut,
@@ -43,51 +38,30 @@ const GameScreen: React.FC<GameScreenProps> = ({
 
   useEffect(() => {
     if (scene) {
-      initiateSceneTransition();
-      preloadSceneAssets(scene);
+      initiateSceneTransition({
+        setIsTextTransitioning,
+        setIsImageTransitioning,
+        setIsAudioTransitioning,
+        setIsAudioLoaded,
+      });
+      preloadSceneAssets(
+        scene,
+        fetchImage,
+        fetchAudio,
+        setImageURL,
+        setAudioFile
+      );
     }
   }, [scene]);
 
-  const initiateSceneTransition = () => {
-    setIsTextTransitioning(true);
-    setIsImageTransitioning(true);
-    setIsAudioTransitioning(true);
-    setIsAudioLoaded(false);
-  };
-
-  const preloadSceneAssets = (scene: Scene) => {
-    if (scene.image) {
-      fetchImage(scene.image);
-    }
-    if (scene.audio) {
-      fetchAudio(scene.audio);
-    }
-  };
-
-  const fetchImage = async (imagePath: string) => {
-    try {
-      const result = await downloadData({ path: imagePath });
-      const blob = await (await result.result).body.blob();
-      const url = URL.createObjectURL(blob);
-      setImageURL(url);
-    } catch (error) {
-      console.error("Error fetching image:", error);
-    }
-  };
-
-  const fetchAudio = async (audioPath: string) => {
-    try {
-      const result = await downloadData({ path: audioPath });
-      const blob = await (await result.result).body.blob();
-      setAudioFile(new File([blob], "audio-file.mp3", { type: "audio/mpeg" }));
-    } catch (error) {
-      console.error("Error fetching audio:", error);
-    }
-  };
-
   const playerChoice = (action: Action) => {
     setTransitionText(action.transition_text);
-    initiateSceneTransition();
+    initiateSceneTransition({
+      setIsTextTransitioning,
+      setIsImageTransitioning,
+      setIsAudioTransitioning,
+      setIsAudioLoaded,
+    });
   };
 
   const handleTransitionEnd = () => {
@@ -97,8 +71,14 @@ const GameScreen: React.FC<GameScreenProps> = ({
   };
 
   useEffect(() => {
+    const handleTransitionEnd = () => {
+      if (!isTextTransitioning && !isImageTransitioning && !isAudioTransitioning) {
+        setRenderedScene(scene);
+      }
+    };
+  
     handleTransitionEnd();
-  }, [isTextTransitioning, isImageTransitioning, isAudioTransitioning]);
+  }, [isTextTransitioning, isImageTransitioning, isAudioTransitioning, scene]);
 
   return (
     <div className="text-white w-full">
@@ -111,11 +91,7 @@ const GameScreen: React.FC<GameScreenProps> = ({
             transition={{ duration: 8.0 }}
             onAnimationComplete={() => setIsImageTransitioning(false)}
           >
-            <Image
-              src={imageURL}
-              alt="Scene Image"
-              fill
-            />
+            <Image src={imageURL} alt="Scene Image" fill />
           </motion.div>
         )}
       </div>

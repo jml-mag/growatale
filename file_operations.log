@@ -611,3 +611,30 @@
 2024-06-20 12:37:38,286 - INFO - Appended content from context/AuthContext.tsx
 2024-06-20 12:37:38,286 - INFO - Searched through /Users/jmlima/Desktop/working/growatale-1/context
 2024-06-20 12:37:38,287 - INFO - Operation completed. All code written to current-code.txt
+2024-06-22 10:45:01,568 - INFO - Appended content from app/fonts.ts
+2024-06-22 10:45:01,569 - INFO - Appended content from app/layout.tsx
+2024-06-22 10:45:01,569 - INFO - Appended content from app/page.tsx
+2024-06-22 10:45:01,569 - INFO - Appended content from app/globals.css
+2024-06-22 10:45:01,569 - INFO - Appended content from app/api/openai/image/route.ts
+2024-06-22 10:45:01,569 - INFO - Appended content from app/api/openai/audio/route.ts
+2024-06-22 10:45:01,569 - INFO - Appended content from app/api/openai/primary/route.ts
+2024-06-22 10:45:01,569 - INFO - Appended content from app/play/types.ts
+2024-06-22 10:45:01,569 - INFO - Appended content from app/play/gameSettings.ts
+2024-06-22 10:45:01,570 - INFO - Appended content from app/play/layout.tsx
+2024-06-22 10:45:01,570 - INFO - Appended content from app/play/page.tsx
+2024-06-22 10:45:01,570 - INFO - Appended content from app/play/utils/apiCalls.ts
+2024-06-22 10:45:01,570 - INFO - Appended content from app/play/utils/gameUtils.ts
+2024-06-22 10:45:01,570 - INFO - Appended content from app/play/[gameId]/layout.tsx
+2024-06-22 10:45:01,570 - INFO - Appended content from app/play/[gameId]/page.tsx
+2024-06-22 10:45:01,570 - INFO - Searched through /Users/jmlima/Desktop/working/growatale-1/app
+2024-06-22 10:45:01,570 - INFO - Appended content from components/AudioPlayer.tsx
+2024-06-22 10:45:01,570 - INFO - Appended content from components/GameScreen.tsx
+2024-06-22 10:45:01,570 - INFO - Searched through /Users/jmlima/Desktop/working/growatale-1/components
+2024-06-22 10:45:01,570 - INFO - Appended content from amplify/backend.ts
+2024-06-22 10:45:01,570 - INFO - Appended content from amplify/auth/resource.ts
+2024-06-22 10:45:01,571 - INFO - Appended content from amplify/storage/resource.ts
+2024-06-22 10:45:01,571 - INFO - Appended content from amplify/data/resource.ts
+2024-06-22 10:45:01,571 - INFO - Searched through /Users/jmlima/Desktop/working/growatale-1/amplify
+2024-06-22 10:45:01,571 - INFO - Appended content from context/AuthContext.tsx
+2024-06-22 10:45:01,571 - INFO - Searched through /Users/jmlima/Desktop/working/growatale-1/context
+2024-06-22 10:45:01,571 - INFO - Operation completed. All code written to current-code.txt
