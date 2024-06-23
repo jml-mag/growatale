@@ -54,22 +54,6 @@ const GameScreen: React.FC<GameScreenProps> = ({
     }
   }, [scene]);
 
-  const playerChoice = (action: Action) => {
-    setTransitionText(action.transition_text);
-    initiateSceneTransition({
-      setIsTextTransitioning,
-      setIsImageTransitioning,
-      setIsAudioTransitioning,
-      setIsAudioLoaded,
-    });
-  };
-
-  const handleTransitionEnd = () => {
-    if (!isTextTransitioning && !isImageTransitioning && !isAudioTransitioning) {
-      setRenderedScene(scene);
-    }
-  };
-
   useEffect(() => {
     const handleTransitionEnd = () => {
       if (!isTextTransitioning && !isImageTransitioning && !isAudioTransitioning) {
@@ -79,6 +63,16 @@ const GameScreen: React.FC<GameScreenProps> = ({
   
     handleTransitionEnd();
   }, [isTextTransitioning, isImageTransitioning, isAudioTransitioning, scene]);
+
+  const playerChoice = (action: Action) => {
+    setTransitionText(action.transition_text);
+    initiateSceneTransition({
+      setIsTextTransitioning,
+      setIsImageTransitioning,
+      setIsAudioTransitioning,
+      setIsAudioLoaded,
+    });
+  };
 
   return (
     <div className="text-white w-full">
