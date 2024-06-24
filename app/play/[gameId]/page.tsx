@@ -31,9 +31,9 @@ const fetchCurrentScene = async (currentSceneId: string) => {
 
 const generatePrimaryText = async (
   currentScene: Scene,
+  setScene: (scene: Scene) => void,
   previousPrimaryText: string,
-  playerChoice: string,
-  setScene: (scene: Scene) => void
+  playerChoice: string
 ) => {
   const start = performance.now();
   const newScene = await createScene(currentScene, previousPrimaryText, playerChoice);
@@ -129,7 +129,7 @@ const handleSceneGeneration = async (
     let currentScene = await fetchCurrentScene(story.current_scene);
 
     if (!currentScene.primary_text) {
-      currentScene = await generatePrimaryText(currentScene, "", "", setScene);
+      currentScene = await generatePrimaryText(currentScene, setScene, "", "");
     } else {
       setScene(currentScene);
     }
@@ -179,10 +179,31 @@ const fetchNewScene = async (
     newScene.id = initialNewScene.id;
     console.log("New scene created with ID: ", newScene.id);
 
-    let createdScene = await generatePrimaryText(newScene, previousPrimaryText, playerChoice, setScene);
+    let createdScene = await generatePrimaryText(newScene, setScene, previousPrimaryText, playerChoice);
     await generateAssets(createdScene, setScene, performance.now());
   } catch (error) {
     setError("Failed to create new scene.");
+  } finally {
+    setLoading(false);
+  }
+};
+
+const fetchPreviousScene = async (
+  previousSceneId: string,
+  storyId: string,
+  previousPrimaryText: string,
+  setScene: (scene: Scene) => void,
+  setLoading: (loading: boolean) => void,
+  setError: (error: string | null) => void
+) => {
+  setLoading(true);
+
+  try {
+    const fetchedScene = await fetchScene(previousSceneId);
+    fetchedScene.previous_scene = previousPrimaryText;
+    setScene(fetchedScene);
+  } catch (error) {
+    setError("Failed to fetch previous scene.");
   } finally {
     setLoading(false);
   }
@@ -225,6 +246,15 @@ const useGameLogic = (gameId: string | undefined) => {
         setLoading,
         setError
       ),
+    fetchPreviousScene: (previousSceneId: string, storyId: string, previousPrimaryText: string) =>
+      fetchPreviousScene(
+        previousSceneId,
+        storyId,
+        previousPrimaryText,
+        setScene,
+        setLoading,
+        setError
+      ),
   };
 };
 
@@ -232,7 +262,7 @@ const Game = () => {
   const { signOut, user } = useAuth();
   const pathname = usePathname();
   const gameId = pathname.split("/").pop();
-  const { scene, loading, error, setScene, fetchNewScene } =
+  const { scene, loading, error, setScene, fetchNewScene, fetchPreviousScene } =
     useGameLogic(gameId);
 
   if (loading) {
@@ -245,14 +275,13 @@ const Game = () => {
 
   return (
     <GameScreen
-  signOut={signOut}
-  user={user}
-  gameId={gameId}
-  scene={scene}
-  fetchNewScene={(previousSceneId: string, storyId: string, previousPrimaryText: string, playerChoice: string) =>
-    fetchNewScene(previousSceneId, storyId, previousPrimaryText, playerChoice)}
-/>
-
+      signOut={signOut}
+      user={user}
+      gameId={gameId}
+      scene={scene}
+      fetchNewScene={fetchNewScene}
+      fetchPreviousScene={fetchPreviousScene}
+    />
   );
 };
 

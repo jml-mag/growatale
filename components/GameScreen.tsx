@@ -18,6 +18,7 @@ interface GameScreenProps {
   gameId: string | string[] | undefined;
   scene: Scene | null;
   fetchNewScene: (previousSceneId: string, storyId: string, previousPrimaryText: string, playerChoice: string) => Promise<void>;
+  fetchPreviousScene: (previousSceneId: string, storyId: string, previousPrimaryText: string) => Promise<void>;
 }
 
 const GameScreen: React.FC<GameScreenProps> = ({
@@ -26,6 +27,7 @@ const GameScreen: React.FC<GameScreenProps> = ({
   gameId,
   scene,
   fetchNewScene,
+  fetchPreviousScene,
 }) => {
   const [imageURL, setImageURL] = useState<string | null>(null);
   const [audioFile, setAudioFile] = useState<File | null>(null);
@@ -94,11 +96,15 @@ const GameScreen: React.FC<GameScreenProps> = ({
       setIsAudioTransitioning,
       setIsAudioLoaded,
     });
-  
+
     if (scene) {
       const previousPrimaryText = scene.primary_text;
-      const playerChoice = action.command_text;
-      await fetchNewScene(scene.id || "", scene.story_id, previousPrimaryText, playerChoice);
+      if (action.command_text.toLowerCase() === "go back") {
+        await fetchPreviousScene(scene.previous_scene || "", scene.story_id, previousPrimaryText);
+      } else {
+        const playerChoice = action.command_text;
+        await fetchNewScene(scene.id || "", scene.story_id, previousPrimaryText, playerChoice);
+      }
     }
   };
 
