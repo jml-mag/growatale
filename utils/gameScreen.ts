@@ -16,7 +16,7 @@ export const staggerChildren = {
 
 export const fetchImage = async (imagePath: string) => {
   try {
-    const result = await downloadData({ path: imagePath });
+    const result = downloadData({ path: imagePath });
     const blob = await (await result.result).body.blob();
     const url = URL.createObjectURL(blob);
     return url;
@@ -28,7 +28,7 @@ export const fetchImage = async (imagePath: string) => {
 
 export const fetchAudio = async (audioPath: string) => {
   try {
-    const result = await downloadData({ path: audioPath });
+    const result = downloadData({ path: audioPath });
     const blob = await (await result.result).body.blob();
     const file = new File([blob], "audio-file.mp3", { type: "audio/mpeg" });
     return file;

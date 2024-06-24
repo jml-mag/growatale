@@ -30,14 +30,18 @@ export async function saveBlobToS3(blob: Blob, contentType: string, path: string
  * @returns The URL of the saved image file.
  */
 export async function getImage(prompt: string): Promise<string | null> {
+
   try {
+    console.log(`prompt: ${prompt}`)
+    const adjustedPrompt = `In the style of ${gameSettings.artist} create ${prompt}`
+    console.log(`adjustedPrompt: ${adjustedPrompt}`)
     const response = await fetch("/api/openai/image", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        prompt: prompt,
+        prompt: adjustedPrompt,
         model: gameSettings.image_ai,
         n: 1,
         size: gameSettings.image_size,

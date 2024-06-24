@@ -20,10 +20,10 @@ interface GameSettings {
   // Default game settings
   const gameSettings: GameSettings = {
     author: "Default Author",
-    artist: "Default Artist",
+    artist: "A world class 1930's American animator",
     primary_ai: "gpt-4o",
-    audio_ai: "tts-1-hd",
-    image_ai: "dall-e-3",
+    audio_ai: "tts-1",// or "tts-1-hd",
+    image_ai: "dall-e-3", // or "dall-e-2"
     image_size: "1024x1024",
     image_quality: "hd",
     image_style: "vivid", // or "natural"

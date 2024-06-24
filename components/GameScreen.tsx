@@ -1,8 +1,6 @@
-// @/components/GameScreen
-
 import Image from "next/image";
 import { Action, Scene } from "@/app/play/types";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import AudioPlayer from "./AudioPlayer";
 import { josefin_slab } from "@/app/fonts";
 import { motion, AnimatePresence } from "framer-motion";
@@ -36,6 +34,9 @@ const GameScreen: React.FC<GameScreenProps> = ({
   const [isAudioTransitioning, setIsAudioTransitioning] = useState<boolean>(false);
   const [isAudioLoaded, setIsAudioLoaded] = useState<boolean>(false);
 
+  const textContainerRef = useRef<HTMLDivElement>(null);
+  const mainContainerRef = useRef<HTMLDivElement>(null);
+
   useEffect(() => {
     if (scene) {
       initiateSceneTransition({
@@ -60,7 +61,7 @@ const GameScreen: React.FC<GameScreenProps> = ({
         setRenderedScene(scene);
       }
     };
-  
+
     handleTransitionEnd();
   }, [isTextTransitioning, isImageTransitioning, isAudioTransitioning, scene]);
 
@@ -74,12 +75,31 @@ const GameScreen: React.FC<GameScreenProps> = ({
     });
   };
 
+  const handleTextScroll = () => {
+    const textContainer = textContainerRef.current;
+    const mainContainer = mainContainerRef.current;
+    if (textContainer && mainContainer) {
+      const { scrollTop, scrollHeight, clientHeight } = textContainer;
+      if (scrollTop + clientHeight >= scrollHeight) {
+        mainContainer.scrollTo({
+          top: mainContainer.scrollHeight,
+          behavior: 'smooth'
+        });
+      } else if (scrollTop === 0) {
+        mainContainer.scrollTo({
+          top: 0,
+          behavior: 'smooth'
+        });
+      }
+    }
+  };
+
   return (
-    <div className="text-white w-full">
+    <div className="text-white w-full h-full overflow-hidden" ref={mainContainerRef}>
       <div className="fixed top-0 left-0 w-full h-full -z-50">
         {imageURL && (
           <motion.div
-            className="object-cover"
+            className="fixed w-full h-screen object-cover"
             initial={{ opacity: 0 }}
             animate={{ opacity: isImageTransitioning ? 0 : 1 }}
             transition={{ duration: 8.0 }}
@@ -99,6 +119,8 @@ const GameScreen: React.FC<GameScreenProps> = ({
           animate={{ opacity: isTextTransitioning ? 0 : 1 }}
           transition={{ duration: 2.5 }}
           onAnimationComplete={() => setIsTextTransitioning(false)}
+          ref={textContainerRef}
+          onScroll={handleTextScroll}
         >
           {renderedScene?.primary_text || "Loading text..."}
         </motion.div>
