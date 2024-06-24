@@ -2,7 +2,9 @@ export interface Action {
   direction: string;
   command_text: string;
   transition_text: string;
+  player_choice: string; // Add this line
 }
+
 
 export interface Inventory {
   item: string;

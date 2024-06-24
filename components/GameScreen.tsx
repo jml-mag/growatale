@@ -1,4 +1,3 @@
-// @/components/GameScreen
 import Image from "next/image";
 import { Action, Scene } from "@/app/play/types";
 import { useState, useEffect, useRef } from "react";
@@ -18,7 +17,7 @@ interface GameScreenProps {
   user: any;
   gameId: string | string[] | undefined;
   scene: Scene | null;
-  fetchNewScene: (previousSceneId: string, storyId: string) => Promise<void>;
+  fetchNewScene: (previousSceneId: string, storyId: string, previousPrimaryText: string, playerChoice: string) => Promise<void>;
 }
 
 const GameScreen: React.FC<GameScreenProps> = ({
@@ -95,9 +94,11 @@ const GameScreen: React.FC<GameScreenProps> = ({
       setIsAudioTransitioning,
       setIsAudioLoaded,
     });
-
+  
     if (scene) {
-      await fetchNewScene(scene.id || "", scene.story_id);
+      const previousPrimaryText = scene.primary_text;
+      const playerChoice = action.command_text;
+      await fetchNewScene(scene.id || "", scene.story_id, previousPrimaryText, playerChoice);
     }
   };
 

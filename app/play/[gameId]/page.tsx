@@ -31,10 +31,12 @@ const fetchCurrentScene = async (currentSceneId: string) => {
 
 const generatePrimaryText = async (
   currentScene: Scene,
+  previousPrimaryText: string,
+  playerChoice: string,
   setScene: (scene: Scene) => void
 ) => {
   const start = performance.now();
-  const newScene = await createScene(currentScene);
+  const newScene = await createScene(currentScene, previousPrimaryText, playerChoice);
   console.log(`createScene: `, newScene);
   console.log(`createScene took ${performance.now() - start}ms`);
 
@@ -127,7 +129,7 @@ const handleSceneGeneration = async (
     let currentScene = await fetchCurrentScene(story.current_scene);
 
     if (!currentScene.primary_text) {
-      currentScene = await generatePrimaryText(currentScene, setScene);
+      currentScene = await generatePrimaryText(currentScene, "", "", setScene);
     } else {
       setScene(currentScene);
     }
@@ -152,6 +154,8 @@ const fetchNewScene = async (
   gameId: string | undefined,
   previousSceneId: string,
   storyId: string,
+  previousPrimaryText: string,
+  playerChoice: string,
   setScene: (scene: Scene) => void,
   setLoading: (loading: boolean) => void,
   setError: (error: string | null) => void
@@ -175,7 +179,7 @@ const fetchNewScene = async (
     newScene.id = initialNewScene.id;
     console.log("New scene created with ID: ", newScene.id);
 
-    let createdScene = await generatePrimaryText(newScene, setScene);
+    let createdScene = await generatePrimaryText(newScene, previousPrimaryText, playerChoice, setScene);
     await generateAssets(createdScene, setScene, performance.now());
   } catch (error) {
     setError("Failed to create new scene.");
@@ -210,11 +214,13 @@ const useGameLogic = (gameId: string | undefined) => {
     loading,
     error,
     setScene,
-    fetchNewScene: (previousSceneId: string, storyId: string) =>
+    fetchNewScene: (previousSceneId: string, storyId: string, previousPrimaryText: string, playerChoice: string) =>
       fetchNewScene(
         gameId,
         previousSceneId,
         storyId,
+        previousPrimaryText,
+        playerChoice,
         setScene,
         setLoading,
         setError
@@ -239,12 +245,14 @@ const Game = () => {
 
   return (
     <GameScreen
-      signOut={signOut}
-      user={user}
-      gameId={gameId}
-      scene={scene}
-      fetchNewScene={fetchNewScene}
-    />
+  signOut={signOut}
+  user={user}
+  gameId={gameId}
+  scene={scene}
+  fetchNewScene={(previousSceneId: string, storyId: string, previousPrimaryText: string, playerChoice: string) =>
+    fetchNewScene(previousSceneId, storyId, previousPrimaryText, playerChoice)}
+/>
+
   );
 };
 
