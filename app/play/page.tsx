@@ -1,3 +1,4 @@
+// @/app/play/page
 'use client';
 import { Story } from "@/app/play/types";
 import { useState, useEffect } from "react";

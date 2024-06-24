@@ -1,4 +1,4 @@
-// @/app/play-5/utils/apiCalls.ts
+// @/app/play/utils/apiCalls.ts
 
 import { uploadData } from '@aws-amplify/storage';
 import gameSettings from '../gameSettings';
