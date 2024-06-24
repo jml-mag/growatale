@@ -1,3 +1,5 @@
+// @/app/components/GameScreen
+
 import Image from "next/image";
 import { Action, Scene } from "@/app/play/types";
 import { useState, useEffect, useRef } from "react";
@@ -75,27 +77,8 @@ const GameScreen: React.FC<GameScreenProps> = ({
     });
   };
 
-  const handleTextScroll = () => {
-    const textContainer = textContainerRef.current;
-    const mainContainer = mainContainerRef.current;
-    if (textContainer && mainContainer) {
-      const { scrollTop, scrollHeight, clientHeight } = textContainer;
-      if (scrollTop + clientHeight >= scrollHeight) {
-        mainContainer.scrollTo({
-          top: mainContainer.scrollHeight,
-          behavior: 'smooth'
-        });
-      } else if (scrollTop === 0) {
-        mainContainer.scrollTo({
-          top: 0,
-          behavior: 'smooth'
-        });
-      }
-    }
-  };
-
   return (
-    <div className="text-white w-full h-full overflow-hidden" ref={mainContainerRef}>
+    <div className="text-white w-full h-screen overflow-hidden" ref={mainContainerRef}>
       <div className="fixed top-0 left-0 w-full h-full -z-50">
         {imageURL && (
           <motion.div
@@ -120,7 +103,6 @@ const GameScreen: React.FC<GameScreenProps> = ({
           transition={{ duration: 2.5 }}
           onAnimationComplete={() => setIsTextTransitioning(false)}
           ref={textContainerRef}
-          onScroll={handleTextScroll}
         >
           {renderedScene?.primary_text || "Loading text..."}
         </motion.div>
