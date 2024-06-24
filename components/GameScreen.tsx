@@ -1,3 +1,4 @@
+// @/components/GameScreen
 import Image from "next/image";
 import { Action, Scene } from "@/app/play/types";
 import { useState, useEffect, useRef } from "react";
@@ -14,9 +15,10 @@ import {
 
 interface GameScreenProps {
   signOut: () => void;
-  user: any; // Replace `any` with the actual type if you have it
+  user: any;
   gameId: string | string[] | undefined;
-  scene: Scene | null; // Accept scene data as a prop
+  scene: Scene | null;
+  fetchNewScene: (previousSceneId: string, storyId: string) => Promise<void>;
 }
 
 const GameScreen: React.FC<GameScreenProps> = ({
@@ -24,6 +26,7 @@ const GameScreen: React.FC<GameScreenProps> = ({
   user,
   gameId,
   scene,
+  fetchNewScene,
 }) => {
   const [imageURL, setImageURL] = useState<string | null>(null);
   const [audioFile, setAudioFile] = useState<File | null>(null);
@@ -33,7 +36,6 @@ const GameScreen: React.FC<GameScreenProps> = ({
   const [isImageTransitioning, setIsImageTransitioning] = useState<boolean>(false);
   const [isAudioTransitioning, setIsAudioTransitioning] = useState<boolean>(false);
   const [isAudioLoaded, setIsAudioLoaded] = useState<boolean>(false);
-  const [isContainerMoving, setIsContainerMoving] = useState<boolean>(false);
   const [scrollDirection, setScrollDirection] = useState<"up" | "down" | null>(null);
 
   const textContainerRef = useRef<HTMLDivElement>(null);
@@ -73,7 +75,7 @@ const GameScreen: React.FC<GameScreenProps> = ({
     const container = textContainerRef.current;
     if (container) {
       const { scrollTop, scrollHeight, clientHeight } = container;
-      const containerHeight = clientHeight * 0.7; // Move 80% of container height
+      const containerHeight = clientHeight * 0.7; // Move 70% of container height
 
       if (scrollTop + clientHeight >= scrollHeight && scrollDirection !== "up") {
         setScrollDirection("up");
@@ -85,7 +87,7 @@ const GameScreen: React.FC<GameScreenProps> = ({
     }
   };
 
-  const playerChoice = (action: Action) => {
+  const playerChoice = async (action: Action) => {
     setTransitionText(action.transition_text);
     initiateSceneTransition({
       setIsTextTransitioning,
@@ -93,6 +95,10 @@ const GameScreen: React.FC<GameScreenProps> = ({
       setIsAudioTransitioning,
       setIsAudioLoaded,
     });
+
+    if (scene) {
+      await fetchNewScene(scene.id || "", scene.story_id);
+    }
   };
 
   return (
@@ -191,6 +197,10 @@ const GameScreen: React.FC<GameScreenProps> = ({
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ duration: 2.5 }}
+              onAnimationComplete={() => {
+                setTransitionText(null);
+                setIsTextTransitioning(false);
+              }}
             >
               {transitionText}
             </motion.div>
