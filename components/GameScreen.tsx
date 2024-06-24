@@ -1,11 +1,9 @@
-// @/app/components/GameScreen
-
 import Image from "next/image";
 import { Action, Scene } from "@/app/play/types";
 import { useState, useEffect, useRef } from "react";
 import AudioPlayer from "./AudioPlayer";
 import { josefin_slab } from "@/app/fonts";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence, useMotionValue, useTransform, animate } from "framer-motion";
 import {
   fetchImage,
   fetchAudio,
@@ -35,9 +33,13 @@ const GameScreen: React.FC<GameScreenProps> = ({
   const [isImageTransitioning, setIsImageTransitioning] = useState<boolean>(false);
   const [isAudioTransitioning, setIsAudioTransitioning] = useState<boolean>(false);
   const [isAudioLoaded, setIsAudioLoaded] = useState<boolean>(false);
+  const [isContainerMoving, setIsContainerMoving] = useState<boolean>(false);
+  const [scrollDirection, setScrollDirection] = useState<"up" | "down" | null>(null);
 
   const textContainerRef = useRef<HTMLDivElement>(null);
   const mainContainerRef = useRef<HTMLDivElement>(null);
+  const scrollY = useMotionValue(0);
+  const containerTransform = useTransform(scrollY, value => `translateY(${value}px)`);
 
   useEffect(() => {
     if (scene) {
@@ -67,6 +69,22 @@ const GameScreen: React.FC<GameScreenProps> = ({
     handleTransitionEnd();
   }, [isTextTransitioning, isImageTransitioning, isAudioTransitioning, scene]);
 
+  const handleScroll = () => {
+    const container = textContainerRef.current;
+    if (container) {
+      const { scrollTop, scrollHeight, clientHeight } = container;
+      const containerHeight = clientHeight * 0.7; // Move 80% of container height
+
+      if (scrollTop + clientHeight >= scrollHeight && scrollDirection !== "up") {
+        setScrollDirection("up");
+        animate(scrollY, -containerHeight, { type: "tween", duration: 1.0 });
+      } else if (scrollTop === 0 && scrollDirection !== "down") {
+        setScrollDirection("down");
+        animate(scrollY, 0, { type: "tween", duration: 0.5 });
+      }
+    }
+  };
+
   const playerChoice = (action: Action) => {
     setTransitionText(action.transition_text);
     initiateSceneTransition({
@@ -95,7 +113,10 @@ const GameScreen: React.FC<GameScreenProps> = ({
       <div className="hidden bg-blue-950 bg-opacity-70 p-4 rounded-2xl">
         <button onClick={signOut}>Sign Out</button>
       </div>
-      <div>
+      <motion.div
+        className="absolute w-full h-full"
+        style={{ transform: containerTransform }}
+      >
         <motion.div
           className={`${josefin_slab.className} text-lg gamescreen-component fixed left-2 top-2 max-h-72 overflow-y-auto`}
           initial={{ opacity: 0 }}
@@ -103,77 +124,78 @@ const GameScreen: React.FC<GameScreenProps> = ({
           transition={{ duration: 2.5 }}
           onAnimationComplete={() => setIsTextTransitioning(false)}
           ref={textContainerRef}
+          onScroll={handleScroll}
         >
           {renderedScene?.primary_text || "Loading text..."}
         </motion.div>
-        <div className="fixed bottom-0 w-full text-center content-center sm:flex sm:justify-center sm:items-center sm:space-x-4">
-          <motion.div
-            className="w-full sm:w-1/2 sm:order-last mb-4 sm:mb-0"
-            variants={staggerChildren}
-            initial="hidden"
-            animate={isAudioLoaded ? (isTextTransitioning ? "hidden" : "visible") : "hidden"}
-            exit="hidden"
-            transition={{ duration: 0.3 }}
-          >
-            <div className="w-full flex justify-center">
-              <div className="flex w-full max-w-sm justify-around">
-                <AnimatePresence>
-                  {renderedScene?.actions_available.map((action, index) => (
-                    <motion.button
-                      key={action.direction}
-                      onClick={() => playerChoice(action)}
-                      className="gamescreen-button m-2"
-                      custom={index}
-                      variants={{
-                        hidden: { opacity: 0 },
-                        visible: { opacity: 1 },
-                        exit: { opacity: 0, transition: { duration: 0.3 } },
-                      }}
-                    >
-                      {action.command_text}
-                    </motion.button>
-                  ))}
-                </AnimatePresence>
-              </div>
-              <div className="gamescreen-component">{transitionText}</div>
-            </div>
-          </motion.div>
-          <div className="w-full sm:w-1/2 sm:order-first">
-            <div className="w-full flex justify-center">
+      </motion.div>
+      <div className="fixed bottom-0 w-full text-center content-center sm:flex sm:justify-center sm:items-center sm:space-x-4">
+        <motion.div
+          className="w-full sm:w-1/2 sm:order-last mb-4 sm:mb-0"
+          variants={staggerChildren}
+          initial="hidden"
+          animate={isAudioLoaded ? (isTextTransitioning ? "hidden" : "visible") : "hidden"}
+          exit="hidden"
+          transition={{ duration: 0.3 }}
+        >
+          <div className="w-full flex justify-center">
+            <div className="flex w-full max-w-sm justify-around">
               <AnimatePresence>
-                {audioFile && (
-                  <motion.div
-                    className="audio-player-wrapper"
-                    initial={{ opacity: 0, y: 100 }}
-                    animate={{ opacity: isAudioTransitioning ? 0 : 1, y: isAudioTransitioning ? 100 : 0 }}
-                    exit={{ opacity: 0, y: 100 }}
-                    transition={{ duration: 0.5 }}
-                    onAnimationComplete={() => {
-                      setIsAudioTransitioning(false);
-                      setIsAudioLoaded(true);
+                {renderedScene?.actions_available.map((action, index) => (
+                  <motion.button
+                    key={action.direction}
+                    onClick={() => playerChoice(action)}
+                    className="gamescreen-button m-2"
+                    custom={index}
+                    variants={{
+                      hidden: { opacity: 0 },
+                      visible: { opacity: 1 },
+                      exit: { opacity: 0, transition: { duration: 0.3 } },
                     }}
                   >
-                    <AudioPlayer audioFile={audioFile} />
-                  </motion.div>
-                )}
+                    {action.command_text}
+                  </motion.button>
+                ))}
               </AnimatePresence>
             </div>
+            <div className="gamescreen-component">{transitionText}</div>
+          </div>
+        </motion.div>
+        <div className="w-full sm:w-1/2 sm:order-first">
+          <div className="w-full flex justify-center">
+            <AnimatePresence>
+              {audioFile && (
+                <motion.div
+                  className="audio-player-wrapper"
+                  initial={{ opacity: 0, y: 100 }}
+                  animate={{ opacity: isAudioTransitioning ? 0 : 1, y: isAudioTransitioning ? 100 : 0 }}
+                  exit={{ opacity: 0, y: 100 }}
+                  transition={{ duration: 0.5 }}
+                  onAnimationComplete={() => {
+                    setIsAudioTransitioning(false);
+                    setIsAudioLoaded(true);
+                  }}
+                >
+                  <AudioPlayer audioFile={audioFile} />
+                </motion.div>
+              )}
+            </AnimatePresence>
           </div>
         </div>
-        <div className="fixed bottom-0 w-full text-center">
-          <AnimatePresence>
-            {isTextTransitioning && (
-              <motion.div
-                className={`${josefin_slab.className} text-lg gamescreen-component fixed left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2`}
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ duration: 2.5 }}
-              >
-                {transitionText}
-              </motion.div>
-            )}
-          </AnimatePresence>
-        </div>
+      </div>
+      <div className="fixed bottom-0 w-full text-center">
+        <AnimatePresence>
+          {isTextTransitioning && (
+            <motion.div
+              className={`${josefin_slab.className} text-lg gamescreen-component fixed left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2`}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 2.5 }}
+            >
+              {transitionText}
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
     </div>
   );
