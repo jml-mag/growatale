@@ -2,7 +2,8 @@ export interface Action {
   direction: string;
   command_text: string;
   transition_text: string;
-  player_choice: string; // Add this line
+  player_choice: string; 
+  resulting_scene?: string;
 }
 
 

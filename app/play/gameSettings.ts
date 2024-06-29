@@ -24,9 +24,9 @@ interface GameSettings {
     primary_ai: "gpt-4o",
     audio_ai: "tts-1",// or "tts-1-hd",
     image_ai: "dall-e-3", // or "dall-e-2"
-    image_size: "1024x1024",
+    image_size: "1024x1024",//"1024x1024", "1024x1792", "1792x1024"
     image_quality: "hd",
-    image_style: "vivid", // or "natural"
+    image_style: "vivid", // "natural", "vivid"
     image_response_format: "b64_json",
     player_inventory: [],
     starting_scene_description: "a forest with mountains in the very far distance",

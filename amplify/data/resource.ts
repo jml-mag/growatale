@@ -7,6 +7,7 @@ const schema = a.schema({
     direction: a.string().required(),
     command_text: a.string().required(),
     transition_text: a.string().required(),
+    resulting_scene: a.string(),
   }),
   Inventory: a.customType({
     item: a.string().required(),

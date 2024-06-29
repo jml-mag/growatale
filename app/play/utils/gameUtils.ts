@@ -6,17 +6,41 @@ import sharp from "sharp";
 
 const client: Client<Schema> = generateClient<Schema>();
 
-export async function saveScene(sceneData: Scene) {
+export async function saveScene(sceneData: Scene, previousSceneData?: Scene, selectedActionIndex?: number) {
   try {
     const { id, createdAt, updatedAt, owner, ...validSceneData } = sceneData as any;
     console.log(`attempting to save this: ${JSON.stringify(validSceneData, null, 2)}`);
-    const { data, errors } = await client.models.Scene.create(validSceneData);
-    if (!errors && data) {
-      return data;
-    } else {
+    
+    // Save the new scene
+    const { data: newScene, errors } = await client.models.Scene.create(validSceneData);
+    if (errors || !newScene) {
       console.error("Error creating new scene:", errors);
       throw new Error("Error creating new scene");
     }
+    
+    // If there is a previous scene, update its actions
+    if (previousSceneData && previousSceneData.id && typeof selectedActionIndex === 'number') {
+      previousSceneData.actions_available = previousSceneData.actions_available || [];
+      if (previousSceneData.actions_available[selectedActionIndex]) {
+        previousSceneData.actions_available[selectedActionIndex].resulting_scene = newScene.id;
+      }
+
+      // Create the update object
+      const updateObject = {
+        id: previousSceneData.id,
+        actions_available: previousSceneData.actions_available,
+      };
+
+      // Save the updated previous scene
+      const { data: updatedPreviousScene, errors: updateErrors } = await client.models.Scene.update(updateObject);
+
+      if (updateErrors || !updatedPreviousScene) {
+        console.error("Error updating previous scene:", updateErrors);
+        throw new Error("Error updating previous scene");
+      }
+    }
+
+    return newScene;
   } catch (error) {
     console.error("Error saving scene:", error);
     throw error;

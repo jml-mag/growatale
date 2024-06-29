@@ -113,13 +113,13 @@ const GameScreen: React.FC<GameScreenProps> = ({
       <div className="fixed top-0 left-0 w-full h-full -z-50">
         {imageURL && (
           <motion.div
-            className="fixed w-full h-screen object-cover"
+            className="fixed w-full h-screen object-fill"
             initial={{ opacity: 0 }}
             animate={{ opacity: isImageTransitioning ? 0 : 1 }}
             transition={{ duration: 8.0 }}
             onAnimationComplete={() => setIsImageTransitioning(false)}
           >
-            <Image src={imageURL} alt="Scene Image" fill />
+            <Image src={imageURL} alt="Scene Image" fill style={{"objectFit": "cover"}} />
           </motion.div>
         )}
       </div>
