@@ -1,3 +1,5 @@
+// @/context/AuthContext
+
 import { createContext, useContext, ReactNode } from "react";
 
 interface AuthContextType {
