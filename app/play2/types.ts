@@ -3,6 +3,7 @@ export interface Action {
   direction: string;
   command_text: string;
   transition_text: string;
+  leads_to: string;
 } 
 
 export interface Inventory {
@@ -30,7 +31,4 @@ export interface Story {
   current_scene: string;
   player_health: number;
   player_inventory: Inventory[];
-  primary_ai: string;
-  audio_ai: string;
-  image_ai: string;
 }

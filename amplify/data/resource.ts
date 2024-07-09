@@ -7,6 +7,7 @@ const schema = a.schema({
     direction: a.string().required(),
     command_text: a.string().required(),
     transition_text: a.string().required(),
+    leads_to: a.string().required(),
   }),
   Inventory: a.customType({
     item: a.string().required(),
@@ -34,9 +35,6 @@ const schema = a.schema({
     current_scene: a.string().required(),
     player_health: a.integer().required(),
     player_inventory: a.ref('Inventory').array().required(),
-    primary_ai: a.string().required(),
-    audio_ai: a.string().required(),
-    image_ai: a.string().required(),
     scenes: a.hasMany('Scene', 'story_id'), // Reflects that a Story has many Scenes
   }).authorization(allow => [
     allow.owner(),

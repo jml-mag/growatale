@@ -1,8 +1,7 @@
 // app/play2/utils/gameUtils.ts
-
 import { generateClient } from "aws-amplify/data";
 import { Schema } from "@/amplify/data/resource";
-import { Scene, Story } from "@/app/play2/types";
+import { Scene, Story, Action } from "@/app/play2/types";
 import gameSettings from "@/app/play2/gameSettings";
 
 const client = generateClient<Schema>();
@@ -15,8 +14,6 @@ const saveSceneIdToStory = async (sceneId: string, storyId: string) => {
     });
 
     if (!errors && data) {
-      console.log(`saveSceneIdToStory data: ${JSON.stringify(data, null, 2)}`);
-
       return data;
     } else {
       console.error("Error updating story:", errors);
@@ -32,27 +29,32 @@ const saveSceneIdToStory = async (sceneId: string, storyId: string) => {
   }
 };
 
-const saveScene = async (sceneData: Scene) => {
+async function saveScene(sceneData: Scene) {
   try {
     const { id, createdAt, updatedAt, owner, ...validSceneData } = sceneData as any;
-    console.log(`saveScene, saving: ${JSON.stringify(validSceneData, null, 2)}`);
 
-    const { data: newScene, errors } = await client.models.Scene.create(validSceneData);
-    if (errors || !newScene) {
-      console.error("Error creating new scene:", errors);
-      throw new Error("Error creating new scene");
-    }
+    // Ensure leads_to is always a string
+    validSceneData.actions_available = validSceneData.actions_available.map((action: Action) => ({
+      ...action,
+      leads_to: action.leads_to || "", // Default to an empty string if leads_to is not set
+    }));
 
-    return newScene;
-  } catch (error: unknown) {
-    if (error instanceof Error) {
-      console.error("Error saving scene:", error.message);
-    } else {
-      console.error("Unknown error saving scene");
+    const { data: savedScene, errors } = id
+      ? await client.models.Scene.update({ id, ...validSceneData })
+      : await client.models.Scene.create(validSceneData);
+
+    if (errors || !savedScene) {
+      console.error("Error saving scene:", errors);
+      throw new Error("Error saving scene");
     }
+    return savedScene;
+  } catch (error) {
+    console.error("Error saving scene:", error);
     throw error;
   }
-};
+}
+
+
 
 const fetchStoryById = async (storyId: string): Promise<Story> => {
   try {
@@ -84,23 +86,6 @@ const fetchSceneById = async (sceneId: string): Promise<Scene> => {
     if (errors || !scene) {
       throw new Error("Scene not found");
     }
-
-    // Ensure actions_available is correctly typed
-    /*
-    if (scene.actions_available) {
-      scene.actions_available = scene.actions_available.map(action => {
-        if (!action) {
-          throw new Error("Invalid action found in scene");
-        }
-        return {
-          direction: action.direction,
-          command_text: action.command_text,
-          transition_text: action.transition_text,
-        };
-      });
-    }
-*/
-    console.log(`fetchSceneById data: ${JSON.stringify(scene, null, 2)}`);
     return scene as Scene;
   } catch (error: unknown) {
     if (error instanceof Error) {
@@ -120,16 +105,12 @@ const initializeGame = async (username: string): Promise<{ gameId: string, scene
     current_scene: "",
     player_health: 100,
     player_inventory: [],
-    primary_ai: gameSettings.primary_ai,
-    audio_ai: gameSettings.audio_ai,
-    image_ai: gameSettings.image_ai,
   };
 
   try {
     const { data: storyData, errors: storyErrors } = await client.models.Story.create(newStory);
     if (!storyErrors && storyData) {
       const gameId = storyData.id;
-      console.log(`initializeGame data: ${JSON.stringify(storyData, null, 2)}`);
 
       const initialScene: Scene = {
         image: "",

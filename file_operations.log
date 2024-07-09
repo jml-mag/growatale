@@ -724,3 +724,182 @@
 2024-07-02 14:52:54,021 - INFO - Appended content from app/play2/[gameId]/page.tsx
 2024-07-02 14:52:54,021 - INFO - Searched through /Users/jmlima/Desktop/working/growatale/app/play2
 2024-07-02 14:52:54,022 - INFO - Operation completed. All code written to current-code.txt
+2024-07-05 14:16:48,252 - INFO - Appended content from app/play2/types.ts
+2024-07-05 14:16:48,252 - INFO - Appended content from app/play2/gameSettings.ts
+2024-07-05 14:16:48,252 - INFO - Appended content from app/play2/layout.tsx
+2024-07-05 14:16:48,252 - INFO - Appended content from app/play2/page.tsx
+2024-07-05 14:16:48,253 - INFO - Appended content from app/play2/utils/apiCalls.ts
+2024-07-05 14:16:48,253 - INFO - Appended content from app/play2/utils/generateContent.ts
+2024-07-05 14:16:48,253 - INFO - Appended content from app/play2/utils/gameUtils.ts
+2024-07-05 14:16:48,254 - INFO - Appended content from app/play2/components/AudioPlayer.tsx
+2024-07-05 14:16:48,254 - INFO - Appended content from app/play2/components/GameScreen.tsx
+2024-07-05 14:16:48,254 - INFO - Appended content from app/play2/hooks/usePrimaryCall.ts
+2024-07-05 14:16:48,255 - INFO - Appended content from app/play2/[gameId]/layout.tsx
+2024-07-05 14:16:48,255 - INFO - Appended content from app/play2/[gameId]/page.tsx
+2024-07-05 14:16:48,255 - INFO - Searched through /Users/jmlima/Desktop/working/growatale/app/play2
+2024-07-05 14:16:48,255 - INFO - Appended content from app/api/openai/image/route.ts
+2024-07-05 14:16:48,255 - INFO - Appended content from app/api/openai/audio/route.ts
+2024-07-05 14:16:48,256 - INFO - Appended content from app/api/openai/primary/route.ts
+2024-07-05 14:16:48,256 - INFO - Searched through /Users/jmlima/Desktop/working/growatale/app/api
+2024-07-05 14:16:48,256 - INFO - Appended content from context/AuthContext.tsx
+2024-07-05 14:16:48,256 - INFO - Searched through /Users/jmlima/Desktop/working/growatale/context
+2024-07-05 14:16:48,257 - INFO - Operation completed. All code written to current-code.txt
+2024-07-06 13:34:04,307 - INFO - Appended content from app/play2/types.ts
+2024-07-06 13:34:04,308 - INFO - Appended content from app/play2/gameSettings.ts
+2024-07-06 13:34:04,308 - INFO - Appended content from app/play2/layout.tsx
+2024-07-06 13:34:04,308 - INFO - Appended content from app/play2/page.tsx
+2024-07-06 13:34:04,308 - INFO - Appended content from app/play2/utils/apiCalls.ts
+2024-07-06 13:34:04,308 - INFO - Appended content from app/play2/utils/generateContent.ts
+2024-07-06 13:34:04,309 - INFO - Appended content from app/play2/utils/gameUtils.ts
+2024-07-06 13:34:04,309 - INFO - Appended content from app/play2/components/AudioPlayer.tsx
+2024-07-06 13:34:04,309 - INFO - Appended content from app/play2/components/GameScreen.tsx
+2024-07-06 13:34:04,309 - INFO - Appended content from app/play2/hooks/useGame.ts
+2024-07-06 13:34:04,310 - INFO - Appended content from app/play2/[gameId]/layout.tsx
+2024-07-06 13:34:04,310 - INFO - Appended content from app/play2/[gameId]/page.tsx
+2024-07-06 13:34:04,310 - INFO - Searched through /Users/jmlima/Desktop/working/growatale/app/play2
+2024-07-06 13:34:04,310 - INFO - Appended content from app/api/openai/image/route.ts
+2024-07-06 13:34:04,310 - INFO - Appended content from app/api/openai/audio/route.ts
+2024-07-06 13:34:04,310 - INFO - Appended content from app/api/openai/primary/route.ts
+2024-07-06 13:34:04,310 - INFO - Searched through /Users/jmlima/Desktop/working/growatale/app/api
+2024-07-06 13:34:04,311 - INFO - Appended content from context/AuthContext.tsx
+2024-07-06 13:34:04,311 - INFO - Searched through /Users/jmlima/Desktop/working/growatale/context
+2024-07-06 13:34:04,311 - INFO - Appended content from amplify/backend.ts
+2024-07-06 13:34:04,311 - INFO - Appended content from amplify/auth/resource.ts
+2024-07-06 13:34:04,311 - INFO - Appended content from amplify/storage/resource.ts
+2024-07-06 13:34:04,311 - INFO - Appended content from amplify/data/resource.ts
+2024-07-06 13:34:04,311 - INFO - Searched through /Users/jmlima/Desktop/working/growatale/amplify
+2024-07-06 13:34:04,312 - INFO - Operation completed. All code written to current-code.txt
+2024-07-07 19:45:26,720 - INFO - Appended content from app/play2/types.ts
+2024-07-07 19:45:26,721 - INFO - Appended content from app/play2/gameSettings.ts
+2024-07-07 19:45:26,721 - INFO - Appended content from app/play2/layout.tsx
+2024-07-07 19:45:26,721 - INFO - Appended content from app/play2/page.tsx
+2024-07-07 19:45:26,722 - INFO - Appended content from app/play2/utils/apiCalls.ts
+2024-07-07 19:45:26,722 - INFO - Appended content from app/play2/utils/generateContent.ts
+2024-07-07 19:45:26,722 - INFO - Appended content from app/play2/utils/gameUtils.ts
+2024-07-07 19:45:26,723 - INFO - Appended content from app/play2/components/AudioPlayer.tsx
+2024-07-07 19:45:26,723 - INFO - Appended content from app/play2/components/GameScreen.tsx
+2024-07-07 19:45:26,723 - INFO - Appended content from app/play2/hooks/useGameEngine.ts
+2024-07-07 19:45:26,724 - INFO - Appended content from app/play2/hooks/useGame.ts
+2024-07-07 19:45:26,724 - INFO - Appended content from app/play2/[gameId]/layout.tsx
+2024-07-07 19:45:26,724 - INFO - Appended content from app/play2/[gameId]/page.tsx
+2024-07-07 19:45:26,724 - INFO - Searched through /Users/jmlima/Desktop/working/growatale/app/play2
+2024-07-07 19:45:26,724 - INFO - Appended content from app/api/openai/image/route.ts
+2024-07-07 19:45:26,724 - INFO - Appended content from app/api/openai/audio/route.ts
+2024-07-07 19:45:26,725 - INFO - Appended content from app/api/openai/primary/route.ts
+2024-07-07 19:45:26,725 - INFO - Searched through /Users/jmlima/Desktop/working/growatale/app/api
+2024-07-07 19:45:26,725 - INFO - Appended content from context/AuthContext.tsx
+2024-07-07 19:45:26,725 - INFO - Searched through /Users/jmlima/Desktop/working/growatale/context
+2024-07-07 19:45:26,726 - INFO - Appended content from amplify/backend.ts
+2024-07-07 19:45:26,726 - INFO - Appended content from amplify/auth/resource.ts
+2024-07-07 19:45:26,726 - INFO - Appended content from amplify/storage/resource.ts
+2024-07-07 19:45:26,726 - INFO - Appended content from amplify/data/resource.ts
+2024-07-07 19:45:26,726 - INFO - Searched through /Users/jmlima/Desktop/working/growatale/amplify
+2024-07-07 19:45:26,728 - INFO - Operation completed. All code written to current-code.txt
+2024-07-08 12:02:46,298 - INFO - Appended content from app/play2/types.ts
+2024-07-08 12:02:46,298 - INFO - Appended content from app/play2/gameSettings.ts
+2024-07-08 12:02:46,298 - INFO - Appended content from app/play2/layout.tsx
+2024-07-08 12:02:46,298 - INFO - Appended content from app/play2/page.tsx
+2024-07-08 12:02:46,299 - INFO - Appended content from app/play2/utils/apiCalls.ts
+2024-07-08 12:02:46,299 - INFO - Appended content from app/play2/utils/generateContent.ts
+2024-07-08 12:02:46,299 - INFO - Appended content from app/play2/utils/gameUtils.ts
+2024-07-08 12:02:46,299 - INFO - Appended content from app/play2/components/AudioPlayer.tsx
+2024-07-08 12:02:46,299 - INFO - Appended content from app/play2/components/GameScreen.tsx
+2024-07-08 12:02:46,300 - INFO - Appended content from app/play2/hooks/useGameEngine.ts
+2024-07-08 12:02:46,300 - INFO - Appended content from app/play2/hooks/useGameEngine2.ts
+2024-07-08 12:02:46,300 - INFO - Appended content from app/play2/hooks/useGame.ts
+2024-07-08 12:02:46,300 - INFO - Appended content from app/play2/[gameId]/layout.tsx
+2024-07-08 12:02:46,300 - INFO - Appended content from app/play2/[gameId]/page.tsx
+2024-07-08 12:02:46,300 - INFO - Searched through /Users/jmlima/Desktop/working/growatale/app/play2
+2024-07-08 12:02:46,301 - INFO - Appended content from app/api/openai/image/route.ts
+2024-07-08 12:02:46,301 - INFO - Appended content from app/api/openai/audio/route.ts
+2024-07-08 12:02:46,301 - INFO - Appended content from app/api/openai/primary/route.ts
+2024-07-08 12:02:46,301 - INFO - Searched through /Users/jmlima/Desktop/working/growatale/app/api
+2024-07-08 12:02:46,301 - INFO - Appended content from context/AuthContext.tsx
+2024-07-08 12:02:46,302 - INFO - Searched through /Users/jmlima/Desktop/working/growatale/context
+2024-07-08 12:02:46,302 - INFO - Appended content from amplify/backend.ts
+2024-07-08 12:02:46,302 - INFO - Appended content from amplify/auth/resource.ts
+2024-07-08 12:02:46,302 - INFO - Appended content from amplify/storage/resource.ts
+2024-07-08 12:02:46,302 - INFO - Appended content from amplify/data/resource.ts
+2024-07-08 12:02:46,302 - INFO - Searched through /Users/jmlima/Desktop/working/growatale/amplify
+2024-07-08 12:02:46,304 - INFO - Operation completed. All code written to current-code.txt
+2024-07-08 12:10:23,429 - INFO - Appended content from app/play2/types.ts
+2024-07-08 12:10:23,430 - INFO - Appended content from app/play2/gameSettings.ts
+2024-07-08 12:10:23,430 - INFO - Appended content from app/play2/layout.tsx
+2024-07-08 12:10:23,430 - INFO - Appended content from app/play2/page.tsx
+2024-07-08 12:10:23,431 - INFO - Appended content from app/play2/utils/apiCalls.ts
+2024-07-08 12:10:23,431 - INFO - Appended content from app/play2/utils/generateContent.ts
+2024-07-08 12:10:23,431 - INFO - Appended content from app/play2/utils/gameUtils.ts
+2024-07-08 12:10:23,432 - INFO - Appended content from app/play2/components/AudioPlayer.tsx
+2024-07-08 12:10:23,432 - INFO - Appended content from app/play2/components/GameScreen.tsx
+2024-07-08 12:10:23,432 - INFO - Appended content from app/play2/hooks/useGameEngine.ts
+2024-07-08 12:10:23,432 - INFO - Appended content from app/play2/hooks/useGameEngine2.ts
+2024-07-08 12:10:23,433 - INFO - Appended content from app/play2/hooks/useGame.ts
+2024-07-08 12:10:23,433 - INFO - Appended content from app/play2/[gameId]/layout.tsx
+2024-07-08 12:10:23,433 - INFO - Appended content from app/play2/[gameId]/page.tsx
+2024-07-08 12:10:23,433 - INFO - Searched through /Users/jmlima/Desktop/working/growatale/app/play2
+2024-07-08 12:10:23,433 - INFO - Appended content from app/api/openai/image/route.ts
+2024-07-08 12:10:23,434 - INFO - Appended content from app/api/openai/audio/route.ts
+2024-07-08 12:10:23,434 - INFO - Appended content from app/api/openai/primary/route.ts
+2024-07-08 12:10:23,434 - INFO - Searched through /Users/jmlima/Desktop/working/growatale/app/api
+2024-07-08 12:10:23,434 - INFO - Appended content from context/AuthContext.tsx
+2024-07-08 12:10:23,434 - INFO - Searched through /Users/jmlima/Desktop/working/growatale/context
+2024-07-08 12:10:23,434 - INFO - Appended content from amplify/backend.ts
+2024-07-08 12:10:23,434 - INFO - Appended content from amplify/auth/resource.ts
+2024-07-08 12:10:23,435 - INFO - Appended content from amplify/storage/resource.ts
+2024-07-08 12:10:23,435 - INFO - Appended content from amplify/data/resource.ts
+2024-07-08 12:10:23,435 - INFO - Searched through /Users/jmlima/Desktop/working/growatale/amplify
+2024-07-08 12:10:23,436 - INFO - Operation completed. All code written to current-code.txt
+2024-07-08 13:04:15,464 - INFO - Appended content from app/play2/types.ts
+2024-07-08 13:04:15,465 - INFO - Appended content from app/play2/gameSettings.ts
+2024-07-08 13:04:15,465 - INFO - Appended content from app/play2/layout.tsx
+2024-07-08 13:04:15,465 - INFO - Appended content from app/play2/page.tsx
+2024-07-08 13:04:15,465 - INFO - Appended content from app/play2/utils/apiCalls.ts
+2024-07-08 13:04:15,466 - INFO - Appended content from app/play2/utils/generateContent.ts
+2024-07-08 13:04:15,466 - INFO - Appended content from app/play2/utils/gameUtils.ts
+2024-07-08 13:04:15,467 - INFO - Appended content from app/play2/components/AudioPlayer.tsx
+2024-07-08 13:04:15,467 - INFO - Appended content from app/play2/components/GameScreen.tsx
+2024-07-08 13:04:15,467 - INFO - Appended content from app/play2/hooks/useGameEngine.ts
+2024-07-08 13:04:15,468 - INFO - Appended content from app/play2/hooks/useGameEngine2.ts
+2024-07-08 13:04:15,468 - INFO - Appended content from app/play2/hooks/useGame.ts
+2024-07-08 13:04:15,468 - INFO - Appended content from app/play2/[gameId]/layout.tsx
+2024-07-08 13:04:15,468 - INFO - Appended content from app/play2/[gameId]/page.tsx
+2024-07-08 13:04:15,468 - INFO - Searched through /Users/jmlima/Desktop/working/growatale/app/play2
+2024-07-08 13:04:15,468 - INFO - Appended content from app/api/openai/image/route.ts
+2024-07-08 13:04:15,469 - INFO - Appended content from app/api/openai/audio/route.ts
+2024-07-08 13:04:15,469 - INFO - Appended content from app/api/openai/primary/route.ts
+2024-07-08 13:04:15,469 - INFO - Searched through /Users/jmlima/Desktop/working/growatale/app/api
+2024-07-08 13:04:15,469 - INFO - Appended content from context/AuthContext.tsx
+2024-07-08 13:04:15,469 - INFO - Searched through /Users/jmlima/Desktop/working/growatale/context
+2024-07-08 13:04:15,470 - INFO - Appended content from amplify/backend.ts
+2024-07-08 13:04:15,470 - INFO - Appended content from amplify/auth/resource.ts
+2024-07-08 13:04:15,470 - INFO - Appended content from amplify/storage/resource.ts
+2024-07-08 13:04:15,470 - INFO - Appended content from amplify/data/resource.ts
+2024-07-08 13:04:15,470 - INFO - Searched through /Users/jmlima/Desktop/working/growatale/amplify
+2024-07-08 13:04:15,471 - INFO - Operation completed. All code written to current-code.txt
+2024-07-08 13:50:39,668 - INFO - Appended content from app/play2/types.ts
+2024-07-08 13:50:39,669 - INFO - Appended content from app/play2/gameSettings.ts
+2024-07-08 13:50:39,669 - INFO - Appended content from app/play2/layout.tsx
+2024-07-08 13:50:39,669 - INFO - Appended content from app/play2/page.tsx
+2024-07-08 13:50:39,669 - INFO - Appended content from app/play2/utils/apiCalls.ts
+2024-07-08 13:50:39,670 - INFO - Appended content from app/play2/utils/generateContent.ts
+2024-07-08 13:50:39,670 - INFO - Appended content from app/play2/utils/gameUtils.ts
+2024-07-08 13:50:39,670 - INFO - Appended content from app/play2/components/AudioPlayer.tsx
+2024-07-08 13:50:39,670 - INFO - Appended content from app/play2/components/GameScreen.tsx
+2024-07-08 13:50:39,671 - INFO - Appended content from app/play2/hooks/useGameEngine.ts
+2024-07-08 13:50:39,671 - INFO - Appended content from app/play2/hooks/useGameEngine2.ts
+2024-07-08 13:50:39,672 - INFO - Appended content from app/play2/hooks/useGame.ts
+2024-07-08 13:50:39,672 - INFO - Appended content from app/play2/[gameId]/layout.tsx
+2024-07-08 13:50:39,672 - INFO - Appended content from app/play2/[gameId]/page.tsx
+2024-07-08 13:50:39,672 - INFO - Searched through /Users/jmlima/Desktop/working/growatale/app/play2
+2024-07-08 13:50:39,672 - INFO - Appended content from app/api/openai/image/route.ts
+2024-07-08 13:50:39,672 - INFO - Appended content from app/api/openai/audio/route.ts
+2024-07-08 13:50:39,673 - INFO - Appended content from app/api/openai/primary/route.ts
+2024-07-08 13:50:39,673 - INFO - Searched through /Users/jmlima/Desktop/working/growatale/app/api
+2024-07-08 13:50:39,673 - INFO - Appended content from context/AuthContext.tsx
+2024-07-08 13:50:39,673 - INFO - Searched through /Users/jmlima/Desktop/working/growatale/context
+2024-07-08 13:50:39,673 - INFO - Appended content from amplify/backend.ts
+2024-07-08 13:50:39,673 - INFO - Appended content from amplify/auth/resource.ts
+2024-07-08 13:50:39,673 - INFO - Appended content from amplify/storage/resource.ts
+2024-07-08 13:50:39,674 - INFO - Appended content from amplify/data/resource.ts
+2024-07-08 13:50:39,674 - INFO - Searched through /Users/jmlima/Desktop/working/growatale/amplify
+2024-07-08 13:50:39,675 - INFO - Operation completed. All code written to current-code.txt
