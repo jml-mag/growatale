@@ -13,14 +13,9 @@ const useGameEngine = () => {
     const pathname = usePathname();
     const gameId = pathname.split("/").pop();
 
-    useEffect(() => {
-        console.log('Current scene:', scene);
-    }, [scene]);
-
     const fetchAndSetScene = async (sceneId: string) => {
         try {
             let fetchedScene = await fetchSceneById(sceneId);
-            console.log(`Fetched scene: ${sceneId}`, fetchedScene);
 
             if (!fetchedScene.primary_text && fetchedScene.actions_available.length === 0) {
                 const generatedContent = await createScene(fetchedScene, '', '');
@@ -30,7 +25,6 @@ const useGameEngine = () => {
                     actions_available: generatedContent.player_options.directions.filter((action: Action): action is Action => action !== null),
                 };
                 await saveScene(fetchedScene);
-                console.log('Generated and saved new scene content:', fetchedScene);
             }
 
             setScene(fetchedScene);
@@ -48,7 +42,6 @@ const useGameEngine = () => {
             setLoading(true);
             try {
                 const story = await fetchStoryById(gameId);
-                console.log('Fetched story:', story);
                 await fetchAndSetScene(story.current_scene);
             } catch (error) {
                 console.error('Error fetching current scene:', error);
@@ -63,11 +56,8 @@ const useGameEngine = () => {
         if (!scene || !scene.id) return;
         setLoading(true);
         try {
-            console.log('Handling player action:', action);
-
             // Check if the action already leads to an existing scene, if so, fetch and set that scene
             if (action.leads_to) {
-                console.log('Action leads to an existing scene:', action.leads_to);
                 await fetchAndSetScene(action.leads_to);
                 return;
             }
@@ -84,14 +74,12 @@ const useGameEngine = () => {
                 story_id: scene.story_id,
             };
             let createdScene = await saveScene(newScene);
-            console.log('Created new scene:', createdScene);
 
             // Update the action with the new scene ID
             const updatedAction: Action = {
                 ...action,
                 leads_to: createdScene.id,
             };
-            console.log('Updated action with new scene ID:', updatedAction);
 
             // Update the actions in the current scene with the updated action
             const updatedActions = scene.actions_available.map((act: Action | null) => {
@@ -107,7 +95,6 @@ const useGameEngine = () => {
                 actions_available: updatedActions,
             };
             await saveScene(updatedScene);
-            console.log('*** Saved updated current scene:', updatedScene);
 
             // Generate new content for the new scene
             const generatedContent = await createScene(createdScene as Scene, '', '');
@@ -125,18 +112,15 @@ const useGameEngine = () => {
                         ...act,
                         leads_to: scene.id,  // Set to previous scene's ID
                     };
-                    console.log('*** Updated back action:', updatedBackAction);
                     return updatedBackAction;
                 }
                 return act;
             }).filter((act): act is Action => act !== null); // Ensure no null values
 
             createdScene = { ...createdScene, actions_available: finalCreatedSceneActions };
-            console.log('Created scene with updated back action:', createdScene);
 
             // Save the new scene with the updated 'back' action
             await saveScene(createdScene as Scene);
-            console.log('Saved new scene with updated back action:', createdScene);
 
             // Fetch and set the new scene
             await fetchAndSetScene(createdScene.id);
@@ -147,7 +131,6 @@ const useGameEngine = () => {
             setLoading(false);
         }
     }, [scene]);
-
     return { scene, loading, error, handlePlayerAction };
 };
 
