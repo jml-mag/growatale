@@ -16,43 +16,45 @@ const useGameEngine = () => {
 
     const fetchAndSetScene = async (sceneId: string) => {
         try {
-            let fetchedScene = await fetchSceneById(sceneId);
-
-            if (!fetchedScene.primary_text && fetchedScene.actions_available.length === 0) {
-                const generatedContent = await createScene(fetchedScene, '', '');
-                fetchedScene = {
-                    ...fetchedScene,
-                    primary_text: generatedContent.story,
-                    actions_available: generatedContent.player_options.directions.filter((action: Action): action is Action => action !== null),
-                };
-                await saveScene(fetchedScene);
+          let fetchedScene = await fetchSceneById(sceneId);
+      
+          if (!fetchedScene.primary_text && fetchedScene.actions_available.length === 0) {
+            const generatedContent = await createScene(fetchedScene, '', '');
+            fetchedScene = {
+              ...fetchedScene,
+              primary_text: generatedContent.story,
+              actions_available: generatedContent.player_options.directions.filter((action: Action): action is Action => action !== null),
+            };
+            await saveScene(fetchedScene);
+          }
+      
+          // Directly use the S3 path as the image URL
+          if (fetchedScene.image) {
+            // Ensure image is a string URL from S3
+            const imageUrl = fetchedScene.image;
+            fetchedScene = {
+              ...fetchedScene,
+              image: imageUrl || "", // Ensure image is a string
+            };
+          } else {
+            // Generate the image if not already present
+            const imageUrl = await getImage(fetchedScene.scene_description);
+            if (imageUrl) {
+              fetchedScene.image = imageUrl;
+              await saveScene(fetchedScene);
             }
-
-            // Fetch and set the image for the scene
-            if (fetchedScene.image) {
-                const imageUrl = await fetchImage(fetchedScene.image);
-                fetchedScene = {
-                    ...fetchedScene,
-                    image: imageUrl || "", // Ensure image is a string
-                };
-            } else {
-                // Generate the image if not already present
-                const imageUrl = await getImage(fetchedScene.scene_description);
-                if (imageUrl) {
-                    fetchedScene.image = imageUrl;
-                    await saveScene(fetchedScene);
-                }
-            }
-
-            setScene(fetchedScene);
-            console.log('Fetched and set scene:', fetchedScene);
+          }
+      
+          setScene(fetchedScene);
+          console.log('Fetched and set scene:', fetchedScene);
         } catch (error) {
-            console.error('Error fetching and setting scene:', error);
-            setError(error instanceof Error ? error.message : "Unknown error fetching the scene.");
+          console.error('Error fetching and setting scene:', error);
+          setError(error instanceof Error ? error.message : "Unknown error fetching the scene.");
         } finally {
-            setLoading(false);
+          setLoading(false);
         }
-    };
+      };
+      
 
     useEffect(() => {
         if (!gameId) return;

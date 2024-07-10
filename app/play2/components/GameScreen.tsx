@@ -1,8 +1,10 @@
 // app/play2/components/GameScreen.tsx
+
 import React, { useEffect, useState } from "react";
 import { Scene, Action } from "@/app/play2/types";
 import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
+import { downloadData } from "aws-amplify/storage";
 
 interface GameScreenProps {
   signOut: () => void;
@@ -15,6 +17,8 @@ const GameScreen: React.FC<GameScreenProps> = ({ signOut, user, scene, onAction 
   const [displayScene, setDisplayScene] = useState<Scene | null>(scene);
   const [isTransitioning, setIsTransitioning] = useState(false);
   const [transitionText, setTransitionText] = useState<string>("");
+  const [imageUrl, setImageUrl] = useState<string>("");
+  const [progress, setProgress] = useState<number>(0);
 
   useEffect(() => {
     if (scene && scene !== displayScene) {
@@ -30,6 +34,30 @@ const GameScreen: React.FC<GameScreenProps> = ({ signOut, user, scene, onAction 
     }
   }, [scene, displayScene]);
 
+  useEffect(() => {
+    const fetchImage = async (path: string) => {
+      try {
+        const downloadResult = await downloadData({
+          path,
+          options: {
+            onProgress: (event) => {
+              setProgress((event.transferredBytes / (event.totalBytes || 1)) * 100);
+            },
+          },
+        }).result;
+        const blob = await downloadResult.body.blob();
+        const blobUrl = URL.createObjectURL(blob);
+        setImageUrl(blobUrl);
+      } catch (error) {
+        console.error("Error fetching image:", error);
+      }
+    };
+
+    if (displayScene?.image) {
+      fetchImage(displayScene.image);
+    }
+  }, [displayScene]);
+
   const handleAction = (action: Action) => {
     setIsTransitioning(true);
     setTransitionText(action.transition_text);
@@ -44,8 +72,13 @@ const GameScreen: React.FC<GameScreenProps> = ({ signOut, user, scene, onAction 
       <div className="mb-4">
         <div className="font-bold">Scene Description</div>
         <p>{displayScene?.scene_description}</p>
-        {displayScene?.image && (
-          <Image src={displayScene.image} alt="Scene image" width={250} height={250} />
+        {imageUrl ? (
+          <Image src={imageUrl} alt="Scene image" width={250} height={250} />
+        ) : (
+          <div>
+            <p>Loading image...</p>
+            <progress value={progress} max="100">{progress}%</progress>
+          </div>
         )}
       </div>
 
