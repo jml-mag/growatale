@@ -1,3 +1,5 @@
+// @/components/GameScreen
+
 import Image from "next/image";
 import { Action, Scene } from "@/app/play/types";
 import { useState, useEffect, useRef } from "react";
