@@ -3,8 +3,9 @@
 import { useState, useEffect, useCallback } from "react";
 import { usePathname } from "next/navigation";
 import { Scene, Action } from "@/app/play2/types";
-import { fetchStoryById, fetchSceneById, saveScene } from "@/app/play2/utils/gameUtils";
+import { fetchStoryById, fetchSceneById, saveScene, fetchImage } from "@/app/play2/utils/gameUtils";
 import { createScene } from "@/app/play2/utils/generateContent";
+import { getImage } from "@/app/play2/utils/apiCalls";
 
 const useGameEngine = () => {
     const [scene, setScene] = useState<Scene | null>(null);
@@ -27,7 +28,24 @@ const useGameEngine = () => {
                 await saveScene(fetchedScene);
             }
 
+            // Fetch and set the image for the scene
+            if (fetchedScene.image) {
+                const imageUrl = await fetchImage(fetchedScene.image);
+                fetchedScene = {
+                    ...fetchedScene,
+                    image: imageUrl || "", // Ensure image is a string
+                };
+            } else {
+                // Generate the image if not already present
+                const imageUrl = await getImage(fetchedScene.scene_description);
+                if (imageUrl) {
+                    fetchedScene.image = imageUrl;
+                    await saveScene(fetchedScene);
+                }
+            }
+
             setScene(fetchedScene);
+            console.log('Fetched and set scene:', fetchedScene);
         } catch (error) {
             console.error('Error fetching and setting scene:', error);
             setError(error instanceof Error ? error.message : "Unknown error fetching the scene.");
@@ -56,13 +74,11 @@ const useGameEngine = () => {
         if (!scene || !scene.id) return;
         setLoading(true);
         try {
-            // Check if the action already leads to an existing scene, if so, fetch and set that scene
             if (action.leads_to) {
                 await fetchAndSetScene(action.leads_to);
                 return;
             }
 
-            // If not, create a new scene with the current scene's ID as the previous_scene
             const newScene: Scene = {
                 image: "",
                 audio: "",
@@ -75,28 +91,24 @@ const useGameEngine = () => {
             };
             let createdScene = await saveScene(newScene);
 
-            // Update the action with the new scene ID
             const updatedAction: Action = {
                 ...action,
                 leads_to: createdScene.id,
             };
 
-            // Update the actions in the current scene with the updated action
             const updatedActions = scene.actions_available.map((act: Action | null) => {
                 if (act && act.direction === action.direction) {
                     return updatedAction;
                 }
                 return act;
-            }).filter((act): act is Action => act !== null); // Ensure no null values
+            }).filter((act): act is Action => act !== null);
 
-            // Save the updated current scene
             const updatedScene: Scene = {
                 ...scene,
                 actions_available: updatedActions,
             };
             await saveScene(updatedScene);
 
-            // Generate new content for the new scene
             const generatedContent = await createScene(createdScene as Scene, '', '');
             createdScene = {
                 ...createdScene,
@@ -105,25 +117,28 @@ const useGameEngine = () => {
                 actions_available: generatedContent.player_options.directions.filter((action: Action): action is Action => action !== null),
             };
 
-            // Ensure the 'back' action in the new scene is updated before saving
             const finalCreatedSceneActions = createdScene.actions_available.map((act: Action | null) => {
                 if (act && act.direction === 'back') {
                     const updatedBackAction = {
                         ...act,
-                        leads_to: scene.id,  // Set to previous scene's ID
+                        leads_to: scene.id,
                     };
                     return updatedBackAction;
                 }
                 return act;
-            }).filter((act): act is Action => act !== null); // Ensure no null values
+            }).filter((act): act is Action => act !== null);
 
             createdScene = { ...createdScene, actions_available: finalCreatedSceneActions };
 
-            // Save the new scene with the updated 'back' action
-            await saveScene(createdScene as Scene);
+            // Generate and save the image for the new scene
+            const imageUrl = await getImage(createdScene.scene_description);
+            if (imageUrl) {
+                createdScene.image = imageUrl;
+                await saveScene(createdScene as Scene);
+            }
 
-            // Fetch and set the new scene
             await fetchAndSetScene(createdScene.id);
+            console.log('New scene created and set:', scene);
         } catch (error) {
             console.error('Error handling player action:', error);
             setError(error instanceof Error ? error.message : "Unknown error handling player action.");
@@ -131,6 +146,7 @@ const useGameEngine = () => {
             setLoading(false);
         }
     }, [scene]);
+
     return { scene, loading, error, handlePlayerAction };
 };
 

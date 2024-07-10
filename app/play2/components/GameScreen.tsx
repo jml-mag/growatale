@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from "react";
 import { Scene, Action } from "@/app/play2/types";
 import { motion, AnimatePresence } from "framer-motion";
+import Image from "next/image";
 
 interface GameScreenProps {
   signOut: () => void;
@@ -43,6 +44,9 @@ const GameScreen: React.FC<GameScreenProps> = ({ signOut, user, scene, onAction 
       <div className="mb-4">
         <div className="font-bold">Scene Description</div>
         <p>{displayScene?.scene_description}</p>
+        {displayScene?.image && (
+          <Image src={displayScene.image} alt="Scene image" width={250} height={250} />
+        )}
       </div>
 
       <div className="mb-4">

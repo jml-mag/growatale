@@ -3,8 +3,22 @@ import { generateClient } from "aws-amplify/data";
 import { Schema } from "@/amplify/data/resource";
 import { Scene, Story, Action } from "@/app/play2/types";
 import gameSettings from "@/app/play2/gameSettings";
+import { downloadData } from "@aws-amplify/storage";
 
 const client = generateClient<Schema>();
+
+const fetchImage = async (imagePath: string) => {
+  try {
+    const result = downloadData({ path: imagePath });
+    const blob = await (await result.result).body.blob();
+    const url = URL.createObjectURL(blob);
+    console.log(url)
+    return url;
+  } catch (error) {
+    console.error("Error fetching image:", error);
+    return null;
+  }
+};
 
 const saveSceneIdToStory = async (sceneId: string, storyId: string) => {
   try {
@@ -146,4 +160,4 @@ const initializeGame = async (username: string): Promise<{ gameId: string, scene
   }
 };
 
-export { initializeGame, saveScene, fetchStoryById, fetchSceneById };
+export { initializeGame, saveScene, fetchStoryById, fetchSceneById, fetchImage };
