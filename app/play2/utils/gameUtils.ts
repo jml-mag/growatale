@@ -20,6 +20,18 @@ const fetchImage = async (imagePath: string) => {
   }
 };
 
+const fetchAudio = async (audioPath: string) => {
+  try {
+    const result = downloadData({ path: audioPath });
+    const blob = await (await result.result).body.blob();
+    const file = new File([blob], "audio-file.mp3", { type: "audio/mpeg" });
+    return file;
+  } catch (error) {
+    console.error("Error fetching audio:", error);
+    return null;
+  }
+};
+
 const saveSceneIdToStory = async (sceneId: string, storyId: string) => {
   try {
     const { data, errors } = await client.models.Story.update({
@@ -160,4 +172,4 @@ const initializeGame = async (username: string): Promise<{ gameId: string, scene
   }
 };
 
-export { initializeGame, saveScene, fetchStoryById, fetchSceneById, fetchImage };
+export { initializeGame, saveScene, fetchStoryById, fetchSceneById, fetchImage, fetchAudio };

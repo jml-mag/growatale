@@ -1,3 +1,5 @@
+// @/app/play2/components/AudioPlayer.tsx
+
 import React, { useEffect, useRef, useState } from "react";
 
 interface AudioPlayerProps {

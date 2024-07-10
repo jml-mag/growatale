@@ -5,6 +5,7 @@ import { Scene, Action } from "@/app/play2/types";
 import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
 import { downloadData } from "aws-amplify/storage";
+import AudioPlayer from "@/app/play2/components/AudioPlayer";
 
 interface GameScreenProps {
   signOut: () => void;
@@ -14,53 +15,88 @@ interface GameScreenProps {
 }
 
 const GameScreen: React.FC<GameScreenProps> = ({ signOut, user, scene, onAction }) => {
-  const [displayScene, setDisplayScene] = useState<Scene | null>(scene);
+  const [displayState, setDisplayState] = useState<Partial<Scene>>({});
   const [isTransitioning, setIsTransitioning] = useState(false);
   const [transitionText, setTransitionText] = useState<string>("");
   const [imageUrl, setImageUrl] = useState<string>("");
-  const [progress, setProgress] = useState<number>(0);
+  const [audioFile, setAudioFile] = useState<File | null>(null);
 
   useEffect(() => {
-    if (scene && scene !== displayScene) {
+    if (scene) {
       setIsTransitioning(true);
+      setTransitionText(scene.primary_text);
 
       const timer = setTimeout(() => {
-        setTransitionText("");
-        setDisplayScene(scene);
         setIsTransitioning(false);
-      }, 2000); // Total transition time
+        setTransitionText("");
+        setDisplayState((prev) => ({
+          ...prev,
+          ...scene,
+        }));
+        if (scene.image) {
+          fetchImage(scene.image);
+        }
+        if (scene.audio) {
+          fetchAudio(scene.audio);
+        }
+      }, 1000); // Transition time
 
       return () => clearTimeout(timer);
     }
-  }, [scene, displayScene]);
+  }, [scene]);
 
   useEffect(() => {
-    const fetchImage = async (path: string) => {
-      try {
-        const downloadResult = await downloadData({
-          path,
-          options: {
-            onProgress: (event) => {
-              setProgress((event.transferredBytes / (event.totalBytes || 1)) * 100);
-            },
-          },
-        }).result;
-        const blob = await downloadResult.body.blob();
-        const blobUrl = URL.createObjectURL(blob);
-        setImageUrl(blobUrl);
-      } catch (error) {
-        console.error("Error fetching image:", error);
-      }
-    };
+    console.log('displayState changed:', displayState);
+  }, [displayState]);
 
-    if (displayScene?.image) {
-      fetchImage(displayScene.image);
+  const fetchImage = async (path: string) => {
+    try {
+      const downloadResult = await downloadData({
+        path,
+        options: {
+          onProgress: (event) => {
+            // Update progress silently
+          },
+        },
+      }).result;
+      const blob = await downloadResult.body.blob();
+      const blobUrl = URL.createObjectURL(blob);
+      setImageUrl(blobUrl);
+      setDisplayState((prev) => ({
+        ...prev,
+        image: blobUrl,
+      }));
+    } catch (error) {
+      console.error("Error fetching image:", error);
     }
-  }, [displayScene]);
+  };
+
+  const fetchAudio = async (path: string) => {
+    try {
+      const downloadResult = await downloadData({
+        path,
+        options: {
+          onProgress: (event) => {
+            // Update progress silently
+          },
+        },
+      }).result;
+      const blob = await downloadResult.body.blob();
+      const file = new File([blob], "audio-file.mp3", { type: "audio/mpeg" });
+      setAudioFile(file);
+      setDisplayState((prev) => ({
+        ...prev,
+        audio: path,
+      }));
+    } catch (error) {
+      console.error("Error fetching audio:", error);
+    }
+  };
 
   const handleAction = (action: Action) => {
     setIsTransitioning(true);
     setTransitionText(action.transition_text);
+    setAudioFile(null); // Stop the audio
 
     setTimeout(() => {
       onAction(action);
@@ -69,76 +105,119 @@ const GameScreen: React.FC<GameScreenProps> = ({ signOut, user, scene, onAction 
 
   return (
     <div className="text-sm p-4">
-      <div className="mb-4">
-        <div className="font-bold">Scene Description</div>
-        <p>{displayScene?.scene_description}</p>
-        {imageUrl ? (
-          <Image src={imageUrl} alt="Scene image" width={250} height={250} />
-        ) : (
-          <div>
-            <p>Loading image...</p>
-            <progress value={progress} max="100">{progress}%</progress>
-          </div>
-        )}
-      </div>
+      <AnimatePresence>
+        {displayState && (
+          <motion.div
+            key="scene"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.5 }}
+          >
+            {displayState.scene_description && (
+              <div className="mb-4">
+                <div className="font-bold">Scene Description</div>
+                <p>{displayState.scene_description}</p>
+              </div>
+            )}
 
-      <div className="mb-4">
-        <div className="font-bold">Primary Text</div>
-        <AnimatePresence>
-          {!isTransitioning && (
-            <motion.p
-              key="primary_text"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 1 }}
-            >
-              {displayScene?.primary_text}
-            </motion.p>
-          )}
-        </AnimatePresence>
+            {displayState.primary_text && (
+              <div className="mb-4">
+                <div className="font-bold">Primary Text</div>
+                <AnimatePresence>
+                  {!isTransitioning && (
+                    <motion.p
+                      key="primary_text"
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      exit={{ opacity: 0 }}
+                      transition={{ duration: 1 }}
+                    >
+                      {displayState.primary_text}
+                    </motion.p>
+                  )}
+                </AnimatePresence>
 
-        <AnimatePresence>
-          {transitionText && (
-            <motion.p
-              key="transition_text"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 1, delay: 0.5 }}
-            >
-              {transitionText}
-            </motion.p>
-          )}
-        </AnimatePresence>
-      </div>
+                <AnimatePresence>
+                  {transitionText && (
+                    <motion.p
+                      key="transition_text"
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      exit={{ opacity: 0 }}
+                      transition={{ duration: 1, delay: 0.5 }}
+                    >
+                      {transitionText}
+                    </motion.p>
+                  )}
+                </AnimatePresence>
+              </div>
+            )}
 
-      <div className="mb-4">
-        <div className="font-bold">Actions</div>
-        <ul>
-          {displayScene?.actions_available.map((action, index) => (
-            <motion.li
-              key={index}
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.5 }}
-            >
-              <strong>Direction:</strong> {action.direction}
-              <br />
-              <strong>Command:</strong> {action.command_text}
-              <br />
-              <strong>Transition:</strong> {action.transition_text}
-              <button
-                onClick={() => handleAction(action)}
-                className="mt-2 p-1 bg-blue-500 text-white rounded"
+            {imageUrl && (
+              <motion.div
+                key="image"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 1 }}
+                className="mb-4"
               >
-                Choose
-              </button>
-            </motion.li>
-          ))}
-        </ul>
-      </div>
+                <Image src={imageUrl} alt="Scene image" width={250} height={250} />
+              </motion.div>
+            )}
+
+            {audioFile && (
+              <motion.div
+                key="audio"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 1 }}
+                className="mb-4"
+              >
+                <AudioPlayer audioFile={audioFile} />
+              </motion.div>
+            )}
+
+            {!isTransitioning && displayState.actions_available && displayState.actions_available.length > 0 && (
+              <motion.div
+                key="actions"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.5 }}
+                className="mb-4"
+              >
+                <div className="font-bold">Actions</div>
+                <ul>
+                  {displayState.actions_available.map((action, index) => (
+                    <motion.li
+                      key={index}
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      exit={{ opacity: 0 }}
+                      transition={{ duration: 0.5 }}
+                    >
+                      <strong>Direction:</strong> {action.direction}
+                      <br />
+                      <strong>Command:</strong> {action.command_text}
+                      <br />
+                      <strong>Transition:</strong> {action.transition_text}
+                      <button
+                        onClick={() => handleAction(action)}
+                        className="mt-2 p-1 bg-blue-500 text-white rounded"
+                      >
+                        Choose
+                      </button>
+                    </motion.li>
+                  ))}
+                </ul>
+              </motion.div>
+            )}
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       <button onClick={signOut} className="p-2 bg-red-500 text-white rounded">
         Sign Out
