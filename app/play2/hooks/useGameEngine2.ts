@@ -1,4 +1,4 @@
-// @/app/play2/hooks/useGameEngine.ts
+// @/app/play2/hooks/useGameEngine2
 
 import { useState, useEffect, useCallback } from "react";
 import { usePathname } from "next/navigation";
@@ -32,24 +32,29 @@ const useGameEngine = () => {
         await saveScene(fetchedScene);
       }
 
+      // Set the primary text and actions immediately
       setScene(fetchedScene);
 
+      // Fetch and set image asynchronously
       if (!fetchedScene.image) {
-        const imageUrl = await getImage(fetchedScene.scene_description);
-        if (imageUrl) {
-          fetchedScene.image = imageUrl;
-          await saveScene(fetchedScene);
-          setScene(prevScene => prevScene ? { ...prevScene, image: imageUrl } : prevScene);
-        }
+        getImage(fetchedScene.scene_description).then(imageUrl => {
+          if (imageUrl) {
+            fetchedScene.image = imageUrl;
+            saveScene(fetchedScene);
+            setScene(prevScene => prevScene ? { ...prevScene, image: imageUrl } : prevScene);
+          }
+        }).catch(error => console.error('Error fetching image:', error));
       }
 
+      // Fetch and set audio asynchronously
       if (!fetchedScene.audio) {
-        const audioUrl = await getAudio(fetchedScene.primary_text);
-        if (audioUrl) {
-          fetchedScene.audio = audioUrl;
-          await saveScene(fetchedScene);
-          setScene(prevScene => prevScene ? { ...prevScene, audio: audioUrl } : prevScene);
-        }
+        getAudio(fetchedScene.primary_text).then(audioUrl => {
+          if (audioUrl) {
+            fetchedScene.audio = audioUrl;
+            saveScene(fetchedScene);
+            setScene(prevScene => prevScene ? { ...prevScene, audio: audioUrl } : prevScene);
+          }
+        }).catch(error => console.error('Error fetching audio:', error));
       }
     } catch (error) {
       console.error('Error fetching and setting scene:', error);

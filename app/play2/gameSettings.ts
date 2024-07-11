@@ -20,7 +20,7 @@ interface GameSettings {
   // Default game settings
   const gameSettings: GameSettings = {
     author: "Default Author",
-    artist: "A world class 1930's American animator",
+    artist: "A world class renaissance master",
     primary_ai: "gpt-4o",
     audio_ai: "tts-1",// or "tts-1-hd",
     image_ai: "dall-e-3", // or "dall-e-2"
