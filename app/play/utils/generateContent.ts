@@ -1,10 +1,8 @@
 // @/app/play3/utils/generateContent.tsx
 
-import { generateClient, Client } from "aws-amplify/data";
-import { type Schema } from "@/amplify/data/resource";
-import { Action, Scene, Story } from "../types";
+import {  Scene } from "../types";
 import gameSettings from "../gameSettings";
-import sharp from "sharp";
+// import sharp from "sharp";
 
 export async function createScene(scene: Scene, previousPrimaryText: string, previousSceneChoice: string) {
     let getPrompt = generatePrompt(scene, previousPrimaryText, previousSceneChoice);

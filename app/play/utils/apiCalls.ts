@@ -1,7 +1,7 @@
 // @/app/play3/utils/apiCalls.ts
 
 import { uploadData } from '@aws-amplify/storage';
-import gameSettings from '../gameSettings';
+import gameSettings from '@/app/play/gameSettings';
 
 /**
  * Saves a Blob to S3 and returns the URL.

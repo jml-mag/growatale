@@ -2,10 +2,10 @@
 
 import { useState, useEffect, useCallback } from "react";
 import { usePathname } from "next/navigation";
-import { Scene, Action } from "@/app/play3/types";
-import { fetchStoryById, fetchSceneById, saveScene, saveSceneIdToStory } from "@/app/play3/utils/gameUtils";
-import { createScene } from "@/app/play3/utils/generateContent";
-import { getImage, getAudio } from "@/app/play3/utils/apiCalls";
+import { Scene, Action } from "@/app/play/types";
+import { fetchStoryById, fetchSceneById, saveScene, saveSceneIdToStory } from "@/app/play/utils/gameUtils";
+import { createScene } from "@/app/play/utils/generateContent";
+import { getImage, getAudio } from "@/app/play/utils/apiCalls";
 
 const useGameEngine = () => {
   const [scene, setScene] = useState<Scene | null>(null);

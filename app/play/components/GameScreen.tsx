@@ -1,13 +1,13 @@
 // @/app/play3/components/GameScreen3.tsx
 
 import React, { useEffect, useState, useRef } from "react";
-import { Scene, Action } from "@/app/play3/types";
+import { Scene, Action } from "@/app/play/types";
 import Image from "next/image";
 import { downloadData } from "aws-amplify/storage";
-import AudioPlayer from "@/app/play3/components/AudioPlayer";
+import AudioPlayer from "@/app/play/components/AudioPlayer";
 import { josefin_slab } from "@/app/fonts";
 import { motion, AnimatePresence } from "framer-motion";
-import useGameEngine from "@/app/play3/hooks/useGameEngine3";
+import useGameEngine from "@/app/play/hooks/useGameEngine";
 
 interface GameScreenProps {
   signOut: () => void;

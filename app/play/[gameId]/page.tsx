@@ -1,8 +1,8 @@
 // app/play3/[gameId]/page.tsx
 "use client";
 import { useAuth } from "@/context/AuthContext";
-import GameScreen from "@/app/play3/components/GameScreen3";
-import useGameEngine from "@/app/play3/hooks/useGameEngine3";
+import GameScreen from "@/app/play/components/GameScreen";
+import useGameEngine from "@/app/play/hooks/useGameEngine";
 
 const Game = () => {
   const { signOut, user } = useAuth();

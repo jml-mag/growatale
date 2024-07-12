@@ -1,8 +1,8 @@
-// app/play2/utils/gameUtils.ts
+// app/play3/utils/gameUtils.ts
 import { generateClient } from "aws-amplify/data";
 import { Schema } from "@/amplify/data/resource";
-import { Scene, Story, Action } from "@/app/play2/types";
-import gameSettings from "@/app/play2/gameSettings";
+import { Scene, Story, Action } from "@/app/play/types";
+import gameSettings from "@/app/play/gameSettings";
 import { downloadData } from "@aws-amplify/storage";
 
 const client = generateClient<Schema>();
@@ -12,7 +12,6 @@ const fetchImage = async (imagePath: string) => {
     const result = downloadData({ path: imagePath });
     const blob = await (await result.result).body.blob();
     const url = URL.createObjectURL(blob);
-    console.log(url)
     return url;
   } catch (error) {
     console.error("Error fetching image:", error);
@@ -30,6 +29,12 @@ const fetchAudio = async (audioPath: string) => {
     console.error("Error fetching audio:", error);
     return null;
   }
+};
+const saveStateToScene = async (initialScene: Scene) => {
+  const sceneResponse = await saveScene(initialScene);
+  const sceneId = sceneResponse.id;
+  const storyId = sceneResponse.story_id;
+  await saveSceneIdToStory(sceneId, storyId);
 };
 
 const saveSceneIdToStory = async (sceneId: string, storyId: string) => {
@@ -172,4 +177,4 @@ const initializeGame = async (username: string): Promise<{ gameId: string, scene
   }
 };
 
-export { initializeGame, saveScene, fetchStoryById, fetchSceneById, fetchImage, fetchAudio };
+export { initializeGame,saveStateToScene,saveSceneIdToStory, saveScene, fetchStoryById, fetchSceneById, fetchImage, fetchAudio };
