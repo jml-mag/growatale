@@ -1,8 +1,10 @@
+// @/play3/components/GameScreen3.tsx
+
 import React, { useEffect, useState } from "react";
-import { Scene, Action } from "@/app/play2/types";
+import { Scene, Action } from "@/app/play3/types";
 import Image from "next/image";
 import { downloadData } from "aws-amplify/storage";
-import AudioPlayer from "@/app/play2/components/AudioPlayer";
+import AudioPlayer from "@/app/play3/components/AudioPlayer";
 import { josefin_slab } from "@/app/fonts";
 
 interface GameScreenProps {
