@@ -32,7 +32,6 @@ const fetchAudio = async (audioPath: string) => {
 };
 const saveStateToScene = async (initialScene: Scene) => {
   const sceneResponse = await saveScene(initialScene);
-  console.log(sceneResponse);
   const sceneId = sceneResponse.id;
   const storyId = sceneResponse.story_id;
   await saveSceneIdToStory(sceneId, storyId);

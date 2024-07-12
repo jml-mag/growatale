@@ -1,9 +1,10 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { Scene, Action } from "@/app/play3/types";
 import Image from "next/image";
 import { downloadData } from "aws-amplify/storage";
 import AudioPlayer from "@/app/play3/components/AudioPlayer";
 import { josefin_slab } from "@/app/fonts";
+import { motion, AnimatePresence } from "framer-motion";
 
 interface GameScreenProps {
   signOut: () => void;
@@ -26,13 +27,15 @@ const GameScreen: React.FC<GameScreenProps> = ({
   const [showTransition, setShowTransition] = useState(false);
   const [showAudio, setShowAudio] = useState(false);
   const [showImage, setShowImage] = useState(false);
+  const constraintsRef = useRef(null);
 
   useEffect(() => {
     if (scene) {
       setShowPrimary(!!scene.primary_text);
       setShowAudio(!!scene.audio);
       setShowImage(!!scene.image);
-      
+      setShowTransition(false); // Reset showTransition to false
+
       const timer = setTimeout(() => {
         setDisplayState((prev) => ({
           ...prev,
@@ -107,65 +110,105 @@ const GameScreen: React.FC<GameScreenProps> = ({
   };
 
   return (
-    <div className="text-white w-full h-screen overflow-hidden">
+    <div className="text-white w-full h-screen overflow-hidden" ref={constraintsRef}>
       <div className="fixed top-0 left-0 w-full h-full -z-50">
-        {showImage && imageUrl && (
-          <div className="fixed w-full h-screen object-fill">
-            <Image
-              src={imageUrl}
-              alt="Scene Image"
-              fill
-              style={{ objectFit: "cover" }}
-            />
-          </div>
-        )}
+        <AnimatePresence>
+          {showImage && imageUrl && (
+            <motion.div
+              className="fixed w-full h-screen object-fill"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 2 }}
+            >
+              <Image
+                src={imageUrl}
+                alt="Scene Image"
+                fill
+                style={{ objectFit: "cover" }}
+              />
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
-      <>
-        <div className="absolute w-full h-full">
+      <div className="">
+        <AnimatePresence>
           {showPrimary && (
-            <div
-              className={`${josefin_slab.className} text-lg gamescreen-component fixed left-2 top-2 max-h-72 overflow-y-auto`}
+            <motion.div
+              className={`${josefin_slab.className} text-lg gamescreen-component fixed left-2 top-2 max-h-72 overflow-y-auto sm:left-1/2 sm:top-1/2 sm:transform sm:-translate-x-1/2 sm:-translate-y-1/2`}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 2.5 }}
+              drag
+              dragConstraints={constraintsRef}
+              dragElastic={0.2} // Optional: adjust drag elasticity
+              dragMomentum={false} // Optional: disable momentum for more precise positioning
             >
               {displayState.primary_text || "Loading text..."}
-            </div>
+            </motion.div>
           )}
-        </div>
-        <div className="fixed bottom-0 w-full text-center">
+        </AnimatePresence>
+      </div>
+      <div className="fixed bottom-0 w-full text-center">
+        <AnimatePresence>
           {showTransition && (
-            <div
+            <motion.div
               className={`${josefin_slab.className} text-lg gamescreen-component fixed left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2`}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 2.5 }}
+              onAnimationComplete={() => {
+                setTransitionText("");
+                setShowTransition(false);
+              }}
             >
               {transitionText}
-            </div>
+            </motion.div>
           )}
-        </div>
-        <div className="fixed bottom-0 w-full text-center content-center sm:flex sm:justify-center sm:items-center sm:space-x-4">
-          <div className="w-full sm:w-1/2 sm:order-last mb-4 sm:mb-0">
-            <div className="w-full flex justify-center">
-              <div className="flex w-full max-w-sm justify-around">
+        </AnimatePresence>
+      </div>
+      <div className="fixed bottom-0 w-full text-center content-center sm:flex sm:justify-center sm:items-center sm:space-x-4">
+        <div className="w-full sm:w-1/2 sm:order-last mb-4 sm:mb-0">
+          <div className="w-full flex justify-center">
+            <div className="flex w-full max-w-sm justify-around">
+              <AnimatePresence>
                 {displayState.actions_available?.map((action, index) => (
-                  <button
+                  <motion.button
                     key={action.direction}
                     onClick={() => handleAction(action)}
                     className="gamescreen-button m-2"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                    transition={{ duration: 0.3 }}
                   >
                     {action.command_text}
-                  </button>
+                  </motion.button>
                 ))}
-              </div>
-            </div>
-          </div>
-          <div className="w-full sm:w-1/2 sm:order-first">
-            <div className="w-full flex justify-center">
-              {showAudio && audioFile && (
-                <div className="audio-player-wrapper">
-                  <AudioPlayer audioFile={audioFile} />
-                </div>
-              )}
+              </AnimatePresence>
             </div>
           </div>
         </div>
-      </>
+        <div className="w-full sm:w-1/2 sm:order-first">
+          <div className="w-full flex justify-center">
+            <AnimatePresence>
+              {showAudio && audioFile && (
+                <motion.div
+                  className="audio-player-wrapper"
+                  initial={{ opacity: 0, y: 100 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: 100 }}
+                  transition={{ duration: 0.5 }}
+                >
+                  <AudioPlayer audioFile={audioFile} />
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </div>
+        </div>
+      </div>
     </div>
   );
 };

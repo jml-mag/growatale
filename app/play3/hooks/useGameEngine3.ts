@@ -1,4 +1,5 @@
 // @/app/play3/hooks/useGameEngine3.ts
+
 import { useState, useEffect, useCallback } from "react";
 import { usePathname } from "next/navigation";
 import { Scene, Action } from "@/app/play3/types";
@@ -10,6 +11,8 @@ const useGameEngine = () => {
   const [scene, setScene] = useState<Scene | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
+  const [previousPrimaryText, setPreviousPrimaryText] = useState<string>("");
+  const [previousSceneChoice, setPreviousSceneChoice] = useState<string>("");
   const pathname = usePathname();
   const gameId = pathname.split("/").pop();
 
@@ -22,7 +25,7 @@ const useGameEngine = () => {
       let fetchedScene = await fetchSceneById(sceneId);
 
       if (!fetchedScene.primary_text && fetchedScene.actions_available.length === 0) {
-        const generatedContent = await createScene(fetchedScene, '', '');
+        const generatedContent = await createScene(fetchedScene, previousPrimaryText, previousSceneChoice);
         fetchedScene = {
           ...fetchedScene,
           primary_text: generatedContent.story,
@@ -86,6 +89,10 @@ const useGameEngine = () => {
     if (!scene || !scene.id) return;
     setLoading(true);
     try {
+      // Update previous primary text and choice
+      setPreviousPrimaryText(scene.primary_text);
+      setPreviousSceneChoice(action.command_text);
+
       if (action.leads_to) {
         if (gameId) {
           await fetchAndSetScene(action.leads_to, gameId);
@@ -129,7 +136,7 @@ const useGameEngine = () => {
       };
       await saveScene(updatedScene);
 
-      const generatedContent = await createScene(createdScene as Scene, '', '');
+      const generatedContent = await createScene(createdScene as Scene, scene.primary_text, action.command_text);
       createdScene = {
         ...createdScene,
         primary_text: generatedContent.story,
