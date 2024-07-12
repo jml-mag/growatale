@@ -12,6 +12,8 @@ import useGameEngine from "@/app/play3/hooks/useGameEngine3";
 interface GameScreenProps {
   signOut: () => void;
   user: any; // Replace with your user type if available
+  scene: Scene|null; // Add this line
+  onAction: (action: Action) => void; // Add this line
 }
 
 const GameScreen: React.FC<GameScreenProps> = ({ signOut, user }) => {
