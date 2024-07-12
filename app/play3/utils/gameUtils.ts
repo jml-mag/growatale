@@ -12,7 +12,6 @@ const fetchImage = async (imagePath: string) => {
     const result = downloadData({ path: imagePath });
     const blob = await (await result.result).body.blob();
     const url = URL.createObjectURL(blob);
-    console.log(url)
     return url;
   } catch (error) {
     console.error("Error fetching image:", error);
@@ -30,6 +29,13 @@ const fetchAudio = async (audioPath: string) => {
     console.error("Error fetching audio:", error);
     return null;
   }
+};
+const saveStateToScene = async (initialScene: Scene) => {
+  const sceneResponse = await saveScene(initialScene);
+  console.log(sceneResponse);
+  const sceneId = sceneResponse.id;
+  const storyId = sceneResponse.story_id;
+  await saveSceneIdToStory(sceneId, storyId);
 };
 
 const saveSceneIdToStory = async (sceneId: string, storyId: string) => {
@@ -172,4 +178,4 @@ const initializeGame = async (username: string): Promise<{ gameId: string, scene
   }
 };
 
-export { initializeGame, saveScene, fetchStoryById, fetchSceneById, fetchImage, fetchAudio };
+export { initializeGame,saveStateToScene,saveSceneIdToStory, saveScene, fetchStoryById, fetchSceneById, fetchImage, fetchAudio };

@@ -1,5 +1,3 @@
-// @/play3/components/GameScreen3.tsx
-
 import React, { useEffect, useState } from "react";
 import { Scene, Action } from "@/app/play3/types";
 import Image from "next/image";
@@ -31,12 +29,11 @@ const GameScreen: React.FC<GameScreenProps> = ({
 
   useEffect(() => {
     if (scene) {
-      scene.primary_text && setShowPrimary(true);
-      scene.audio && setShowAudio(true);
-      scene.image && setShowImage(true);
+      setShowPrimary(!!scene.primary_text);
+      setShowAudio(!!scene.audio);
+      setShowImage(!!scene.image);
       
       const timer = setTimeout(() => {
-       
         setDisplayState((prev) => ({
           ...prev,
           ...scene,
@@ -112,7 +109,7 @@ const GameScreen: React.FC<GameScreenProps> = ({
   return (
     <div className="text-white w-full h-screen overflow-hidden">
       <div className="fixed top-0 left-0 w-full h-full -z-50">
-        {imageUrl && (
+        {showImage && imageUrl && (
           <div className="fixed w-full h-screen object-fill">
             <Image
               src={imageUrl}
@@ -123,50 +120,52 @@ const GameScreen: React.FC<GameScreenProps> = ({
           </div>
         )}
       </div>
-      { (
-        <>
-          <div className="absolute w-full h-full">
+      <>
+        <div className="absolute w-full h-full">
+          {showPrimary && (
             <div
               className={`${josefin_slab.className} text-lg gamescreen-component fixed left-2 top-2 max-h-72 overflow-y-auto`}
             >
               {displayState.primary_text || "Loading text..."}
             </div>
+          )}
+        </div>
+        <div className="fixed bottom-0 w-full text-center">
+          {showTransition && (
+            <div
+              className={`${josefin_slab.className} text-lg gamescreen-component fixed left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2`}
+            >
+              {transitionText}
+            </div>
+          )}
+        </div>
+        <div className="fixed bottom-0 w-full text-center content-center sm:flex sm:justify-center sm:items-center sm:space-x-4">
+          <div className="w-full sm:w-1/2 sm:order-last mb-4 sm:mb-0">
+            <div className="w-full flex justify-center">
+              <div className="flex w-full max-w-sm justify-around">
+                {displayState.actions_available?.map((action, index) => (
+                  <button
+                    key={action.direction}
+                    onClick={() => handleAction(action)}
+                    className="gamescreen-button m-2"
+                  >
+                    {action.command_text}
+                  </button>
+                ))}
+              </div>
+            </div>
           </div>
-          <div className="fixed bottom-0 w-full text-center">
-          <div
-            className={`${josefin_slab.className} text-lg gamescreen-component fixed left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2`}
-          >
-            {transitionText}
+          <div className="w-full sm:w-1/2 sm:order-first">
+            <div className="w-full flex justify-center">
+              {showAudio && audioFile && (
+                <div className="audio-player-wrapper">
+                  <AudioPlayer audioFile={audioFile} />
+                </div>
+              )}
+            </div>
           </div>
         </div>
-          <div className="fixed bottom-0 w-full text-center content-center sm:flex sm:justify-center sm:items-center sm:space-x-4">
-            <div className="w-full sm:w-1/2 sm:order-last mb-4 sm:mb-0">
-              <div className="w-full flex justify-center">
-                <div className="flex w-full max-w-sm justify-around">
-                  {displayState.actions_available?.map((action, index) => (
-                    <button
-                      key={action.direction}
-                      onClick={() => handleAction(action)}
-                      className="gamescreen-button m-2"
-                    >
-                      {action.command_text}
-                    </button>
-                  ))}
-                </div>
-              </div>
-            </div>
-            <div className="w-full sm:w-1/2 sm:order-first">
-              <div className="w-full flex justify-center">
-                {audioFile && (
-                  <div className="audio-player-wrapper">
-                    <AudioPlayer audioFile={audioFile} />
-                  </div>
-                )}
-              </div>
-            </div>
-          </div>
-        </>
-      )}
+      </>
     </div>
   );
 };

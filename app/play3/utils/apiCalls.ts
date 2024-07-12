@@ -18,7 +18,6 @@ export async function saveBlobToS3(blob: Blob, contentType: string, path: string
       options: { contentType }
     });
     const s3path = (await result.result).path;
-    console.log(`Saved Blob to S3: ${s3path}`);
     return s3path
   } catch (error) {
     console.error("Error uploading Blob to S3:", error);
@@ -62,7 +61,6 @@ export async function getImage(prompt: string): Promise<string | null> {
 
     // Save to S3 and return the storage URL
     const imageUrl = await saveBlobToS3(blob, "image/png", `images/${Date.now()}.png`);
-    console.log(`NEW imageUrl: ${imageUrl}`);
     return imageUrl;
 
   } catch (error) {
@@ -110,7 +108,6 @@ export async function getAudio(text: string): Promise<string | null> {
 
     // Save to S3 and return the storage URL
     const audioUrl = await saveBlobToS3(audioBlob, "audio/mpeg", `audio/${Date.now()}.mp3`);
-    console.log(`audioUrl: ${audioUrl}`);
     return audioUrl;
   } catch (error) {
     console.error("Error fetching audio:", error);

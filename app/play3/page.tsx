@@ -1,12 +1,12 @@
-// app/play2/page.tsx
+// app/play3/page.tsx
 
 "use client";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { useAuth } from "@/context/AuthContext";
-import { initializeGame } from "@/app/play2/utils/gameUtils";
-import { Story } from "@/app/play2/types";
+import { initializeGame } from "@/app/play3/utils/gameUtils";
+import { Story } from "@/app/play3/types";
 import { generateClient } from "aws-amplify/data";
 import { Schema } from "@/amplify/data/resource";
 
@@ -41,7 +41,7 @@ const Play = () => {
     try {
       //  Create a new story and scene
       const { gameId, sceneData } = await initializeGame(user.username);
-      router.push(`/play2/${gameId}`);
+      router.push(`/play3/${gameId}`);
     } catch (error) {
       console.error("Error starting story:", error);
     }
@@ -60,7 +60,7 @@ const Play = () => {
           <ul>
             {previousGames.map((game) => (
               <li key={game.id}>
-                <Link href={`/play2/${game.id}`}>{game.id}</Link>
+                <Link href={`/play3/${game.id}`}>{game.id}</Link>
               </li>
             ))}
           </ul>

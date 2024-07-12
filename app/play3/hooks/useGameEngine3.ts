@@ -1,9 +1,8 @@
 // @/app/play3/hooks/useGameEngine3.ts
-
 import { useState, useEffect, useCallback } from "react";
 import { usePathname } from "next/navigation";
 import { Scene, Action } from "@/app/play3/types";
-import { fetchStoryById, fetchSceneById, saveScene } from "@/app/play3/utils/gameUtils";
+import { fetchStoryById, fetchSceneById, saveScene, saveSceneIdToStory } from "@/app/play3/utils/gameUtils";
 import { createScene } from "@/app/play3/utils/generateContent";
 import { getImage, getAudio } from "@/app/play3/utils/apiCalls";
 
@@ -18,7 +17,7 @@ const useGameEngine = () => {
     console.log(`scene: ${JSON.stringify(scene, null, 2)}`);
   }, [scene]);
 
-  const fetchAndSetScene = async (sceneId: string) => {
+  const fetchAndSetScene = async (sceneId: string, storyId: string) => {
     try {
       let fetchedScene = await fetchSceneById(sceneId);
 
@@ -34,6 +33,9 @@ const useGameEngine = () => {
 
       // Set the primary text and actions immediately
       setScene(fetchedScene);
+
+      // Update the story's current_scene field
+      await saveSceneIdToStory(fetchedScene.id || '', storyId);
 
       // Fetch and set image asynchronously
       if (!fetchedScene.image) {
@@ -70,7 +72,7 @@ const useGameEngine = () => {
       setLoading(true);
       try {
         const story = await fetchStoryById(gameId);
-        await fetchAndSetScene(story.current_scene);
+        await fetchAndSetScene(story.current_scene, gameId);
       } catch (error) {
         console.error('Error fetching current scene:', error);
         setError(error instanceof Error ? error.message : "Unknown error fetching the story.");
@@ -85,7 +87,12 @@ const useGameEngine = () => {
     setLoading(true);
     try {
       if (action.leads_to) {
-        await fetchAndSetScene(action.leads_to);
+        if (gameId) {
+          await fetchAndSetScene(action.leads_to, gameId);
+        } else {
+          setError("Game ID is required");
+          setLoading(false);
+        }
         return;
       }
 
@@ -100,6 +107,9 @@ const useGameEngine = () => {
         story_id: scene.story_id,
       };
       let createdScene = await saveScene(newScene);
+
+      // Update the story's current_scene field
+      await saveSceneIdToStory(createdScene.id, scene.story_id);
 
       const updatedAction: Action = {
         ...action,
@@ -156,14 +166,14 @@ const useGameEngine = () => {
         setScene(prevScene => prevScene ? { ...prevScene, audio: audioUrl } : prevScene);
       }
 
-      await fetchAndSetScene(createdScene.id);
+      await fetchAndSetScene(createdScene.id, createdScene.story_id);
     } catch (error) {
       console.error('Error handling player action:', error);
       setError(error instanceof Error ? error.message : "Unknown error handling player action.");
     } finally {
       setLoading(false);
     }
-  }, [scene]);
+  }, [scene, gameId]);
 
   return { scene, loading, error, handlePlayerAction };
 };
