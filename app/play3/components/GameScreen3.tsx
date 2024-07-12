@@ -1,3 +1,5 @@
+// @/app/play3/components/GameScreen3.tsx
+
 import React, { useEffect, useState, useRef } from "react";
 import { Scene, Action } from "@/app/play3/types";
 import Image from "next/image";
@@ -5,20 +7,15 @@ import { downloadData } from "aws-amplify/storage";
 import AudioPlayer from "@/app/play3/components/AudioPlayer";
 import { josefin_slab } from "@/app/fonts";
 import { motion, AnimatePresence } from "framer-motion";
+import useGameEngine from "@/app/play3/hooks/useGameEngine3";
 
 interface GameScreenProps {
   signOut: () => void;
   user: any; // Replace with your user type if available
-  scene: Scene | null;
-  onAction: (action: Action) => void; // New prop for handling actions
 }
 
-const GameScreen: React.FC<GameScreenProps> = ({
-  signOut,
-  user,
-  scene,
-  onAction,
-}) => {
+const GameScreen: React.FC<GameScreenProps> = ({ signOut, user }) => {
+  const { scene, loading, error, audioLoaded, showActions, handlePlayerAction } = useGameEngine();
   const [displayState, setDisplayState] = useState<Partial<Scene>>({});
   const [transitionText, setTransitionText] = useState<string>("");
   const [imageUrl, setImageUrl] = useState<string>("");
@@ -105,7 +102,7 @@ const GameScreen: React.FC<GameScreenProps> = ({
     setShowImage(false);
 
     setTimeout(() => {
-      onAction(action);
+      handlePlayerAction(action);
     }, 1); // Start action after 1 ms
   };
 
@@ -131,11 +128,11 @@ const GameScreen: React.FC<GameScreenProps> = ({
           )}
         </AnimatePresence>
       </div>
-      <div className="">
+      <div className="absolute w-full h-full">
         <AnimatePresence>
           {showPrimary && (
             <motion.div
-              className={`${josefin_slab.className} text-lg gamescreen-component fixed left-2 top-2 max-h-72 overflow-y-auto sm:left-1/2 sm:top-1/2 sm:transform sm:-translate-x-1/2 sm:-translate-y-1/2`}
+              className={`${josefin_slab.className} text-lg gamescreen-component fixed left-2 top-2 max-h-72 overflow-y-auto sm:w-2/3 sm:left-1/2 sm:top-1/2 sm:transform sm:-translate-x-1/2 sm:-translate-y-1/2`}
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
@@ -174,7 +171,7 @@ const GameScreen: React.FC<GameScreenProps> = ({
           <div className="w-full flex justify-center">
             <div className="flex w-full max-w-sm justify-around">
               <AnimatePresence>
-                {displayState.actions_available?.map((action, index) => (
+                {showActions && displayState.actions_available?.map((action, index) => (
                   <motion.button
                     key={action.direction}
                     onClick={() => handleAction(action)}

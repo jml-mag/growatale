@@ -11,8 +11,8 @@ const useGameEngine = () => {
   const [scene, setScene] = useState<Scene | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
-  const [previousPrimaryText, setPreviousPrimaryText] = useState<string>("");
-  const [previousSceneChoice, setPreviousSceneChoice] = useState<string>("");
+  const [audioLoaded, setAudioLoaded] = useState<boolean>(false);
+  const [showActions, setShowActions] = useState<boolean>(false);
   const pathname = usePathname();
   const gameId = pathname.split("/").pop();
 
@@ -22,10 +22,12 @@ const useGameEngine = () => {
 
   const fetchAndSetScene = async (sceneId: string, storyId: string) => {
     try {
+      setAudioLoaded(false); // Reset audio loaded status
+      setShowActions(false); // Hide actions when fetching a new scene
       let fetchedScene = await fetchSceneById(sceneId);
 
       if (!fetchedScene.primary_text && fetchedScene.actions_available.length === 0) {
-        const generatedContent = await createScene(fetchedScene, previousPrimaryText, previousSceneChoice);
+        const generatedContent = await createScene(fetchedScene, '', '');
         fetchedScene = {
           ...fetchedScene,
           primary_text: generatedContent.story,
@@ -58,8 +60,13 @@ const useGameEngine = () => {
             fetchedScene.audio = audioUrl;
             saveScene(fetchedScene);
             setScene(prevScene => prevScene ? { ...prevScene, audio: audioUrl } : prevScene);
+            setAudioLoaded(true); // Mark audio as loaded
+            setShowActions(true); // Show actions after audio has loaded
           }
         }).catch(error => console.error('Error fetching audio:', error));
+      } else {
+        setAudioLoaded(true); // Audio is already set
+        setShowActions(true); // Show actions after audio has loaded
       }
     } catch (error) {
       console.error('Error fetching and setting scene:', error);
@@ -88,11 +95,9 @@ const useGameEngine = () => {
   const handlePlayerAction = useCallback(async (action: Action) => {
     if (!scene || !scene.id) return;
     setLoading(true);
+    setAudioLoaded(false); // Reset audio loaded status
+    setShowActions(false); // Hide actions when an action is picked
     try {
-      // Update previous primary text and choice
-      setPreviousPrimaryText(scene.primary_text);
-      setPreviousSceneChoice(action.command_text);
-
       if (action.leads_to) {
         if (gameId) {
           await fetchAndSetScene(action.leads_to, gameId);
@@ -136,7 +141,7 @@ const useGameEngine = () => {
       };
       await saveScene(updatedScene);
 
-      const generatedContent = await createScene(createdScene as Scene, scene.primary_text, action.command_text);
+      const generatedContent = await createScene(createdScene as Scene, '', '');
       createdScene = {
         ...createdScene,
         primary_text: generatedContent.story,
@@ -171,6 +176,8 @@ const useGameEngine = () => {
         createdScene.audio = audioUrl;
         await saveScene(createdScene as Scene);
         setScene(prevScene => prevScene ? { ...prevScene, audio: audioUrl } : prevScene);
+        setAudioLoaded(true); // Mark audio as loaded
+        setShowActions(true); // Show actions after audio has loaded
       }
 
       await fetchAndSetScene(createdScene.id, createdScene.story_id);
@@ -182,7 +189,8 @@ const useGameEngine = () => {
     }
   }, [scene, gameId]);
 
-  return { scene, loading, error, handlePlayerAction };
+  return { scene, loading, error, audioLoaded, showActions, handlePlayerAction };
 };
 
 export default useGameEngine;
+
