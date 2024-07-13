@@ -30,7 +30,7 @@ const schema = a.schema({
     id: a.id().required(),
     owner: a.string().required(),
     time: a.string().required(),
-    weather: a.string().required(),
+    weather: a.integer().required(),
     author: a.string().required(),
     artist: a.string().required(),
     current_scene: a.string().required(),

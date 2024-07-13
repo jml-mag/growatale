@@ -18,7 +18,7 @@ export async function saveBlobToS3(blob: Blob, contentType: string, path: string
       options: { contentType }
     });
     const s3path = (await result.result).path;
-    return s3path
+    return s3path;
   } catch (error) {
     console.error("Error uploading Blob to S3:", error);
     throw error;
@@ -28,14 +28,13 @@ export async function saveBlobToS3(blob: Blob, contentType: string, path: string
 /**
  * Fetches an image from the API, saves it to S3, and returns the URL.
  * @param prompt The prompt for the image generation.
+ * @param time The current time.
+ * @param weather The current weather description.
  * @returns The URL of the saved image file.
  */
-export async function getImage(prompt: string): Promise<string | null> {
-
+export async function getImage(prompt: string, time: string, weather: string): Promise<string | null> {
   try {
-    console.log(`prompt: ${prompt}`)
-    const adjustedPrompt = `In the style of ${gameSettings.artist} create ${prompt}`
-    console.log(`adjustedPrompt: ${adjustedPrompt}`)
+    const adjustedPrompt = `In the style of ${gameSettings.artist}, create an image that shows ${prompt}. The scene should reflect the time ${time} and the weather ${weather}.`;
     const response = await fetch("/api/openai/image", {
       method: "POST",
       headers: {

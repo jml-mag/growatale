@@ -1,11 +1,15 @@
-// @/app/play/hooks/useGameEngine3.ts
+// @/app/play/hooks/useGameEngine.ts
 
 import { useState, useEffect, useCallback } from "react";
 import { usePathname } from "next/navigation";
+import { generateClient } from "aws-amplify/data";
+import { Schema } from "@/amplify/data/resource";
 import { Scene, Action, Story } from "@/app/play/types";
-import { fetchStoryById, fetchSceneById, saveScene, saveSceneIdToStory } from "@/app/play/utils/gameUtils";
+import { fetchStoryById, fetchSceneById, saveScene, saveSceneIdToStory, incrementTime, adjustWeather, weatherDescriptions } from "@/app/play/utils/gameUtils";
 import { createScene } from "@/app/play/utils/generateContent";
 import { getImage, getAudio } from "@/app/play/utils/apiCalls";
+
+const client = generateClient<Schema>();
 
 const useGameEngine = () => {
   const [scene, setScene] = useState<Scene | null>(null);
@@ -43,27 +47,26 @@ const useGameEngine = () => {
       await saveSceneIdToStory(fetchedScene.id || '', storyId);
 
       // Fetch and set image asynchronously
+      const story = await fetchStoryById(storyId);
       if (!fetchedScene.image) {
-        getImage(fetchedScene.scene_description).then(imageUrl => {
-          if (imageUrl) {
-            fetchedScene.image = imageUrl;
-            saveScene(fetchedScene);
-            setScene(prevScene => prevScene ? { ...prevScene, image: imageUrl } : prevScene);
-          }
-        }).catch(error => console.error('Error fetching image:', error));
+        const imageUrl = await getImage(fetchedScene.scene_description, story.time, weatherDescriptions[story.weather as keyof typeof weatherDescriptions]);
+        if (imageUrl) {
+          fetchedScene.image = imageUrl;
+          await saveScene(fetchedScene);
+          setScene(prevScene => prevScene ? { ...prevScene, image: imageUrl } : prevScene);
+        }
       }
 
       // Fetch and set audio asynchronously
       if (!fetchedScene.audio) {
-        getAudio(fetchedScene.primary_text).then(audioUrl => {
-          if (audioUrl) {
-            fetchedScene.audio = audioUrl;
-            saveScene(fetchedScene);
-            setScene(prevScene => prevScene ? { ...prevScene, audio: audioUrl } : prevScene);
-            setAudioLoaded(true); // Mark audio as loaded
-            setShowActions(true); // Show actions after audio has loaded
-          }
-        }).catch(error => console.error('Error fetching audio:', error));
+        const audioUrl = await getAudio(fetchedScene.primary_text);
+        if (audioUrl) {
+          fetchedScene.audio = audioUrl;
+          await saveScene(fetchedScene);
+          setScene(prevScene => prevScene ? { ...prevScene, audio: audioUrl } : prevScene);
+          setAudioLoaded(true); // Mark audio as loaded
+          setShowActions(true); // Show actions after audio has loaded
+        }
       } else {
         setAudioLoaded(true); // Audio is already set
         setShowActions(true); // Show actions after audio has loaded
@@ -161,9 +164,22 @@ const useGameEngine = () => {
 
       createdScene = { ...createdScene, actions_available: finalCreatedSceneActions };
 
+      // Increment time and adjust weather
+      const story = await fetchStoryById(scene.story_id);
+      const newTime = incrementTime(story.time);
+      const newWeather = adjustWeather(story.weather);
+
+      if (story.id) {
+        await client.models.Story.update({
+          id: story.id,
+          time: newTime,
+          weather: newWeather,
+        });
+      }
+
       setScene(createdScene as Scene);
 
-      const imageUrl = await getImage(createdScene.scene_description);
+      const imageUrl = await getImage(createdScene.scene_description, newTime, weatherDescriptions[newWeather as keyof typeof weatherDescriptions]);
       if (imageUrl) {
         createdScene.image = imageUrl;
         await saveScene(createdScene as Scene);
@@ -192,4 +208,3 @@ const useGameEngine = () => {
 };
 
 export default useGameEngine;
-

@@ -1,4 +1,4 @@
-// @/app/play3/components/GameScreen3.tsx
+// @/app/play/components/GameScreen.tsx
 
 import React, { useEffect, useState, useRef } from "react";
 import { Scene, Action } from "@/app/play/types";
@@ -12,7 +12,7 @@ import useGameEngine from "@/app/play/hooks/useGameEngine";
 interface GameScreenProps {
   signOut: () => void;
   user: any; // Replace with your user type if available
-  scene: Scene|null; // Add this line
+  scene: Scene | null; // Add this line
   onAction: (action: Action) => void; // Add this line
 }
 

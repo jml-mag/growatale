@@ -1,4 +1,4 @@
-// app/play3/page.tsx
+// @/app/play/page.tsx
 
 "use client";
 import { useState, useEffect } from "react";

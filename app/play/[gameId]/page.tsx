@@ -1,4 +1,5 @@
-// app/play3/[gameId]/page.tsx
+// @/app/play/[gameId]/page.tsx
+
 "use client";
 import { useAuth } from "@/context/AuthContext";
 import GameScreen from "@/app/play/components/GameScreen";

@@ -1,4 +1,5 @@
-// app/play3/utils/gameUtils.ts
+// @/app/play/utils/gameUtils.ts
+
 import { generateClient } from "aws-amplify/data";
 import { Schema } from "@/amplify/data/resource";
 import { Scene, Story, Action } from "@/app/play/types";
@@ -30,6 +31,7 @@ const fetchAudio = async (audioPath: string) => {
     return null;
   }
 };
+
 const saveStateToScene = async (initialScene: Scene) => {
   const sceneResponse = await saveScene(initialScene);
   const sceneId = sceneResponse.id;
@@ -85,8 +87,6 @@ async function saveScene(sceneData: Scene) {
   }
 }
 
-
-
 const fetchStoryById = async (storyId: string): Promise<Story> => {
   try {
     const { data: stories, errors } = await client.models.Story.list({
@@ -133,6 +133,8 @@ const initializeGame = async (username: string): Promise<{ gameId: string, scene
     owner: username,
     author: gameSettings.author,
     artist: gameSettings.artist,
+    time: gameSettings.time,
+    weather: 1, // Set initial weather to sunny
     current_scene: "",
     player_health: 100,
     player_inventory: [],
@@ -149,7 +151,6 @@ const initializeGame = async (username: string): Promise<{ gameId: string, scene
         actions_available: [], // Ensure actions_available is of type Action[]
         primary_text: "",
         scene_description: gameSettings.starting_scene_description,
-        time: gameSettings.time,
         previous_scene: "",
         story_id: gameId,
       };
@@ -177,4 +178,71 @@ const initializeGame = async (username: string): Promise<{ gameId: string, scene
   }
 };
 
-export { initializeGame,saveStateToScene,saveSceneIdToStory, saveScene, fetchStoryById, fetchSceneById, fetchImage, fetchAudio };
+export const weatherDescriptions = {
+  1: "sunny",
+  2: "mostly sunny",
+  3: "partly cloudy",
+  4: "partly sunny",
+  5: "mostly cloudy",
+  6: "cloudy",
+  7: "light rain",
+  8: "moderate rain",
+  9: "heavy rain",
+  10: "pouring rain",
+};
+
+export const adjustWeather = (currentWeather: number) => {
+  const change = Math.random();
+  let newWeather = currentWeather;
+
+  if (change < 0.4) {
+    newWeather += 1;  // 40% chance to increase by 1
+  } else if (change < 0.6) {
+    newWeather -= 1;  // 20% chance to decrease by 1
+  } else if (change < 0.7) {
+    newWeather += 2;  // 10% chance to increase by 2
+  } else if (change < 0.8) {
+    newWeather -= 2;  // 10% chance to decrease by 2
+  }
+
+  // Ensure weather stays within bounds
+  if (newWeather < 1) newWeather = 1;
+  if (newWeather > 10) newWeather = 10;
+
+  return newWeather;
+};
+
+export const convertTimeToNumber = (time: string) => {
+  const [timePart, meridiem] = time.split(' ');
+  let [hours, minutes] = timePart.split(':').map(Number);
+  
+  if (meridiem === 'PM' && hours !== 12) {
+    hours += 12;
+  } else if (hours === 12 && meridiem === 'AM') {
+    hours = 0;
+  }
+
+  return { hours, minutes };
+};
+
+export const incrementTime = (time: string) => {
+  let { hours, minutes } = convertTimeToNumber(time);
+  minutes += 15;
+
+  if (minutes >= 60) {
+    minutes -= 60;
+    hours += 1;
+  }
+
+  if (hours >= 24) {
+    hours -= 24;
+  }
+
+  const newMeridiem = hours >= 12 ? 'PM' : 'AM';
+  if (hours > 12) hours -= 12;
+  if (hours === 0) hours = 12;
+
+  return `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')} ${newMeridiem}`;
+};
+
+export { initializeGame, saveStateToScene, saveSceneIdToStory, saveScene, fetchStoryById, fetchSceneById, fetchImage, fetchAudio };
