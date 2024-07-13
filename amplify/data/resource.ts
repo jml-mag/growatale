@@ -20,7 +20,6 @@ const schema = a.schema({
     actions_available: a.ref('Action').array().required(),
     primary_text: a.string().required(),
     scene_description: a.string().required(),
-    time: a.string().required(),
     previous_scene: a.string(),
     story_id: a.string().required(),
     story: a.belongsTo('Story', 'story_id'),
@@ -30,6 +29,8 @@ const schema = a.schema({
   Story: a.model({
     id: a.id().required(),
     owner: a.string().required(),
+    time: a.string().required(),
+    weather: a.string().required(),
     author: a.string().required(),
     artist: a.string().required(),
     current_scene: a.string().required(),

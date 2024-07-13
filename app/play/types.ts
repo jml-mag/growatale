@@ -1,4 +1,4 @@
-// app/play3/types.ts
+// app/play/types.ts
 export interface Action {
   direction: string;
   command_text: string;
@@ -18,7 +18,6 @@ export interface Scene {
   actions_available: Action[]; 
   primary_text: string;
   scene_description: string;
-  time: string;
   previous_scene: string;
   story_id: string;
 }
@@ -26,6 +25,8 @@ export interface Scene {
 export interface Story {
   id?: string;
   owner: string;
+  time: string;
+  weather: string;
   author: string;
   artist: string;
   current_scene: string;

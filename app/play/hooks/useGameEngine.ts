@@ -1,8 +1,8 @@
-// @/app/play3/hooks/useGameEngine3.ts
+// @/app/play/hooks/useGameEngine3.ts
 
 import { useState, useEffect, useCallback } from "react";
 import { usePathname } from "next/navigation";
-import { Scene, Action } from "@/app/play/types";
+import { Scene, Action, Story } from "@/app/play/types";
 import { fetchStoryById, fetchSceneById, saveScene, saveSceneIdToStory } from "@/app/play/utils/gameUtils";
 import { createScene } from "@/app/play/utils/generateContent";
 import { getImage, getAudio } from "@/app/play/utils/apiCalls";
@@ -114,7 +114,6 @@ const useGameEngine = () => {
         actions_available: [],
         primary_text: '',
         scene_description: '',
-        time: '',
         previous_scene: scene.id,
         story_id: scene.story_id,
       };
@@ -141,7 +140,7 @@ const useGameEngine = () => {
       };
       await saveScene(updatedScene);
 
-      const generatedContent = await createScene(createdScene as Scene, '', '');
+      const generatedContent = await createScene(createdScene as Scene, scene.primary_text, action.direction);
       createdScene = {
         ...createdScene,
         primary_text: generatedContent.story,
