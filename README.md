@@ -1,5 +1,20 @@
 # Grow a Tale
 
+# Setup Instructions
+
+## Environment Variables
+
+To run Grow a Tale locally and deploy it with AWS Amplify, you need to configure the environment variables for the OpenAI API key.
+
+### Local Setup
+
+1. Create a `.env.local` file in the root directory of your project.
+2. Add your OpenAI API key to the `.env.local` file:
+
+   ```env
+   OPENAI_API_KEY=your_openai_api_key
+
+
 **Grow a Tale** is a proof-of-concept interactive text adventure game that dynamically generates story content using AI technologies. This application leverages modern web technologies to create engaging experiences, showcasing the potential for similar products built with this stack. While there are many optimizations left to explore, Grow a Tale serves as an inspiring demonstration of what's possible.
 
 ## Key Features
