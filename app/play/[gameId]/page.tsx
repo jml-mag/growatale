@@ -1,13 +1,16 @@
-// @/app/play/[gameId]/page.tsx
-
 "use client";
 import { useAuth } from "@/context/AuthContext";
 import GameScreen from "@/app/play/components/GameScreen";
 import useGameEngine from "@/app/play/hooks/useGameEngine";
 
-const Game = () => {
+/**
+ * Game component to manage the game state and render the GameScreen.
+ * 
+ * @returns A React component that renders the GameScreen or an error message if there's an error.
+ */
+const Game: React.FC = () => {
   const { signOut, user } = useAuth();
-  const { scene, loading, error, handlePlayerAction } = useGameEngine();
+  const { scene, error, handlePlayerAction } = useGameEngine();
 
   if (error) {
     return <div>Error: {error}</div>;

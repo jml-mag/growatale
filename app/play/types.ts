@@ -1,5 +1,6 @@
-// @/app/play/types.ts
-
+/**
+ * Represents an action available in a scene.
+ */
 export interface Action {
   direction: string;
   command_text: string;
@@ -7,11 +8,17 @@ export interface Action {
   leads_to: string;
 }
 
+/**
+ * Represents an item in the player's inventory.
+ */
 export interface Inventory {
   item: string;
   amount: string;
 }
 
+/**
+ * Represents a scene in the story.
+ */
 export interface Scene {
   id?: string;
   image: string;
@@ -23,6 +30,9 @@ export interface Scene {
   story_id: string;
 }
 
+/**
+ * Represents a story in the game.
+ */
 export interface Story {
   id?: string;
   owner: string;

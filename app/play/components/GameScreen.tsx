@@ -1,6 +1,4 @@
-// @/app/play/components/GameScreen.tsx
-
-import React, { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef } from "react";
 import { Scene, Action } from "@/app/play/types";
 import Image from "next/image";
 import { downloadData } from "aws-amplify/storage";
@@ -12,10 +10,19 @@ import useGameEngine from "@/app/play/hooks/useGameEngine";
 interface GameScreenProps {
   signOut: () => void;
   user: any; // Replace with your user type if available
-  scene: Scene | null; // Add this line
-  onAction: (action: Action) => void; // Add this line
+  scene: Scene | null;
+  onAction: (action: Action) => void;
 }
 
+/**
+ * GameScreen component to display the game scene, handle actions, and play audio.
+ * 
+ * @param signOut - Function to sign out the user.
+ * @param user - The current user object.
+ * @param scene - The current game scene.
+ * @param onAction - Function to handle the player's actions.
+ * @returns A React component to render the game screen.
+ */
 const GameScreen: React.FC<GameScreenProps> = ({ signOut, user }) => {
   const { scene, loading, error, audioLoaded, showActions, handlePlayerAction } = useGameEngine();
   const [displayState, setDisplayState] = useState<Partial<Scene>>({});
@@ -52,16 +59,14 @@ const GameScreen: React.FC<GameScreenProps> = ({ signOut, user }) => {
     }
   }, [scene]);
 
+  /**
+   * Fetches and sets the image URL for the scene.
+   * 
+   * @param path - The path to the image file.
+   */
   const fetchImage = async (path: string) => {
     try {
-      const downloadResult = await downloadData({
-        path,
-        options: {
-          onProgress: (event) => {
-            // Update progress silently
-          },
-        },
-      }).result;
+      const downloadResult = await downloadData({ path }).result;
       const blob = await downloadResult.body.blob();
       const blobUrl = URL.createObjectURL(blob);
       setImageUrl(blobUrl);
@@ -74,16 +79,14 @@ const GameScreen: React.FC<GameScreenProps> = ({ signOut, user }) => {
     }
   };
 
+  /**
+   * Fetches and sets the audio file for the scene.
+   * 
+   * @param path - The path to the audio file.
+   */
   const fetchAudio = async (path: string) => {
     try {
-      const downloadResult = await downloadData({
-        path,
-        options: {
-          onProgress: (event) => {
-            // Update progress silently
-          },
-        },
-      }).result;
+      const downloadResult = await downloadData({ path }).result;
       const blob = await downloadResult.body.blob();
       const file = new File([blob], "audio-file.mp3", { type: "audio/mpeg" });
       setAudioFile(file);
@@ -96,6 +99,11 @@ const GameScreen: React.FC<GameScreenProps> = ({ signOut, user }) => {
     }
   };
 
+  /**
+   * Handles player actions and updates the display state accordingly.
+   * 
+   * @param action - The action taken by the player.
+   */
   const handleAction = (action: Action) => {
     setTransitionText(action.transition_text);
     setShowPrimary(false);
@@ -141,8 +149,8 @@ const GameScreen: React.FC<GameScreenProps> = ({ signOut, user }) => {
               transition={{ duration: 2.5 }}
               drag
               dragConstraints={constraintsRef}
-              dragElastic={0.2} // Optional: adjust drag elasticity
-              dragMomentum={false} // Optional: disable momentum for more precise positioning
+              dragElastic={0.2}
+              dragMomentum={false}
             >
               {displayState.primary_text || "Loading text..."}
             </motion.div>

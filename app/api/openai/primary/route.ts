@@ -1,27 +1,27 @@
-// app/api/openai/primary/route.ts
 import { NextRequest, NextResponse } from 'next/server';
 import OpenAI from 'openai';
-import { generateClient } from 'aws-amplify/data';
-import { type Schema } from '@/amplify/data/resource'; // Ensure the correct relative path
 
 const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY, // Use a server-side environment variable
+  apiKey: process.env.OPENAI_API_KEY,
 });
 
-const client = generateClient<Schema>();
-
-export async function POST(req: NextRequest) {
+/**
+ * Handles the POST request to generate chat completions using OpenAI's API.
+ *
+ * @param {NextRequest} req - The incoming request object.
+ * @returns {Promise<NextResponse>} - The response object containing the chat completion data or an error message.
+ */
+export async function POST(req: NextRequest): Promise<NextResponse> {
   const { prompt, model, messages } = await req.json();
 
   try {
-    // Step 1: Call OpenAI for text generation
     const response = await openai.chat.completions.create({
-      model: model, 
-      messages: messages,
+      model,
+      messages,
     });
 
-    let textContent = response.choices[0].message.content || '{}'; // Ensure it's a string
-    textContent = textContent.replace(/```json/g, '').replace(/```/g, ''); // Remove the code block markers
+    let textContent = response.choices[0].message.content || '{}';
+    textContent = textContent.replace(/```json/g, '').replace(/```/g, '');
 
     let parsedContent;
     try {
@@ -32,14 +32,13 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'Error parsing OpenAI response' }, { status: 500 });
     }
 
-    // Extract the relevant parts from the response, ensuring no null values
     const story = parsedContent.story || 'No story provided';
-    const scene_description = parsedContent.scene_description || 'No description provided';
-    const player_options = parsedContent.player_options || { directions: [] };
+    const sceneDescription = parsedContent.scene_description || 'No description provided';
+    const playerOptions = parsedContent.player_options || { directions: [] };
 
     console.log('Story:', story);
-    console.log('Description:', scene_description);
-    console.log('Options:', player_options);
+    console.log('Description:', sceneDescription);
+    console.log('Options:', playerOptions);
 
     return NextResponse.json({ message: textContent });
   } catch (error: any) {
@@ -48,6 +47,9 @@ export async function POST(req: NextRequest) {
       console.error('Error response:', error.response.status, error.response.statusText);
       console.error('Error details:', await error.response.json());
     }
-    return NextResponse.json({ error: 'OpenAI API call error' }, { status: 500 });
+    return NextResponse.json(
+      { error: 'OpenAI API call error', details: error.message },
+      { status: 500 }
+    );
   }
 }

@@ -1,5 +1,3 @@
-// @/app/play/utils/gameUtils.ts
-
 import { generateClient } from "aws-amplify/data";
 import { Schema } from "@/amplify/data/resource";
 import { Scene, Story, Action } from "@/app/play/types";

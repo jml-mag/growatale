@@ -1,8 +1,15 @@
-import { Scene } from "../types";
-import gameSettings from "../gameSettings";
-import { fetchStoryById } from "./gameUtils";
-import { weatherDescriptions } from "./gameUtils";
+import { Scene } from "@/app/play/types";
+import gameSettings from "@/app/play/gameSettings";
+import { fetchStoryById, weatherDescriptions } from "@/app/play/utils/gameUtils";
 
+/**
+ * Creates a new scene based on the previous scene's primary text and the player's choice.
+ * 
+ * @param scene - The current scene object.
+ * @param previousPrimaryText - The primary text of the previous scene.
+ * @param previousSceneChoice - The player's choice in the previous scene.
+ * @returns A promise that resolves to the generated scene.
+ */
 export async function createScene(scene: Scene, previousPrimaryText: string, previousSceneChoice: string) {
     console.log(`previousPrimaryText: ${previousPrimaryText}`);
     console.log(`previousSceneChoice: ${previousSceneChoice}`);
@@ -11,6 +18,12 @@ export async function createScene(scene: Scene, previousPrimaryText: string, pre
     return generatedScene;
 }
 
+/**
+ * Makes a call to the primary AI service to generate a new scene based on the provided prompt.
+ * 
+ * @param prompt - The prompt to send to the AI service.
+ * @returns A promise that resolves to the parsed data from the AI service response.
+ */
 async function makePrimaryCall(prompt: any) {
     const response = await fetch("/api/openai/primary", {
         method: "POST",
@@ -24,6 +37,14 @@ async function makePrimaryCall(prompt: any) {
     return parsedData;
 }
 
+/**
+ * Generates a prompt for the AI service based on the current scene and the previous scene's details.
+ * 
+ * @param scene - The current scene object.
+ * @param previousPrimaryText - The primary text of the previous scene.
+ * @param previousSceneChoice - The player's choice in the previous scene.
+ * @returns A promise that resolves to the generated prompt.
+ */
 async function generatePrompt(scene: Scene, previousPrimaryText: string, previousSceneChoice: string) {
     let sceneDescription: string;
     let backOption: string;

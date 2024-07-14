@@ -1,6 +1,6 @@
-// @/app/play/gameSettings.ts
-
-// Define the structure of the game settings
+/**
+ * Interface for defining the game settings.
+ */
 interface GameSettings {
   author: string;
   artist: string;
@@ -20,12 +20,14 @@ interface GameSettings {
   writer: string;
 }
 
-// Default game settings
+/**
+ * Default game settings.
+ */
 const gameSettings: GameSettings = {
   author: "Edgar Allan Poe",
   artist: "A master of Realism",
   primary_ai: "gpt-4o",
-  audio_ai: "tts-1", // or "tts-1-hd",
+  audio_ai: "tts-1", // or "tts-1-hd"
   image_ai: "dall-e-3", // or "dall-e-2"
   image_size: "1024x1024", // "1024x1024", "1024x1792", "1792x1024"
   image_quality: "hd",
@@ -37,7 +39,7 @@ const gameSettings: GameSettings = {
   time: "12:00 PM",
   weather: 6, // Default to "cloudy"
   age: 12,
-  writer: `Edgar Allan Poe`,
+  writer: "Edgar Allan Poe",
 };
 
 export default gameSettings;

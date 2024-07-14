@@ -1,17 +1,15 @@
 "use client";
-import { useState } from "react";
-import Link from "next/link";
 import { Amplify } from "aws-amplify";
-import "@aws-amplify/ui-react/styles.css";
-import outputs from "../amplify_outputs.json";
+import Link from "next/link";
 import Image from "next/image";
+import "@aws-amplify/ui-react/styles.css";
+import outputs from "@/amplify_outputs.json";
 import defaultBackground from "@/public/home-bg-2.png";
 import logo from "@/public/logo.png";
 
 Amplify.configure(outputs);
 
 export default function Home() {
-  const [showAuth, setShowAuth] = useState(false);
   return (
     <div className="text-center">
       <div className="w-screen h-screen fixed -z-30">
@@ -23,7 +21,7 @@ export default function Home() {
           priority
         />
       </div>
-      <main className="">
+      <main>
         <div className="w-full sm:w-auto sm:mr-4">
           <Image
             className="pt-12 sm:pt-0 mx-auto sm:ml-0"

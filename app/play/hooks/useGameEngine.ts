@@ -1,16 +1,19 @@
-// @/app/play/hooks/useGameEngine.ts
-
 import { useState, useEffect, useCallback } from "react";
 import { usePathname } from "next/navigation";
 import { generateClient } from "aws-amplify/data";
 import { Schema } from "@/amplify/data/resource";
-import { Scene, Action, Story } from "@/app/play/types";
+import { Scene, Action } from "@/app/play/types";
 import { fetchStoryById, fetchSceneById, saveScene, saveSceneIdToStory, incrementTime, adjustWeather, weatherDescriptions } from "@/app/play/utils/gameUtils";
 import { createScene } from "@/app/play/utils/generateContent";
 import { getImage, getAudio } from "@/app/play/utils/apiCalls";
 
 const client = generateClient<Schema>();
 
+/**
+ * Custom hook for managing the game engine.
+ * 
+ * @returns An object containing the current scene, loading state, error message, audio loaded state, show actions state, and a function to handle player actions.
+ */
 const useGameEngine = () => {
   const [scene, setScene] = useState<Scene | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
@@ -24,6 +27,12 @@ const useGameEngine = () => {
     console.log(`scene: ${JSON.stringify(scene, null, 2)}`);
   }, [scene]);
 
+  /**
+   * Fetches and sets the scene based on the provided scene ID and story ID.
+   * 
+   * @param sceneId - The ID of the scene to fetch.
+   * @param storyId - The ID of the story the scene belongs to.
+   */
   const fetchAndSetScene = async (sceneId: string, storyId: string) => {
     try {
       setAudioLoaded(false); // Reset audio loaded status
@@ -95,6 +104,11 @@ const useGameEngine = () => {
     fetchCurrentScene();
   }, [gameId]);
 
+  /**
+   * Handles player actions and updates the game state accordingly.
+   * 
+   * @param action - The action taken by the player.
+   */
   const handlePlayerAction = useCallback(async (action: Action) => {
     if (!scene || !scene.id) return;
     setLoading(true);

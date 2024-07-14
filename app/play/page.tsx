@@ -1,6 +1,5 @@
-// @/app/play/page.tsx
-
 "use client";
+
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
@@ -12,7 +11,12 @@ import { Schema } from "@/amplify/data/resource";
 
 const client = generateClient<Schema>();
 
-const Play = () => {
+/**
+ * Play component that lists previous games and allows starting a new game.
+ *
+ * @returns {JSX.Element} The Play component.
+ */
+const Play = (): JSX.Element => {
   const { signOut, user } = useAuth();
   const [previousGames, setPreviousGames] = useState<Story[]>([]);
   const router = useRouter();
@@ -36,11 +40,12 @@ const Play = () => {
     fetchPreviousGames();
   }, [user.username]);
 
-  // Initializes a new game, creates an initial scene, and navigates to the game screen
+  /**
+   * Initializes a new game, creates an initial scene, and navigates to the game screen.
+   */
   const startStory = async () => {
     try {
-      //  Create a new story and scene
-      const { gameId, sceneData } = await initializeGame(user.username);
+      const { gameId } = await initializeGame(user.username);
       router.push(`/play/${gameId}`);
     } catch (error) {
       console.error("Error starting story:", error);
@@ -49,6 +54,11 @@ const Play = () => {
 
   return (
     <div className="text-white">
+      <div className="fixed top-0 right-0 p-4">
+        <button onClick={signOut} className="py-2 px-4 bg-red-600 text-white">
+          Sign Out
+        </button>
+      </div>
       <button
         onClick={startStory}
         className="py-3 px-2 m-3 bg-green-600 text-green-50"

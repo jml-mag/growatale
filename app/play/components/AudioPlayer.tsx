@@ -1,11 +1,18 @@
-// @/app/play3/components/AudioPlayer.tsx
+import { useEffect, useRef, useState } from "react";
 
-import React, { useEffect, useRef, useState } from "react";
-
+/**
+ * Props for the AudioPlayer component.
+ */
 interface AudioPlayerProps {
   audioFile: File;
 }
 
+/**
+ * AudioPlayer component for playing audio files with controls for play/pause, mute/unmute, and volume adjustment.
+ * 
+ * @param audioFile - The audio file to be played.
+ * @returns A React component for the audio player.
+ */
 const AudioPlayer: React.FC<AudioPlayerProps> = ({ audioFile }) => {
   const audioRef = useRef<HTMLAudioElement>(null);
   const [isPlaying, setIsPlaying] = useState<boolean>(false);
@@ -53,6 +60,9 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({ audioFile }) => {
     }
   }, [audioSrc]);
 
+  /**
+   * Toggles play and pause states for the audio.
+   */
   const handlePlayPause = () => {
     const audio = audioRef.current;
     if (audio) {
@@ -66,6 +76,9 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({ audioFile }) => {
     }
   };
 
+  /**
+   * Toggles mute and unmute states for the audio.
+   */
   const handleMuteUnmute = () => {
     const audio = audioRef.current;
     if (audio) {
@@ -84,6 +97,11 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({ audioFile }) => {
     }
   };
 
+  /**
+   * Handles volume changes for the audio.
+   * 
+   * @param e - The event triggered by changing the volume slider.
+   */
   const handleVolumeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const audio = audioRef.current;
     const newVolume = parseInt(e.target.value);
@@ -98,6 +116,11 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({ audioFile }) => {
     }
   };
 
+  /**
+   * Handles seeking within the audio.
+   * 
+   * @param e - The event triggered by changing the progress slider.
+   */
   const handleSeek = (e: React.ChangeEvent<HTMLInputElement>) => {
     const audio = audioRef.current;
     const seekTime = (parseInt(e.target.value) / 100) * (audio?.duration || 0);
@@ -106,6 +129,12 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({ audioFile }) => {
     }
   };
 
+  /**
+   * Formats time from seconds to a MM:SS string.
+   * 
+   * @param time - The time in seconds.
+   * @returns A formatted time string.
+   */
   const formatTime = (time: number): string => {
     const minutes = Math.floor(time / 60);
     const seconds = Math.floor(time % 60)
