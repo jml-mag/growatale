@@ -3,10 +3,10 @@ import gameSettings from '@/app/play/gameSettings';
 
 /**
  * Saves a Blob to S3 and returns the URL.
- * @param {Blob} blob - The Blob to save.
- * @param {string} contentType - The content type of the Blob.
- * @param {string} path - The path where the file will be stored in S3.
- * @returns {Promise<string>} - The URL of the saved file.
+ * @param blob The Blob to save.
+ * @param contentType The content type of the Blob.
+ * @param path The path where the file will be stored in S3.
+ * @returns The URL of the saved file.
  */
 export async function saveBlobToS3(blob: Blob, contentType: string, path: string): Promise<string> {
   try {
@@ -25,10 +25,10 @@ export async function saveBlobToS3(blob: Blob, contentType: string, path: string
 
 /**
  * Fetches an image from the API, saves it to S3, and returns the URL.
- * @param {string} prompt - The prompt for the image generation.
- * @param {string} time - The current time.
- * @param {string} weather - The current weather description.
- * @returns {Promise<string | null>} - The URL of the saved image file.
+ * @param prompt The prompt for the image generation.
+ * @param time The current time.
+ * @param weather The current weather description.
+ * @returns The URL of the saved image file.
  */
 export async function getImage(prompt: string, time: string, weather: string): Promise<string | null> {
   try {
@@ -68,8 +68,8 @@ export async function getImage(prompt: string, time: string, weather: string): P
 
 /**
  * Fetches audio from the API, saves it to S3, and returns the URL.
- * @param {string} text - The text to convert to audio.
- * @returns {Promise<string | null>} - The URL of the saved audio file.
+ * @param text The text to convert to audio.
+ * @returns The URL of the saved audio file.
  */
 export async function getAudio(text: string): Promise<string | null> {
   try {
@@ -93,6 +93,11 @@ export async function getAudio(text: string): Promise<string | null> {
 
     const responseData = await response.json();
     const base64Audio = responseData.audio_base64;
+
+    // Ensure base64 string is valid
+    if (!base64Audio || base64Audio.length % 4 !== 0) {
+      throw new Error('Invalid base64 string');
+    }
 
     // Convert base64 to Blob
     const byteCharacters = atob(base64Audio);

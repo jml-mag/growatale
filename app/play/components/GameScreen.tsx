@@ -185,7 +185,7 @@ const GameScreen: React.FC<GameScreenProps> = ({ signOut, user }) => {
                   <motion.button
                     key={action.direction}
                     onClick={() => handleAction(action)}
-                    className="gamescreen-button m-2"
+                    className="gamescreen-button m-2 first-letter:uppercase"
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     exit={{ opacity: 0 }}
