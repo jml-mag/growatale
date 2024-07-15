@@ -19,7 +19,7 @@ export default function Layout({
   children,
 }: Readonly<{ children: React.ReactNode }>): JSX.Element {
   return (
-    <Authenticator variation="modal" hideSignUp={true}>
+    <Authenticator variation="modal">
       {({ signOut = () => {}, user }) => {
         if (!user) {
           return <div>Loading...</div>;
