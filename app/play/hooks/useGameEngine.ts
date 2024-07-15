@@ -55,31 +55,37 @@ const useGameEngine = () => {
       // Update the story's current_scene field
       await saveSceneIdToStory(fetchedScene.id || '', storyId);
 
-      // Fetch and set image asynchronously
       const story = await fetchStoryById(storyId);
-      if (!fetchedScene.image) {
-        const imageUrl = await getImage(fetchedScene.scene_description, story.time, weatherDescriptions[story.weather as keyof typeof weatherDescriptions]);
-        if (imageUrl) {
-          fetchedScene.image = imageUrl;
-          await saveScene(fetchedScene);
-          setScene(prevScene => prevScene ? { ...prevScene, image: imageUrl } : prevScene);
-        }
-      }
 
-      // Fetch and set audio asynchronously
-      if (!fetchedScene.audio) {
-        const audioUrl = await getAudio(fetchedScene.primary_text);
-        if (audioUrl) {
-          fetchedScene.audio = audioUrl;
-          await saveScene(fetchedScene);
-          setScene(prevScene => prevScene ? { ...prevScene, audio: audioUrl } : prevScene);
-          setAudioLoaded(true); // Mark audio as loaded
+      // Concurrently fetch and set image and audio
+      const fetchImagePromise = (async () => {
+        if (!fetchedScene.image) {
+          const imageUrl = await getImage(fetchedScene.scene_description, story.time, weatherDescriptions[story.weather as keyof typeof weatherDescriptions]);
+          if (imageUrl) {
+            fetchedScene.image = imageUrl;
+            await saveScene(fetchedScene);
+            setScene(prevScene => prevScene ? { ...prevScene, image: imageUrl } : prevScene);
+          }
+        }
+      })();
+
+      const fetchAudioPromise = (async () => {
+        if (!fetchedScene.audio) {
+          const audioUrl = await getAudio(fetchedScene.primary_text);
+          if (audioUrl) {
+            fetchedScene.audio = audioUrl;
+            await saveScene(fetchedScene);
+            setScene(prevScene => prevScene ? { ...prevScene, audio: audioUrl } : prevScene);
+            setAudioLoaded(true); // Mark audio as loaded
+            setShowActions(true); // Show actions after audio has loaded
+          }
+        } else {
+          setAudioLoaded(true); // Audio is already set
           setShowActions(true); // Show actions after audio has loaded
         }
-      } else {
-        setAudioLoaded(true); // Audio is already set
-        setShowActions(true); // Show actions after audio has loaded
-      }
+      })();
+
+      await Promise.all([fetchImagePromise, fetchAudioPromise]);
     } catch (error) {
       console.error('Error fetching and setting scene:', error);
       setError(error instanceof Error ? error.message : "Unknown error fetching the scene.");
@@ -193,21 +199,28 @@ const useGameEngine = () => {
 
       setScene(createdScene as Scene);
 
-      const imageUrl = await getImage(createdScene.scene_description, newTime, weatherDescriptions[newWeather as keyof typeof weatherDescriptions]);
-      if (imageUrl) {
-        createdScene.image = imageUrl;
-        await saveScene(createdScene as Scene);
-        setScene(prevScene => prevScene ? { ...prevScene, image: imageUrl } : prevScene);
-      }
+      // Concurrently fetch and set image and audio
+      const fetchImagePromise = (async () => {
+        const imageUrl = await getImage(createdScene.scene_description, newTime, weatherDescriptions[newWeather as keyof typeof weatherDescriptions]);
+        if (imageUrl) {
+          createdScene.image = imageUrl;
+          await saveScene(createdScene as Scene);
+          setScene(prevScene => prevScene ? { ...prevScene, image: imageUrl } : prevScene);
+        }
+      })();
 
-      const audioUrl = await getAudio(createdScene.primary_text);
-      if (audioUrl) {
-        createdScene.audio = audioUrl;
-        await saveScene(createdScene as Scene);
-        setScene(prevScene => prevScene ? { ...prevScene, audio: audioUrl } : prevScene);
-        setAudioLoaded(true); // Mark audio as loaded
-        setShowActions(true); // Show actions after audio has loaded
-      }
+      const fetchAudioPromise = (async () => {
+        const audioUrl = await getAudio(createdScene.primary_text);
+        if (audioUrl) {
+          createdScene.audio = audioUrl;
+          await saveScene(createdScene as Scene);
+          setScene(prevScene => prevScene ? { ...prevScene, audio: audioUrl } : prevScene);
+          setAudioLoaded(true); // Mark audio as loaded
+          setShowActions(true); // Show actions after audio has loaded
+        }
+      })();
+
+      await Promise.all([fetchImagePromise, fetchAudioPromise]);
 
       await fetchAndSetScene(createdScene.id, createdScene.story_id);
     } catch (error) {
