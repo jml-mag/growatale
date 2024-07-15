@@ -7,9 +7,9 @@
     @apply text-white bg-gradient-to-br from-black via-black to-gray-900 h-screen;
   }
   .gamescreen-component {
-    @apply bg-black bg-opacity-30 p-2 rounded-2xl;
+    @apply bg-black bg-opacity-40 p-2 rounded-2xl;
   }
   .gamescreen-button {
-    @apply bg-green-950 bg-opacity-75 hover:bg-opacity-90 text-white font-extralight text-xs border border-green-100 rounded-2xl px-2 w-20 h-14;
+    @apply bg-green-950 bg-opacity-75 hover:bg-opacity-90 text-white font-extralight text-xs border border-green-100 rounded-2xl px-2 w-20 h-20;
   }
 }

@@ -9,14 +9,14 @@ import useGameEngine from "@/app/play/hooks/useGameEngine";
 
 interface GameScreenProps {
   signOut: () => void;
-  user: any; // Replace with your user type if available
+  user: any;
   scene: Scene | null;
   onAction: (action: Action) => void;
 }
 
 /**
  * GameScreen component to display the game scene, handle actions, and play audio.
- * 
+ *
  * @param signOut - Function to sign out the user.
  * @param user - The current user object.
  * @param scene - The current game scene.
@@ -24,7 +24,7 @@ interface GameScreenProps {
  * @returns A React component to render the game screen.
  */
 const GameScreen: React.FC<GameScreenProps> = ({ signOut, user }) => {
-  const { scene, loading, error, audioLoaded, showActions, handlePlayerAction } = useGameEngine();
+  const { scene, showActions, handlePlayerAction } = useGameEngine();
   const [displayState, setDisplayState] = useState<Partial<Scene>>({});
   const [transitionText, setTransitionText] = useState<string>("");
   const [imageUrl, setImageUrl] = useState<string>("");
@@ -61,7 +61,7 @@ const GameScreen: React.FC<GameScreenProps> = ({ signOut, user }) => {
 
   /**
    * Fetches and sets the image URL for the scene.
-   * 
+   *
    * @param path - The path to the image file.
    */
   const fetchImage = async (path: string) => {
@@ -81,7 +81,7 @@ const GameScreen: React.FC<GameScreenProps> = ({ signOut, user }) => {
 
   /**
    * Fetches and sets the audio file for the scene.
-   * 
+   *
    * @param path - The path to the audio file.
    */
   const fetchAudio = async (path: string) => {
@@ -101,7 +101,7 @@ const GameScreen: React.FC<GameScreenProps> = ({ signOut, user }) => {
 
   /**
    * Handles player actions and updates the display state accordingly.
-   * 
+   *
    * @param action - The action taken by the player.
    */
   const handleAction = (action: Action) => {
@@ -117,7 +117,10 @@ const GameScreen: React.FC<GameScreenProps> = ({ signOut, user }) => {
   };
 
   return (
-    <div className="text-white w-full h-screen overflow-hidden" ref={constraintsRef}>
+    <div
+      className="text-white w-full h-screen overflow-hidden"
+      ref={constraintsRef}
+    >
       <div className="fixed top-0 left-0 w-full h-full -z-50">
         <AnimatePresence>
           {showImage && imageUrl && (
@@ -142,7 +145,7 @@ const GameScreen: React.FC<GameScreenProps> = ({ signOut, user }) => {
         <AnimatePresence>
           {showPrimary && (
             <motion.div
-              className={`${josefin_slab.className} text-lg gamescreen-component fixed left-2 top-2 max-h-72 overflow-y-auto sm:w-2/3 sm:left-1/2 sm:top-1/2 sm:transform sm:-translate-x-1/2 sm:-translate-y-1/2`}
+              className={`${josefin_slab.className} text-lg gamescreen-component overflow-y-auto sm:w-2/3 sm:left-1/2 sm:top-1/2 cursor-grab active:cursor-grabbing`}
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
@@ -181,19 +184,20 @@ const GameScreen: React.FC<GameScreenProps> = ({ signOut, user }) => {
           <div className="w-full flex justify-center">
             <div className="flex w-full max-w-sm justify-around">
               <AnimatePresence>
-                {showActions && displayState.actions_available?.map((action, index) => (
-                  <motion.button
-                    key={action.direction}
-                    onClick={() => handleAction(action)}
-                    className="gamescreen-button m-2 first-letter:uppercase"
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    exit={{ opacity: 0 }}
-                    transition={{ duration: 0.3 }}
-                  >
-                    {action.command_text}
-                  </motion.button>
-                ))}
+                {showActions &&
+                  displayState.actions_available?.map((action, index) => (
+                    <motion.button
+                      key={action.direction}
+                      onClick={() => handleAction(action)}
+                      className="gamescreen-button m-2 first-letter:uppercase"
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      exit={{ opacity: 0 }}
+                      transition={{ duration: 0.3 }}
+                    >
+                      {action.command_text}
+                    </motion.button>
+                  ))}
               </AnimatePresence>
             </div>
           </div>
