@@ -24,6 +24,7 @@ const Play = (): JSX.Element => {
   useEffect(() => {
     async function fetchPreviousGames() {
       try {
+        console.log("Fetching previous games for user:", user.username);
         const { data: stories, errors } = await client.models.Story.list({
           filter: { owner: { eq: user.username } },
         });
