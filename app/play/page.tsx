@@ -23,16 +23,19 @@ const Play = (): JSX.Element => {
 
   useEffect(() => {
     async function fetchPreviousGames() {
+      console.log(`Fetching previous games for user: ${user.username}`);
       try {
-        console.log("Fetching previous games for user:", user.username);
         const { data: stories, errors } = await client.models.Story.list({
           filter: { owner: { eq: user.username } },
         });
-        if (!errors) {
-          setPreviousGames(stories as Story[]);
-        } else {
+
+        if (errors) {
           console.error("Errors fetching games: ", errors);
+          return;
         }
+
+        const validStories = stories.filter((story) => story && story.id);
+        setPreviousGames(validStories as Story[]);
       } catch (error) {
         console.error("Error fetching previous games:", error);
       }
