@@ -1,3 +1,5 @@
+// @/app/play/types.ts
+
 /**
  * Represents an action available in a scene.
  */

@@ -1,3 +1,5 @@
+// @/app/play/components/GameScreen.tsx
+
 import { useEffect, useState, useRef } from "react";
 import { Scene, Action } from "@/app/play/types";
 import Image from "next/image";
@@ -14,39 +16,32 @@ interface GameScreenProps {
   onAction: (action: Action) => void;
 }
 
-/**
- * GameScreen component to display the game scene, handle actions, and play audio.
- *
- * @param signOut - Function to sign out the user.
- * @param user - The current user object.
- * @param scene - The current game scene.
- * @param onAction - Function to handle the player's actions.
- * @returns A React component to render the game screen.
- */
 const GameScreen: React.FC<GameScreenProps> = ({ signOut, user }) => {
   const { scene, showActions, handlePlayerAction } = useGameEngine();
   const [displayState, setDisplayState] = useState<Partial<Scene>>({});
   const [transitionText, setTransitionText] = useState<string>("");
-  const [imageUrl, setImageUrl] = useState<string>("");
+  const [imageUrl, setImageUrl] = useState<string | null>(null); // Ensure string | null
   const [audioFile, setAudioFile] = useState<File | null>(null);
   const [showPrimary, setShowPrimary] = useState(true);
   const [showTransition, setShowTransition] = useState(false);
   const [showAudio, setShowAudio] = useState(false);
   const [showImage, setShowImage] = useState(false);
   const constraintsRef = useRef(null);
+  const currentSceneRef = useRef<string | null>(null);
 
   useEffect(() => {
-    if (scene) {
+    if (scene && scene.id !== currentSceneRef.current) {
+      currentSceneRef.current = scene.id || null;
       setShowPrimary(!!scene.primary_text);
       setShowAudio(!!scene.audio);
       setShowImage(!!scene.image);
       setShowTransition(false); // Reset showTransition to false
 
+      setImageUrl(null); // Clear previous image
+      setAudioFile(null); // Clear previous audio
+
       const timer = setTimeout(() => {
-        setDisplayState((prev) => ({
-          ...prev,
-          ...scene,
-        }));
+        setDisplayState(scene);
         if (scene.image) {
           fetchImage(scene.image);
         }
@@ -59,51 +54,30 @@ const GameScreen: React.FC<GameScreenProps> = ({ signOut, user }) => {
     }
   }, [scene]);
 
-  /**
-   * Fetches and sets the image URL for the scene.
-   *
-   * @param path - The path to the image file.
-   */
   const fetchImage = async (path: string) => {
     try {
       const downloadResult = await downloadData({ path }).result;
       const blob = await downloadResult.body.blob();
       const blobUrl = URL.createObjectURL(blob);
       setImageUrl(blobUrl);
-      setDisplayState((prev) => ({
-        ...prev,
-        image: blobUrl,
-      }));
     } catch (error) {
       console.error("Error fetching image:", error);
+      setImageUrl(null); // Ensure imageUrl is either string or null
     }
   };
 
-  /**
-   * Fetches and sets the audio file for the scene.
-   *
-   * @param path - The path to the audio file.
-   */
   const fetchAudio = async (path: string) => {
     try {
       const downloadResult = await downloadData({ path }).result;
       const blob = await downloadResult.body.blob();
       const file = new File([blob], "audio-file.mp3", { type: "audio/mpeg" });
       setAudioFile(file);
-      setDisplayState((prev) => ({
-        ...prev,
-        audio: path,
-      }));
     } catch (error) {
       console.error("Error fetching audio:", error);
+      setAudioFile(null); // Ensure audioFile is either File or null
     }
   };
 
-  /**
-   * Handles player actions and updates the display state accordingly.
-   *
-   * @param action - The action taken by the player.
-   */
   const handleAction = (action: Action) => {
     setTransitionText(action.transition_text);
     setShowPrimary(false);

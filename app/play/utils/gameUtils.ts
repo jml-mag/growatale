@@ -1,8 +1,10 @@
+// @/app/play/utils/gameUtils.ts
+
 import { generateClient } from "aws-amplify/data";
 import { Schema } from "@/amplify/data/resource";
 import { Scene, Story, Action } from "@/app/play/types";
 import gameSettings from "@/app/play/gameSettings";
-import { downloadData } from "@aws-amplify/storage";
+import { downloadData, remove } from "@aws-amplify/storage";
 
 const client = generateClient<Schema>();
 
@@ -243,4 +245,44 @@ export const incrementTime = (time: string) => {
   return `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')} ${newMeridiem}`;
 };
 
-export { initializeGame, saveStateToScene, saveSceneIdToStory, saveScene, fetchStoryById, fetchSceneById, fetchImage, fetchAudio };
+/**
+ * Deletes all assets associated with a story before deleting the story itself.
+ * 
+ * @param storyId - The ID of the story to be deleted.
+ */
+async function deleteStoryWithAssets(storyId: string): Promise<void> {
+  try {
+    // Fetch all scenes associated with the story
+    const { data: scenes, errors: sceneErrors } = await client.models.Scene.list({
+      filter: { story_id: { eq: storyId } },
+    });
+
+    if (sceneErrors) {
+      console.error("Errors fetching scenes:", sceneErrors);
+      return;
+    }
+
+    // Delete all images and audio files associated with each scene
+    if (scenes) {
+      for (const scene of scenes) {
+        if (scene.image) {
+          await remove({ path: scene.image });
+        }
+        if (scene.audio) {
+          await remove({ path: scene.audio });
+        }
+
+        // Delete the scene itself
+        await client.models.Scene.delete({ id: scene.id });
+      }
+    }
+
+    // Finally, delete the story
+    await client.models.Story.delete({ id: storyId });
+    console.log(`Story ${storyId} and its assets have been deleted successfully.`);
+  } catch (error) {
+    console.error("Error deleting story and its assets:", error);
+  }
+}
+
+export { initializeGame, saveStateToScene, saveSceneIdToStory, saveScene, fetchStoryById, fetchSceneById, fetchImage, fetchAudio,deleteStoryWithAssets };
