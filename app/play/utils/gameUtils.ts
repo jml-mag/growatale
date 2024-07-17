@@ -129,41 +129,63 @@ const fetchSceneById = async (sceneId: string): Promise<Scene> => {
 };
 
 const initializeGame = async (username: string): Promise<{ gameId: string, sceneData: Scene }> => {
+  // Define newStory with all required fields
   const newStory: Story = {
     owner: username,
-    author: gameSettings.author,
-    artist: gameSettings.artist,
-    time: gameSettings.time,
-    weather: 1, // Set initial weather to sunny
+    author: gameSettings.author || "Edgar Allan Poe",
+    artist: gameSettings.artist || "A master of Realism",
+    time: gameSettings.time || "12:00 PM",
+    weather: 1,
     current_scene: "",
     player_health: 100,
-    player_inventory: [],
+    player_inventory: [], // Assuming an empty inventory is a valid initial state
   };
+
+  // Log the newStory object
+  console.log('Creating new story with data:', newStory);
 
   try {
     const { data: storyData, errors: storyErrors } = await client.models.Story.create(newStory);
+
+    // Log the response data and errors
+    console.log('Story creation response data:', storyData);
+    if (storyErrors) {
+      console.error('Story creation errors:', storyErrors);
+    }
+
     if (!storyErrors && storyData) {
       const gameId = storyData.id;
 
       const initialScene: Scene = {
-        image: "",
-        audio: "",
-        actions_available: [], // Ensure actions_available is of type Action[]
+        image: "", // Ensure this is correctly populated
+        audio: "", // Ensure this is correctly populated
+        actions_available: [], // Initial actions, assuming empty is valid
         primary_text: "",
-        scene_description: gameSettings.starting_scene_description,
+        scene_description: gameSettings.starting_scene_description || "Default scene description",
         previous_scene: "",
         story_id: gameId,
       };
 
-      const { data: sceneData, errors: sceneErrors } = await client.models.Scene.create(initialScene);
-      if (!sceneErrors && sceneData) {
-        await saveSceneIdToStory(sceneData.id, gameId);
+      // Log the initialScene object
+      console.log('Creating initial scene with data:', initialScene);
 
-        return { gameId, sceneData: sceneData as Scene };
-      } else {
+      // Validate that all required fields are not null or undefined
+      for (const [key, value] of Object.entries(initialScene)) {
+        if (value === null || value === undefined) {
+          console.error(`Error: Required field ${key} is null or undefined in initialScene.`);
+          throw new Error(`Required field ${key} is null or undefined in initialScene.`);
+        }
+      }
+
+      const { data: sceneData, errors: sceneErrors } = await client.models.Scene.create(initialScene);
+      if (sceneErrors || !sceneData) {
         console.error("Error creating new scene:", sceneErrors);
         throw new Error("Error creating new scene");
       }
+
+      await saveSceneIdToStory(sceneData.id, gameId);
+
+      return { gameId, sceneData: sceneData as Scene };
     } else {
       console.error("Error creating new story:", storyErrors);
       throw new Error("Error creating new story");
@@ -177,6 +199,8 @@ const initializeGame = async (username: string): Promise<{ gameId: string, scene
     throw error;
   }
 };
+
+
 
 export const weatherDescriptions = {
   1: "sunny",
@@ -215,7 +239,7 @@ export const adjustWeather = (currentWeather: number) => {
 export const convertTimeToNumber = (time: string) => {
   const [timePart, meridiem] = time.split(' ');
   let [hours, minutes] = timePart.split(':').map(Number);
-  
+
   if (meridiem === 'PM' && hours !== 12) {
     hours += 12;
   } else if (hours === 12 && meridiem === 'AM') {
@@ -285,4 +309,4 @@ async function deleteStoryWithAssets(storyId: string): Promise<void> {
   }
 }
 
-export { initializeGame, saveStateToScene, saveSceneIdToStory, saveScene, fetchStoryById, fetchSceneById, fetchImage, fetchAudio,deleteStoryWithAssets };
+export { initializeGame, saveStateToScene, saveSceneIdToStory, saveScene, fetchStoryById, fetchSceneById, fetchImage, fetchAudio, deleteStoryWithAssets };
