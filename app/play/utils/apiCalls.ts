@@ -1,13 +1,7 @@
-import { uploadData } from '@aws-amplify/storage';
-import gameSettings from '@/app/play/gameSettings';
+// @/app/play/utils/apiCalls.ts
 
-/**
- * Saves a Blob to S3 and returns the URL.
- * @param blob The Blob to save.
- * @param contentType The content type of the Blob.
- * @param path The path where the file will be stored in S3.
- * @returns The URL of the saved file.
- */
+import { uploadData } from '@aws-amplify/storage';
+
 export async function saveBlobToS3(blob: Blob, contentType: string, path: string): Promise<string> {
   try {
     const result = uploadData({
@@ -23,16 +17,9 @@ export async function saveBlobToS3(blob: Blob, contentType: string, path: string
   }
 }
 
-/**
- * Fetches an image from the API, saves it to S3, and returns the URL.
- * @param prompt The prompt for the image generation.
- * @param time The current time.
- * @param weather The current weather description.
- * @returns The URL of the saved image file.
- */
-export async function getImage(prompt: string, time: string, weather: string): Promise<string | null> {
+export async function getImage(prompt: string, time: string, weather: string, settings: any): Promise<string | null> {
   try {
-    const adjustedPrompt = `In the style of ${gameSettings.artist}, create an image that shows ${prompt}. The scene should reflect the time ${time} and the weather ${weather}.`;
+    const adjustedPrompt = `In the style of ${settings.artist}, create an image that shows ${prompt}. The scene should reflect the time ${time} and the weather ${weather}.`;
     const response = await fetch("/api/openai/image", {
       method: "POST",
       headers: {
@@ -40,12 +27,12 @@ export async function getImage(prompt: string, time: string, weather: string): P
       },
       body: JSON.stringify({
         prompt: adjustedPrompt,
-        model: gameSettings.image_ai,
+        model: settings.image_ai,
         n: 1,
-        size: gameSettings.image_size,
-        quality: gameSettings.image_quality,
-        style: gameSettings.image_style,
-        response_format: gameSettings.image_response_format,
+        size: settings.image_size,
+        quality: settings.image_quality,
+        style: settings.image_style,
+        response_format: settings.image_response_format,
       }),
     });
 
@@ -56,7 +43,6 @@ export async function getImage(prompt: string, time: string, weather: string): P
     const arrayBuffer = await response.arrayBuffer();
     const blob = new Blob([arrayBuffer], { type: 'image/png' });
 
-    // Save to S3 and return the storage URL
     const imageUrl = await saveBlobToS3(blob, "image/png", `images/${Date.now()}.png`);
     return imageUrl;
 
@@ -66,12 +52,7 @@ export async function getImage(prompt: string, time: string, weather: string): P
   }
 }
 
-/**
- * Fetches audio from the API, saves it to S3, and returns the URL.
- * @param text The text to convert to audio.
- * @returns The URL of the saved audio file.
- */
-export async function getAudio(text: string): Promise<string | null> {
+export async function getAudio(text: string, settings: any): Promise<string | null> {
   try {
     const response = await fetch("/api/openai/audio", {
       method: "POST",
@@ -80,7 +61,7 @@ export async function getAudio(text: string): Promise<string | null> {
       },
       body: JSON.stringify({
         text,
-        model: "tts-1-hd",
+        model: settings.audio_ai,
         voice: "nova",
         response_format: "mp3",
         speed: 1,
@@ -94,12 +75,10 @@ export async function getAudio(text: string): Promise<string | null> {
     const responseData = await response.json();
     const base64Audio = responseData.audio_base64;
 
-    // Ensure base64 string is valid
     if (!base64Audio || base64Audio.length % 4 !== 0) {
       throw new Error('Invalid base64 string');
     }
 
-    // Convert base64 to Blob
     const byteCharacters = atob(base64Audio);
     const byteNumbers = new Array(byteCharacters.length);
     for (let i = 0; i < byteCharacters.length; i++) {
@@ -108,7 +87,6 @@ export async function getAudio(text: string): Promise<string | null> {
     const byteArray = new Uint8Array(byteNumbers);
     const audioBlob = new Blob([byteArray], { type: 'audio/mpeg' });
 
-    // Save to S3 and return the storage URL
     const audioUrl = await saveBlobToS3(audioBlob, "audio/mpeg", `audio/${Date.now()}.mp3`);
     return audioUrl;
   } catch (error) {

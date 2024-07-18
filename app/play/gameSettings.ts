@@ -1,3 +1,5 @@
+// @/app/play/gameSettings.ts
+
 /**
  * Interface for defining the game settings.
  */

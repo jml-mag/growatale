@@ -1,3 +1,5 @@
+// @/app/play/components/GameScreen.tsx
+
 import { useEffect, useState, useRef } from "react";
 import Image from "next/image";
 import AudioPlayer from "@/app/play/components/AudioPlayer";

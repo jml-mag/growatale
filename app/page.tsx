@@ -1,3 +1,5 @@
+// @/app/page.tsx
+
 "use client";
 import { Amplify } from "aws-amplify";
 import Link from "next/link";

@@ -1,7 +1,6 @@
 // @/app/play/utils/generateContent.ts
 
 import { Scene } from "@/app/play/types";
-import gameSettings from "@/app/play/gameSettings";
 import { fetchStoryById, weatherDescriptions } from "@/app/play/utils/gameUtils";
 
 /**
@@ -10,11 +9,12 @@ import { fetchStoryById, weatherDescriptions } from "@/app/play/utils/gameUtils"
  * @param scene - The current scene object.
  * @param previousPrimaryText - The primary text of the previous scene.
  * @param previousSceneChoice - The player's choice in the previous scene.
+ * @param settings - The settings object containing game configuration.
  * @returns A promise that resolves to the generated scene.
  */
-export async function createScene(scene: Scene, previousPrimaryText: string, previousSceneChoice: string) {
-    let getPrompt = await generatePrompt(scene, previousPrimaryText, previousSceneChoice);
-    const generatedScene = await makePrimaryCall(getPrompt);
+export async function createScene(scene: Scene, previousPrimaryText: string, previousSceneChoice: string, settings: any) {
+    const prompt = await generatePrompt(scene, previousPrimaryText, previousSceneChoice, settings);
+    const generatedScene = await makePrimaryCall(prompt, settings);
     return generatedScene;
 }
 
@@ -22,15 +22,16 @@ export async function createScene(scene: Scene, previousPrimaryText: string, pre
  * Makes a call to the primary AI service to generate a new scene based on the provided prompt.
  * 
  * @param prompt - The prompt to send to the AI service.
+ * @param settings - The settings object containing game configuration.
  * @returns A promise that resolves to the parsed data from the AI service response.
  */
-async function makePrimaryCall(prompt: any) {
+async function makePrimaryCall(prompt: any, settings: any) {
     const response = await fetch("/api/openai/primary", {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
         },
-        body: JSON.stringify({ prompt: prompt[0].content, model: gameSettings.primary_ai, messages: prompt }),
+        body: JSON.stringify({ prompt: prompt[0].content, model: settings.primary_ai, messages: prompt }),
     });
     const data = await response.json();
     const parsedData = JSON.parse(data.message);
@@ -43,24 +44,25 @@ async function makePrimaryCall(prompt: any) {
  * @param scene - The current scene object.
  * @param previousPrimaryText - The primary text of the previous scene.
  * @param previousSceneChoice - The player's choice in the previous scene.
+ * @param settings - The settings object containing game configuration.
  * @returns A promise that resolves to the generated prompt.
  */
-async function generatePrompt(scene: Scene, previousPrimaryText: string, previousSceneChoice: string) {
+async function generatePrompt(scene: Scene, previousPrimaryText: string, previousSceneChoice: string, settings: any) {
     let sceneDescription: string;
     let backOption: string;
     if (scene.previous_scene !== "") {
         sceneDescription = `${previousPrimaryText} and the player chose ${previousSceneChoice}`;
         backOption = "Additionally, include a 'back' option using the value 'back' in the response, allowing the player to return to the previous location.";
     } else {
-        sceneDescription = gameSettings.starting_scene_description;
+        sceneDescription = settings.starting_scene_description;
         backOption = "This scene should not offer the player a 'go back' option, as it is the starting location of the game.";
     }
 
-    let genre = gameSettings.genre;
-    let time = gameSettings.time;
-    let weather = weatherDescriptions[gameSettings.weather as keyof typeof weatherDescriptions];
-    let age = gameSettings.age;
-    let writer = gameSettings.writer;
+    let genre = settings.genre;
+    let time = settings.time;
+    let weather = weatherDescriptions[settings.weather as keyof typeof weatherDescriptions];
+    let age = settings.age;
+    let writer = settings.writer;
 
     // Override with Story values if available
     if (scene.story_id) {
@@ -74,7 +76,6 @@ async function generatePrompt(scene: Scene, previousPrimaryText: string, previou
     const dataShapePrompt = `The Story should describe the surroundings and options to the player. The scene description will be used by an AI image generator to create a visualization of the story from the player's first-person, ground level perspective. It must be detailed and vivid and the weather is ${weather} at ${time} where sunrise is at 7AM and sunset at 7PM. This should ALWAYS be a single image in full color, always feature at least one path for the player to move in, and be under 750 characters. The player options should only include directions explicitly mentioned in the scene description.${backOption} 'Player_options' should be structured as an object with a 'directions' key which should be an array containing the direction and a 'command text' (limited to three words maximum) which will explain the option to the player, and a 'transition_text' key. There should always be at least one option and no more than three options returned including the 'back' option. The transition_text should describe the action of moving in that direction always prefaced with the player taking that action, ie. "You move...", keeping these texts to one or two sentences. The JSON object structure must include 'story', 'scene_description', and 'player_options', where 'player_options' contain 'directions' with all available directions the player can move, each including 'direction', 'command_text', and 'transition_text'.`;
 
     const prompt = `${foundationPrompt} ${dataShapePrompt}`;
-    console.log(`prompt: ${prompt}`);
     return [
         {
             role: "system",

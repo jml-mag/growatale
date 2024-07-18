@@ -12,11 +12,6 @@ import { Schema } from "@/amplify/data/resource";
 
 const client = generateClient<Schema>();
 
-/**
- * Play component that lists previous games and allows starting a new game.
- *
- * @returns {JSX.Element} The Play component.
- */
 const Play = (): JSX.Element => {
   const { signOut, user } = useAuth();
   const [previousGames, setPreviousGames] = useState<Story[]>([]);
@@ -50,9 +45,6 @@ const Play = (): JSX.Element => {
     }
   }, [user]);
 
-  /**
-   * Initializes a new game, creates an initial scene, and navigates to the game screen.
-   */
   const startStory = async (genre: string) => {
     if (!user || !user.username) {
       console.error("User not authenticated or username is undefined");
@@ -60,22 +52,16 @@ const Play = (): JSX.Element => {
     }
 
     try {
-      const { gameId } = await initializeGame(user.username, genre);
+      const { gameId, sceneData, settings } = await initializeGame(user.username, genre);
       router.push(`/play/${gameId}`);
     } catch (error) {
       console.error("Error starting story:", error);
     }
   };
 
-  /**
-   * Handles the deletion of a story and its assets.
-   * 
-   * @param storyId - The ID of the story to delete.
-   */
   const handleDelete = async (storyId: string) => {
     try {
       await deleteStoryWithAssets(storyId);
-      // Refresh the list of previous games after deletion
       setPreviousGames(previousGames.filter(game => game.id !== storyId));
     } catch (error) {
       console.error("Error deleting story:", error);
