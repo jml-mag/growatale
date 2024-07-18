@@ -28,8 +28,6 @@ const Play = (): JSX.Element => {
         console.error("User not authenticated or username is undefined");
         return;
       }
-
-      console.log(`Fetching previous games for user: ${user.username}`);
       try {
         const { data: stories, errors } = await client.models.Story.list({
           filter: { owner: { eq: user.username } },
@@ -55,14 +53,14 @@ const Play = (): JSX.Element => {
   /**
    * Initializes a new game, creates an initial scene, and navigates to the game screen.
    */
-  const startStory = async () => {
+  const startStory = async (genre: string) => {
     if (!user || !user.username) {
       console.error("User not authenticated or username is undefined");
       return;
     }
 
     try {
-      const { gameId } = await initializeGame(user.username);
+      const { gameId } = await initializeGame(user.username, genre);
       router.push(`/play/${gameId}`);
     } catch (error) {
       console.error("Error starting story:", error);
@@ -88,6 +86,8 @@ const Play = (): JSX.Element => {
     return <p>Loading...</p>;
   }
 
+  const genres = ["gothic horror", "science fiction", "western"];
+
   return (
     <div className="text-white">
       <div className="fixed top-0 right-0 p-4">
@@ -95,31 +95,34 @@ const Play = (): JSX.Element => {
           Sign Out
         </button>
       </div>
-      <button
-        onClick={startStory}
-        className="py-3 px-2 m-3 bg-green-600 text-green-50"
-      >
-        Start Story
-      </button>
-      <div>
-        {previousGames.length > 0 ? (
-          <ul>
-            {previousGames.map((game) => (
-              <li key={game.id} className="flex justify-between items-center">
-                <Link href={`/play/${game.id}`}>{game.id}</Link>
+      {genres.map((genre) => {
+        const genreStory = previousGames.find(game => game.genre === genre);
+        return (
+          <div key={genre} className="my-4 p-4 bg-gray-800 rounded-md">
+            <h2 className="text-2xl capitalize">{genre}</h2>
+            {genreStory ? (
+              <div className="flex justify-between items-center">
+                <Link href={`/play/${genreStory.id}`}>
+                  Continue {genre} Story
+                </Link>
                 <button
-                  onClick={() => handleDelete(game.id || "")}
+                  onClick={() => handleDelete(genreStory.id || "")}
                   className="ml-4 py-1 px-2 bg-red-600 text-white"
                 >
                   Delete
                 </button>
-              </li>
-            ))}
-          </ul>
-        ) : (
-          <p>No previous games found.</p>
-        )}
-      </div>
+              </div>
+            ) : (
+              <button
+                onClick={() => startStory(genre)}
+                className="py-2 px-4 mt-2 bg-green-600 text-green-50"
+              >
+                Start {genre} Story
+              </button>
+            )}
+          </div>
+        );
+      })}
     </div>
   );
 };

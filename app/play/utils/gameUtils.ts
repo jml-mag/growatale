@@ -128,27 +128,24 @@ const fetchSceneById = async (sceneId: string): Promise<Scene> => {
   }
 };
 
-const initializeGame = async (username: string): Promise<{ gameId: string, sceneData: Scene }> => {
+const initializeGame = async (username: string, genre:string): Promise<{ gameId: string, sceneData: Scene }> => {
   // Define newStory with all required fields
   const newStory: Story = {
     owner: username,
-    author: gameSettings.author || "Edgar Allan Poe",
-    artist: gameSettings.artist || "A master of Realism",
-    time: gameSettings.time || "12:00 PM",
+    author: gameSettings.author,
+    artist: gameSettings.artist,
+    time: gameSettings.time,
     weather: 1,
+    genre: gameSettings.genre,
     current_scene: "",
     player_health: 100,
     player_inventory: [], // Assuming an empty inventory is a valid initial state
   };
 
-  // Log the newStory object
-  console.log('Creating new story with data:', newStory);
-
   try {
     const { data: storyData, errors: storyErrors } = await client.models.Story.create(newStory);
 
     // Log the response data and errors
-    console.log('Story creation response data:', storyData);
     if (storyErrors) {
       console.error('Story creation errors:', storyErrors);
     }
@@ -165,9 +162,6 @@ const initializeGame = async (username: string): Promise<{ gameId: string, scene
         previous_scene: "",
         story_id: gameId,
       };
-
-      // Log the initialScene object
-      console.log('Creating initial scene with data:', initialScene);
 
       // Validate that all required fields are not null or undefined
       for (const [key, value] of Object.entries(initialScene)) {
@@ -303,7 +297,6 @@ async function deleteStoryWithAssets(storyId: string): Promise<void> {
 
     // Finally, delete the story
     await client.models.Story.delete({ id: storyId });
-    console.log(`Story ${storyId} and its assets have been deleted successfully.`);
   } catch (error) {
     console.error("Error deleting story and its assets:", error);
   }

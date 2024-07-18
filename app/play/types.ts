@@ -41,6 +41,7 @@ export interface Story {
   time: string;
   weather: number;
   author: string;
+  genre: string;
   artist: string;
   current_scene: string;
   player_health: number;

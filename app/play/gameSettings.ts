@@ -24,8 +24,6 @@ interface GameSettings {
  * Default game settings.
  */
 const gameSettings: GameSettings = {
-  author: "Edgar Allan Poe",
-  artist: "A master of Realism",
   primary_ai: "gpt-4o",
   audio_ai: "tts-1", // or "tts-1-hd"
   image_ai: "dall-e-3", // or "dall-e-2"
@@ -34,12 +32,15 @@ const gameSettings: GameSettings = {
   image_style: "vivid", // "natural", "vivid"
   image_response_format: "b64_json",
   player_inventory: [],
-  starting_scene_description: "Cobblestone streets, shrouded in a thick fog that muffles every sound. Gas lamps flicker weakly, their light barely piercing the mist. Tall, shadowy buildings loom on either side, their windows dark and unwelcoming. An old, weathered sign creaks above a nearby door, but its lettering is obscured by age and grime. The air is filled with the scent of damp earth and decaying wood, giving an eerie, unsettling feel.",
-  genre: "interactive mystery text games",
+  genre: "gothic horror",
   time: "12:00 PM",
   weather: 6, // Default to "cloudy"
-  age: 12,
+  age: 15,
   writer: "Edgar Allan Poe",
+  author: "Edgar Allan Poe",
+  artist: "A pulizer prize winning photographer using photographic equipment of the era",
+  starting_scene_description: "The inner harbor of Baltimore, Maryland, in the year 1849. The site in Baltimore is the Inner Harbor.",
+  
 };
 
 export default gameSettings;

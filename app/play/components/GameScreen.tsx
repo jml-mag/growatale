@@ -73,7 +73,7 @@ const GameScreen: React.FC<GameScreenProps> = ({ signOut, user, scene, handlePla
         <AnimatePresence>
           {showPrimary && (
             <motion.div
-              className={`${josefin_slab.className} text-lg gamescreen-component overflow-y-auto sm:w-2/3 sm:left-1/2 sm:top-1/2 cursor-grab active:cursor-grabbing`}
+              className={`${josefin_slab.className} text-lg gamescreen-component overflow-y-auto w-10/12 m-auto sm:w-2/3 sm:left-1/2 sm:top-1/2 cursor-grab active:cursor-grabbing`}
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}

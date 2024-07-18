@@ -32,14 +32,6 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
       return NextResponse.json({ error: 'Error parsing OpenAI response' }, { status: 500 });
     }
 
-    const story = parsedContent.story || 'No story provided';
-    const sceneDescription = parsedContent.scene_description || 'No description provided';
-    const playerOptions = parsedContent.player_options || { directions: [] };
-
-    console.log('Story:', story);
-    console.log('Description:', sceneDescription);
-    console.log('Options:', playerOptions);
-
     return NextResponse.json({ message: textContent });
   } catch (error: any) {
     console.error('OpenAI API call error:', error);

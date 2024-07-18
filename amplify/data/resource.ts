@@ -33,10 +33,11 @@ const schema = a.schema({
     weather: a.integer().required(),
     author: a.string().required(),
     artist: a.string().required(),
+    genre: a.string().required(),
     current_scene: a.string().required(),
     player_health: a.integer().required(),
     player_inventory: a.ref('Inventory').array(),
-    scenes: a.hasMany('Scene', 'story_id'), // Reflects that a Story has many Scenes
+    scenes: a.hasMany('Scene', 'story_id'),
   }).authorization(allow => [
     allow.owner(),
   ]),
