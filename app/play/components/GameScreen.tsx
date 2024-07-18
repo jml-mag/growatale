@@ -1,80 +1,78 @@
 // @/app/play/components/GameScreen.tsx
 
 import { useEffect, useState, useRef } from "react";
-import { Scene, Action } from "@/app/play/types";
 import Image from "next/image";
 import { downloadData } from "aws-amplify/storage";
 import AudioPlayer from "@/app/play/components/AudioPlayer";
+import { Scene, Action } from "@/app/play/types";
 import { josefin_slab } from "@/app/fonts";
 import { motion, AnimatePresence } from "framer-motion";
-import useGameEngine from "@/app/play/hooks/useGameEngine";
 
 interface GameScreenProps {
   signOut: () => void;
   user: any;
   scene: Scene | null;
-  onAction: (action: Action) => void;
+  handlePlayerAction: (action: Action) => void;
+  showActions: boolean;
 }
 
-const GameScreen: React.FC<GameScreenProps> = ({ signOut, user }) => {
-  const { scene, showActions, handlePlayerAction } = useGameEngine();
+const GameScreen: React.FC<GameScreenProps> = ({ signOut, user, scene, handlePlayerAction, showActions }) => {
   const [displayState, setDisplayState] = useState<Partial<Scene>>({});
   const [transitionText, setTransitionText] = useState<string>("");
-  const [imageUrl, setImageUrl] = useState<string | null>(null); // Ensure string | null
+  const [imageFile, setImageFile] = useState<File | null>(null);
   const [audioFile, setAudioFile] = useState<File | null>(null);
   const [showPrimary, setShowPrimary] = useState(true);
   const [showTransition, setShowTransition] = useState(false);
   const [showAudio, setShowAudio] = useState(false);
   const [showImage, setShowImage] = useState(false);
-  const constraintsRef = useRef(null);
+  const constraintsRef = useRef<HTMLDivElement | null>(null);
   const currentSceneRef = useRef<string | null>(null);
 
   useEffect(() => {
     if (scene && scene.id !== currentSceneRef.current) {
       currentSceneRef.current = scene.id || null;
+      resetState();
+      setDisplayState(scene);
       setShowPrimary(!!scene.primary_text);
-      setShowAudio(!!scene.audio);
-      setShowImage(!!scene.image);
-      setShowTransition(false); // Reset showTransition to false
-
-      setImageUrl(null); // Clear previous image
-      setAudioFile(null); // Clear previous audio
-
-      const timer = setTimeout(() => {
-        setDisplayState(scene);
-        if (scene.image) {
-          fetchImage(scene.image);
-        }
-        if (scene.audio) {
-          fetchAudio(scene.audio);
-        }
-      }, 1000); // Transition time
-
-      return () => clearTimeout(timer);
+      if (scene.image) fetchImage(scene.image);
+      if (scene.audio) fetchAudio(scene.audio);
     }
   }, [scene]);
 
+  const resetState = () => {
+    setShowPrimary(false);
+    setShowTransition(false);
+    setShowAudio(false);
+    setShowImage(false);
+    setImageFile(null);
+    setAudioFile(null);
+  };
+
   const fetchImage = async (path: string) => {
     try {
-      const downloadResult = await downloadData({ path }).result;
-      const blob = await downloadResult.body.blob();
-      const blobUrl = URL.createObjectURL(blob);
-      setImageUrl(blobUrl);
+      const downloadResult = await downloadData({ path });
+      const blob = await (await downloadResult.result).body.blob();
+      const file = new File([blob], "image-file.png", { type: blob.type });
+      setImageFile(file);
+      setShowImage(true);
     } catch (error) {
       console.error("Error fetching image:", error);
-      setImageUrl(null); // Ensure imageUrl is either string or null
+      setImageFile(null);
+      setShowImage(false);
     }
   };
 
   const fetchAudio = async (path: string) => {
     try {
-      const downloadResult = await downloadData({ path }).result;
-      const blob = await downloadResult.body.blob();
-      const file = new File([blob], "audio-file.mp3", { type: "audio/mpeg" });
+      const downloadResult = await downloadData({ path });
+      const blob = await (await downloadResult.result).body.blob();
+      const file = new File([blob], "audio-file.mp3", { type: blob.type });
       setAudioFile(file);
+      setShowAudio(true);
     } catch (error) {
       console.error("Error fetching audio:", error);
-      setAudioFile(null); // Ensure audioFile is either File or null
+      setAudioFile(null);
+      setShowAudio(false);
     }
   };
 
@@ -91,13 +89,10 @@ const GameScreen: React.FC<GameScreenProps> = ({ signOut, user }) => {
   };
 
   return (
-    <div
-      className="text-white w-full h-screen overflow-hidden"
-      ref={constraintsRef}
-    >
+    <div className="text-white w-full h-screen overflow-hidden" ref={constraintsRef}>
       <div className="fixed top-0 left-0 w-full h-full -z-50">
         <AnimatePresence>
-          {showImage && imageUrl && (
+          {showImage && imageFile && (
             <motion.div
               className="fixed w-full h-screen object-fill"
               initial={{ opacity: 0 }}
@@ -106,7 +101,7 @@ const GameScreen: React.FC<GameScreenProps> = ({ signOut, user }) => {
               transition={{ duration: 2 }}
             >
               <Image
-                src={imageUrl}
+                src={URL.createObjectURL(imageFile)}
                 alt="Scene Image"
                 fill
                 style={{ objectFit: "cover" }}
@@ -159,7 +154,7 @@ const GameScreen: React.FC<GameScreenProps> = ({ signOut, user }) => {
             <div className="flex w-full max-w-sm justify-around">
               <AnimatePresence>
                 {showActions &&
-                  displayState.actions_available?.map((action, index) => (
+                  displayState.actions_available?.map((action) => (
                     <motion.button
                       key={action.direction}
                       onClick={() => handleAction(action)}
