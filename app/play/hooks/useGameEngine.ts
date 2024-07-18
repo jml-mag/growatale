@@ -1,40 +1,32 @@
 // @/app/play/hooks/useGameEngine.ts
 
-import { useState, useEffect, useCallback, use } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { generateClient } from "aws-amplify/data";
 import { Schema } from "@/amplify/data/resource";
 import { Scene, Action } from "@/app/play/types";
 import { fetchStoryById, fetchSceneById, saveScene, saveSceneIdToStory, incrementTime, adjustWeather, weatherDescriptions } from "@/app/play/utils/gameUtils";
 import { createScene } from "@/app/play/utils/generateContent";
 import { getImage, getAudio } from "@/app/play/utils/apiCalls";
+import { downloadData } from "aws-amplify/storage";
 
 const client = generateClient<Schema>();
 
-/**
- * Custom hook for managing the game engine.
- * 
- * @returns An object containing the current scene, loading state, error message, audio loaded state, show actions state, and a function to handle player actions.
- */
-const useGameEngine = (gameId:any) => {
+const useGameEngine = (gameId: any) => {
   const [scene, setScene] = useState<Scene | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
-  const [audioLoaded, setAudioLoaded] = useState<boolean>(false);
+  const [audioFile, setAudioFile] = useState<File | null>(null);
+  const [imageFile, setImageFile] = useState<File | null>(null);
   const [showActions, setShowActions] = useState<boolean>(false);
 
   const fetchAndSetScene = async (sceneId: string, storyId: string) => {
     try {
-      console.log('Starting fetchAndSetScene', { sceneId, storyId });
-
-      setAudioLoaded(false); // Reset audio loaded status
-      setShowActions(false); // Hide actions when fetching a new scene
+      setShowActions(false);
       setLoading(true);
 
       let fetchedScene = await fetchSceneById(sceneId);
-      console.log('Fetched scene:', fetchedScene);
 
       if (!fetchedScene.primary_text && fetchedScene.actions_available.length === 0) {
-        console.log('Generating new content...');
         const generatedContent = await createScene(fetchedScene, '', '');
         fetchedScene = {
           ...fetchedScene,
@@ -67,16 +59,26 @@ const useGameEngine = (gameId:any) => {
             fetchedScene.audio = audioUrl;
             await saveScene(fetchedScene);
             setScene(prevScene => prevScene ? { ...prevScene, audio: audioUrl } : prevScene);
-            setAudioLoaded(true); // Mark audio as loaded
-            setShowActions(true); // Show actions after audio has loaded
+            setShowActions(true);
           }
         } else {
-          setAudioLoaded(true); // Audio is already set
-          setShowActions(true); // Show actions after audio has loaded
+          setShowActions(true);
         }
       })();
 
       await Promise.all([fetchImagePromise, fetchAudioPromise]);
+
+      if (fetchedScene.image) {
+        const downloadResult = await downloadData({ path: fetchedScene.image });
+        const blob = await (await downloadResult.result).body.blob();
+        setImageFile(new File([blob], "image-file.png", { type: blob.type }));
+      }
+
+      if (fetchedScene.audio) {
+        const downloadResult = await downloadData({ path: fetchedScene.audio });
+        const blob = await (await downloadResult.result).body.blob();
+        setAudioFile(new File([blob], "audio-file.mp3", { type: blob.type }));
+      }
     } catch (error) {
       console.error('Error fetching and setting scene:', error);
       setError(error instanceof Error ? error.message : "Unknown error fetching the scene.");
@@ -86,17 +88,12 @@ const useGameEngine = (gameId:any) => {
   };
 
   useEffect(() => {
-    console.log(`scene: ${JSON.stringify(scene, null, 2)}`);
-  }, [scene]);
-
-  useEffect(() => {
     if (!gameId) return;
 
     const fetchCurrentScene = async () => {
       setLoading(true);
       try {
         const story = await fetchStoryById(gameId);
-        console.log(`Fetched story: ${JSON.stringify(story, null, 2)}`);
         await fetchAndSetScene(story.current_scene, gameId);
       } catch (error) {
         console.error('Error fetching current scene:', error);
@@ -111,7 +108,6 @@ const useGameEngine = (gameId:any) => {
   const handlePlayerAction = useCallback(async (action: Action) => {
     if (!scene || !scene.id) return;
     setLoading(true);
-    setAudioLoaded(false);
     setShowActions(false);
 
     try {
@@ -206,12 +202,23 @@ const useGameEngine = (gameId:any) => {
           createdScene.audio = audioUrl;
           await saveScene(createdScene as Scene);
           setScene(prevScene => prevScene ? { ...prevScene, audio: audioUrl } : prevScene);
-          setAudioLoaded(true);
           setShowActions(true);
         }
       })();
 
       await Promise.all([fetchImagePromise, fetchAudioPromise]);
+
+      if (createdScene.image) {
+        const downloadResult = await downloadData({ path: createdScene.image });
+        const blob = await (await downloadResult.result).body.blob();
+        setImageFile(new File([blob], "image-file.png", { type: blob.type }));
+      }
+
+      if (createdScene.audio) {
+        const downloadResult = await downloadData({ path: createdScene.audio });
+        const blob = await (await downloadResult.result).body.blob();
+        setAudioFile(new File([blob], "audio-file.mp3", { type: blob.type }));
+      }
 
       await fetchAndSetScene(createdScene.id, createdScene.story_id);
     } catch (error) {
@@ -222,7 +229,7 @@ const useGameEngine = (gameId:any) => {
     }
   }, [scene, gameId]);
 
-  return { scene, loading, error, audioLoaded, showActions, handlePlayerAction };
+  return { scene, loading, error, audioFile, imageFile, showActions, handlePlayerAction };
 };
 
 export default useGameEngine;

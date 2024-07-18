@@ -1,8 +1,5 @@
-// @/app/play/components/GameScreen.tsx
-
 import { useEffect, useState, useRef } from "react";
 import Image from "next/image";
-import { downloadData } from "aws-amplify/storage";
 import AudioPlayer from "@/app/play/components/AudioPlayer";
 import { Scene, Action } from "@/app/play/types";
 import { josefin_slab } from "@/app/fonts";
@@ -14,17 +11,15 @@ interface GameScreenProps {
   scene: Scene | null;
   handlePlayerAction: (action: Action) => void;
   showActions: boolean;
+  audioFile: File | null;
+  imageFile: File | null;
 }
 
-const GameScreen: React.FC<GameScreenProps> = ({ signOut, user, scene, handlePlayerAction, showActions }) => {
+const GameScreen: React.FC<GameScreenProps> = ({ signOut, user, scene, handlePlayerAction, showActions, audioFile, imageFile }) => {
   const [displayState, setDisplayState] = useState<Partial<Scene>>({});
   const [transitionText, setTransitionText] = useState<string>("");
-  const [imageFile, setImageFile] = useState<File | null>(null);
-  const [audioFile, setAudioFile] = useState<File | null>(null);
   const [showPrimary, setShowPrimary] = useState(true);
   const [showTransition, setShowTransition] = useState(false);
-  const [showAudio, setShowAudio] = useState(false);
-  const [showImage, setShowImage] = useState(false);
   const constraintsRef = useRef<HTMLDivElement | null>(null);
   const currentSceneRef = useRef<string | null>(null);
 
@@ -34,54 +29,18 @@ const GameScreen: React.FC<GameScreenProps> = ({ signOut, user, scene, handlePla
       resetState();
       setDisplayState(scene);
       setShowPrimary(!!scene.primary_text);
-      if (scene.image) fetchImage(scene.image);
-      if (scene.audio) fetchAudio(scene.audio);
     }
   }, [scene]);
 
   const resetState = () => {
     setShowPrimary(false);
     setShowTransition(false);
-    setShowAudio(false);
-    setShowImage(false);
-    setImageFile(null);
-    setAudioFile(null);
-  };
-
-  const fetchImage = async (path: string) => {
-    try {
-      const downloadResult = await downloadData({ path });
-      const blob = await (await downloadResult.result).body.blob();
-      const file = new File([blob], "image-file.png", { type: blob.type });
-      setImageFile(file);
-      setShowImage(true);
-    } catch (error) {
-      console.error("Error fetching image:", error);
-      setImageFile(null);
-      setShowImage(false);
-    }
-  };
-
-  const fetchAudio = async (path: string) => {
-    try {
-      const downloadResult = await downloadData({ path });
-      const blob = await (await downloadResult.result).body.blob();
-      const file = new File([blob], "audio-file.mp3", { type: blob.type });
-      setAudioFile(file);
-      setShowAudio(true);
-    } catch (error) {
-      console.error("Error fetching audio:", error);
-      setAudioFile(null);
-      setShowAudio(false);
-    }
   };
 
   const handleAction = (action: Action) => {
     setTransitionText(action.transition_text);
     setShowPrimary(false);
     setShowTransition(true);
-    setShowAudio(false);
-    setShowImage(false);
 
     setTimeout(() => {
       handlePlayerAction(action);
@@ -92,7 +51,7 @@ const GameScreen: React.FC<GameScreenProps> = ({ signOut, user, scene, handlePla
     <div className="text-white w-full h-screen overflow-hidden" ref={constraintsRef}>
       <div className="fixed top-0 left-0 w-full h-full -z-50">
         <AnimatePresence>
-          {showImage && imageFile && (
+          {imageFile && (
             <motion.div
               className="fixed w-full h-screen object-fill"
               initial={{ opacity: 0 }}
@@ -120,7 +79,12 @@ const GameScreen: React.FC<GameScreenProps> = ({ signOut, user, scene, handlePla
               exit={{ opacity: 0 }}
               transition={{ duration: 2.5 }}
               drag
-              dragConstraints={constraintsRef}
+              dragConstraints={{
+                top: -0.9 * window.innerHeight,
+                bottom: 0.9 * window.innerHeight,
+                left: -0.9 * window.innerWidth,
+                right: 0.9 * window.innerWidth,
+              }}
               dragElastic={0.2}
               dragMomentum={false}
             >
@@ -137,7 +101,7 @@ const GameScreen: React.FC<GameScreenProps> = ({ signOut, user, scene, handlePla
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              transition={{ duration: 2.5 }}
+              transition={{ duration: 5 }}
               onAnimationComplete={() => {
                 setTransitionText("");
                 setShowTransition(false);
@@ -174,7 +138,7 @@ const GameScreen: React.FC<GameScreenProps> = ({ signOut, user, scene, handlePla
         <div className="w-full sm:w-1/2 sm:order-first">
           <div className="w-full flex justify-center">
             <AnimatePresence>
-              {showAudio && audioFile && (
+              {audioFile && (
                 <motion.div
                   className="audio-player-wrapper"
                   initial={{ opacity: 0, y: 100 }}
