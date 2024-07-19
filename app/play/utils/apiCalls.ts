@@ -19,7 +19,8 @@ export async function saveBlobToS3(blob: Blob, contentType: string, path: string
 
 export async function getImage(prompt: string, time: string, weather: string, settings: any): Promise<string | null> {
   try {
-    const adjustedPrompt = `In the style of ${settings.artist}, create an image that shows ${prompt}. The scene should reflect the time ${time} and the weather ${weather}.`;
+    
+    const adjustedPrompt = `You are ${settings.artist}, create ${settings.artMedium} that shows ${prompt}. The location is ${settings.geography} The scene should reflect the time ${time} and the weather ${weather} as well as the ${settings.year}.`;
     const response = await fetch("/api/openai/image", {
       method: "POST",
       headers: {

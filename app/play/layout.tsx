@@ -1,12 +1,13 @@
 // app/play/layout.tsx
 
-'use client';
+"use client";
 
 import { Authenticator } from "@aws-amplify/ui-react";
 import { Amplify } from "aws-amplify";
 import "@aws-amplify/ui-react/styles.css";
 import outputs from "@/amplify_outputs.json";
 import { AuthProvider } from "@/context/AuthContext";
+import { MessagingProvider } from "@/context/MessagingContext";
 
 Amplify.configure(outputs);
 
@@ -22,7 +23,7 @@ export default function Layout({
 
         return (
           <AuthProvider signOut={signOut} user={user}>
-            {children}
+            <MessagingProvider messages={{}}>{children}</MessagingProvider>
           </AuthProvider>
         );
       }}

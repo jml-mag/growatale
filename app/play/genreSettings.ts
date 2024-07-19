@@ -6,9 +6,11 @@ interface GenreSettings {
     weather: number;
     time: string;
     artist: string;
+    artMedium: string;
     starting_scene_description: string;
     genre: string;
-    
+    year: number;
+    geography: string;
   }
   
   const genreSettings: { [key: string]: GenreSettings } = {
@@ -18,8 +20,11 @@ interface GenreSettings {
       weather: 6,
       time: "12:00 PM",
       artist: "A Pulitzer prize-winning photographer using photographic equipment of the era",
-      starting_scene_description: "The inner harbor of Baltimore, Maryland, in the year 1849. The site in Baltimore is the Inner Harbor.",
-      genre: "gothic horror"
+      starting_scene_description: "The Inner Harbor.",
+      genre: "gothic horror",
+      artMedium: "Daguerreotype photograph",
+      year: 1849,
+      geography: "Baltimore"
     },
     "science fiction": {
       author: "Isaac Asimov",
@@ -27,8 +32,11 @@ interface GenreSettings {
       weather: 1,
       time: "08:00 AM",
       artist: "A futuristic digital artist",
-      starting_scene_description: "A bustling spaceport on a distant planet in the year 3024.",
-      genre: "science fiction"
+      starting_scene_description: "A bustling spaceport.",
+      genre: "science fiction",
+      artMedium: "90's Cyberpunk graphic novel image",
+      year: 2054,
+      geography: "Earth"
     },
     "western": {
       author: "Louis L'Amour",
@@ -36,8 +44,11 @@ interface GenreSettings {
       weather: 4,
       time: "03:00 PM",
       artist: "A classic western landscape painter",
-      starting_scene_description: "A dusty frontier town in the American West during the late 1800s.",
-      genre: "western"
+      starting_scene_description: "A mining town.",
+      genre: "western",
+      artMedium: "Oil painting",
+      year: 1880,
+      geography: "The Colorado Western Slope"
     }
   };
   
