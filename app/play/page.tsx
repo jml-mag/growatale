@@ -92,7 +92,7 @@ const Play = (): JSX.Element => {
   return (
     <div className="text-white">
       <div className="fixed top-0 right-0 p-4">
-        <button onClick={signOut} className="py-2 px-4 bg-red-600 text-white">
+        <button onClick={signOut} className="py-2 px-4 bg-black text-white border border-white">
           Sign Out
         </button>
       </div>
@@ -103,7 +103,7 @@ const Play = (): JSX.Element => {
             return (
               <div
                 key={name}
-                className="w-10/12 m-auto sm:w-1/3 sm:flex-shrink-0 sm:m-2"
+                className="w-3/4 mt-4 mb-12 m-auto sm:w-1/3 sm:flex-shrink-0 sm:m-2"
               >
                 <Image
                   src={image}
@@ -116,26 +116,26 @@ const Play = (): JSX.Element => {
                 {genreStory ? (
                   <div className="mt-2 text-center">
                     <Link href={`/play/${genreStory.id}`}>
-                      <button className="py-2 px-4 bg-blue-600 text-white">
+                      <button className="py-2 px-4 bg-blue-600 rounded-lg text-white">
                         Continue Story
                       </button>
                     </Link>
-                    <p className="mt-2">
+                    <p className="mt-6 text-sm">
                       To start a new story for {name}, you must delete the
                       existing one.
                     </p>
                     <button
                       onClick={() => handleDelete(genreStory.id || "")}
-                      className="mt-2 py-1 px-2 bg-red-600 text-white"
+                      className="mt-2 py-1 px-2 bg-red-600 text-white font-light"
                     >
-                      Delete
+                      Delete This Story
                     </button>
                   </div>
                 ) : (
                   <div className="text-center">
                     <button
                       onClick={() => startStory(name)}
-                      className="mt-2 py-2 px-4 bg-green-600 text-white"
+                      className="mt-2 py-2 px-4 rounded-lg bg-green-600 text-white font-light"
                     >
                       New Story
                     </button>
