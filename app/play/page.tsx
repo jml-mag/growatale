@@ -1,14 +1,22 @@
 // @/app/play/page.tsx
 
-'use client';
+"use client";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import Image from "next/image";
 import { useAuth } from "@/context/AuthContext";
-import { initializeGame, deleteStoryWithAssets } from "@/app/play/utils/gameUtils";
+import {
+  initializeGame,
+  deleteStoryWithAssets,
+} from "@/app/play/utils/gameUtils";
 import { Story } from "@/app/play/types";
 import { generateClient } from "aws-amplify/data";
 import { Schema } from "@/amplify/data/resource";
+
+import GothicHorror from "@/public/gothichorror.webp";
+import ScienceFiction from "@/public/sciencefiction.webp";
+import Western from "@/public/western.webp";
 
 const client = generateClient<Schema>();
 
@@ -52,7 +60,10 @@ const Play = (): JSX.Element => {
     }
 
     try {
-      const { gameId, sceneData, settings } = await initializeGame(user.username, genre);
+      const { gameId, sceneData, settings } = await initializeGame(
+        user.username,
+        genre
+      );
       router.push(`/play/${gameId}`);
     } catch (error) {
       console.error("Error starting story:", error);
@@ -62,7 +73,7 @@ const Play = (): JSX.Element => {
   const handleDelete = async (storyId: string) => {
     try {
       await deleteStoryWithAssets(storyId);
-      setPreviousGames(previousGames.filter(game => game.id !== storyId));
+      setPreviousGames(previousGames.filter((game) => game.id !== storyId));
     } catch (error) {
       console.error("Error deleting story:", error);
     }
@@ -72,7 +83,11 @@ const Play = (): JSX.Element => {
     return <p>Loading...</p>;
   }
 
-  const genres = ["gothic horror", "science fiction", "western"];
+  const genres = [
+    { name: "gothic horror", image: GothicHorror },
+    { name: "science fiction", image: ScienceFiction },
+    { name: "western", image: Western },
+  ];
 
   return (
     <div className="text-white">
@@ -81,34 +96,56 @@ const Play = (): JSX.Element => {
           Sign Out
         </button>
       </div>
-      {genres.map((genre) => {
-        const genreStory = previousGames.find(game => game.genre === genre);
-        return (
-          <div key={genre} className="my-4 p-4 bg-gray-800 rounded-md">
-            <h2 className="text-2xl capitalize">{genre}</h2>
-            {genreStory ? (
-              <div className="flex justify-between items-center">
-                <Link href={`/play/${genreStory.id}`}>
-                  Continue {genre} Story
-                </Link>
-                <button
-                  onClick={() => handleDelete(genreStory.id || "")}
-                  className="ml-4 py-1 px-2 bg-red-600 text-white"
-                >
-                  Delete
-                </button>
-              </div>
-            ) : (
-              <button
-                onClick={() => startStory(genre)}
-                className="py-2 px-4 mt-2 bg-green-600 text-green-50"
+      <div className="container mx-auto">
+        <div className="mt-24 flex flex-col sm:flex-row sm:justify-center sm:space-x-4">
+          {genres.map(({ name, image }) => {
+            const genreStory = previousGames.find((game) => game.genre === name);
+            return (
+              <div
+                key={name}
+                className="w-10/12 m-auto sm:w-1/3 sm:flex-shrink-0 sm:m-2"
               >
-                Start {genre} Story
-              </button>
-            )}
-          </div>
-        );
-      })}
+                <Image
+                  src={image}
+                  alt={`${name} image`}
+                  layout="responsive"
+                  width={200}
+                  height={300}
+                  className="mx-auto"
+                />
+                {genreStory ? (
+                  <div className="mt-2 text-center">
+                    <Link href={`/play/${genreStory.id}`}>
+                      <button className="py-2 px-4 bg-blue-600 text-white">
+                        Continue Story
+                      </button>
+                    </Link>
+                    <p className="mt-2">
+                      To start a new story for {name}, you must delete the
+                      existing one.
+                    </p>
+                    <button
+                      onClick={() => handleDelete(genreStory.id || "")}
+                      className="mt-2 py-1 px-2 bg-red-600 text-white"
+                    >
+                      Delete
+                    </button>
+                  </div>
+                ) : (
+                  <div className="text-center">
+                    <button
+                      onClick={() => startStory(name)}
+                      className="mt-2 py-2 px-4 bg-green-600 text-white"
+                    >
+                      New Story
+                    </button>
+                  </div>
+                )}
+              </div>
+            );
+          })}
+        </div>
+      </div>
     </div>
   );
 };
