@@ -39,16 +39,16 @@ export default function Home() {
           priority
         />
       </motion.div>
-      <main className="flex flex-col items-center justify-center">
-        <div className="w-full sm:w-auto sm:mr-4">
+      <main className="flex flex-col sm:flex-row items-center justify-center">
+        <div className="w-1/2 sm:w-auto sm:mr-8">
           <Image
-            className="pt-12 sm:pt-0 mx-auto sm:ml-0"
+            className="mx-auto"
             src={logo}
             alt="Grow A Tale logo"
           />
         </div>
         <motion.div
-          className="sm:mt-8 text-center text-white text-3xl sm:text-4xl md:text-6xl font-extrabold px-7 py-3 sm:py-4 border-2 border-white rounded-3xl bg-stone-950 bg-opacity-60 inline-block hover:text-sky-100 hover:border-sky-300"
+          className="mt-8 sm:mt-0 text-center text-white text-3xl sm:text-4xl md:text-6xl font-extrabold px-7 py-3 sm:py-4 border-2 border-white rounded-3xl bg-stone-950 bg-opacity-60 inline-block hover:text-sky-100 hover:border-sky-300"
           initial="hidden"
           animate="visible"
           variants={buttonVariants}

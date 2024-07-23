@@ -118,7 +118,7 @@ const Play = (): JSX.Element => {
             return (
               <div
                 key={name}
-                className={`w-3/4 mt-4 mb-12 m-auto sm:w-1/3 sm:flex-shrink-0 sm:m-2 shadow-lg shadow-blue-300 bg-blue-950 bg-opacity-50 pb-4`}
+                className={`rounded-3xl w-3/4 mt-4 mb-12 m-auto sm:w-1/3 sm:flex-shrink-0 sm:m-2 shadow-lg shadow-blue-300 bg-blue-950 bg-opacity-50 pb-4`}
               >
                 <Image
                   src={image}
@@ -126,7 +126,7 @@ const Play = (): JSX.Element => {
                   layout="responsive"
                   width={200}
                   height={300}
-                  className="mx-auto"
+                  className="mx-auto rounded-t-3xl border-t-2 border-blue-200"
                 />
                 {genreStory ? (
                   <div className="mt-4 text-center">
