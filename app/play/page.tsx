@@ -118,14 +118,13 @@ const Play = (): JSX.Element => {
             return (
               <div
                 key={name}
-                className={`rounded-3xl w-3/4 mt-4 mb-12 m-auto sm:w-1/3 sm:flex-shrink-0 sm:m-2 shadow-lg shadow-blue-300 bg-blue-950 bg-opacity-50 pb-4`}
+                className={`rounded-3xl w-3/4 mt-4 mb-12 m-auto sm:w-1/3 sm:flex-shrink-0 sm:m-2 shadow-lg shadow-blue-300 hover:shadow-sky-300 bg-blue-950 hover:bg-sky-700 bg-opacity-50 hover:bg-opacity-30 pb-4`}
               >
                 <Image
                   src={image}
                   alt={`${name} image`}
-                  layout="responsive"
-                  width={200}
-                  height={300}
+                  style={{ objectFit: "cover" }}
+                  priority
                   className="mx-auto rounded-t-3xl border-t-2 border-blue-200"
                 />
                 {genreStory ? (
@@ -135,7 +134,7 @@ const Play = (): JSX.Element => {
                         Continue Story
                       </button>
                     </Link>
-                    <p className={`mt-6 text-sm`}>
+                    <p className={`text-sm p-4`}>
                       To start a new {name} story you must delete the existing
                       one.
                     </p>

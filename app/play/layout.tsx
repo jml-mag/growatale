@@ -32,8 +32,8 @@ export default function Layout({
                   <Image
                     src={playBg}
                     alt="Play background"
-                    layout="fill"
-                    objectFit="cover"
+                    fill
+                    style={{ objectFit: "cover" }}
                   />
                 </div>
                 {children}
