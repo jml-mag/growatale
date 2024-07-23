@@ -8,6 +8,9 @@ import "@aws-amplify/ui-react/styles.css";
 import outputs from "@/amplify_outputs.json";
 import { AuthProvider } from "@/context/AuthContext";
 import { MessagingProvider } from "@/context/MessagingContext";
+import Image from "next/image";
+
+import playBg from "@/public/play-bg.webp";
 
 Amplify.configure(outputs);
 
@@ -23,7 +26,19 @@ export default function Layout({
 
         return (
           <AuthProvider signOut={signOut} user={user}>
-            <MessagingProvider messages={{}}>{children}</MessagingProvider>
+            <MessagingProvider messages={{}}>
+              <div>
+                <div className="w-full h-screen fixed top-0 left-0 -z-50 opacity-25">
+                  <Image
+                    src={playBg}
+                    alt="Play background"
+                    layout="fill"
+                    objectFit="cover"
+                  />
+                </div>
+                {children}
+              </div>
+            </MessagingProvider>
           </AuthProvider>
         );
       }}

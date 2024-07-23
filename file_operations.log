@@ -1140,3 +1140,67 @@
 2024-07-18 16:16:51,640 - INFO - Appended content from context/AuthContext.tsx
 2024-07-18 16:16:51,640 - INFO - Searched through /Users/jmlima/Desktop/working/growatale/context
 2024-07-18 16:16:51,642 - INFO - Operation completed. All code written to current-code.txt
+2024-07-19 15:01:08,582 - INFO - Appended content from app/fonts.ts
+2024-07-19 15:01:08,582 - INFO - Appended content from app/layout.tsx
+2024-07-19 15:01:08,583 - INFO - Appended content from app/page.tsx
+2024-07-19 15:01:08,583 - INFO - Appended content from app/globals.css
+2024-07-19 15:01:08,583 - INFO - Appended content from app/api/openai/image/route.ts
+2024-07-19 15:01:08,583 - INFO - Appended content from app/api/openai/audio/route.ts
+2024-07-19 15:01:08,584 - INFO - Appended content from app/api/openai/primary/route.ts
+2024-07-19 15:01:08,584 - INFO - Appended content from app/play/types.ts
+2024-07-19 15:01:08,584 - INFO - Appended content from app/play/gameSettings.ts
+2024-07-19 15:01:08,584 - INFO - Appended content from app/play/genreSettings.ts
+2024-07-19 15:01:08,585 - INFO - Appended content from app/play/layout.tsx
+2024-07-19 15:01:08,585 - INFO - Appended content from app/play/baseSettings.ts
+2024-07-19 15:01:08,585 - INFO - Appended content from app/play/page.tsx
+2024-07-19 15:01:08,585 - INFO - Appended content from app/play/utils/generateContentBackup.ts
+2024-07-19 15:01:08,586 - INFO - Appended content from app/play/utils/apiCalls.ts
+2024-07-19 15:01:08,586 - INFO - Appended content from app/play/utils/generateContent.ts
+2024-07-19 15:01:08,586 - INFO - Appended content from app/play/utils/gameUtils.ts
+2024-07-19 15:01:08,587 - INFO - Appended content from app/play/components/AudioPlayer.tsx
+2024-07-19 15:01:08,587 - INFO - Appended content from app/play/components/GameScreen.tsx
+2024-07-19 15:01:08,587 - INFO - Appended content from app/play/hooks/useGameEngine.ts
+2024-07-19 15:01:08,587 - INFO - Appended content from app/play/[gameId]/layout.tsx
+2024-07-19 15:01:08,587 - INFO - Appended content from app/play/[gameId]/page.tsx
+2024-07-19 15:01:08,587 - INFO - Searched through /Users/jmlima/Desktop/working/growatale/app
+2024-07-19 15:01:08,588 - INFO - Appended content from context/AuthContext.tsx
+2024-07-19 15:01:08,588 - INFO - Appended content from context/MessagingContext.tsx
+2024-07-19 15:01:08,588 - INFO - Searched through /Users/jmlima/Desktop/working/growatale/context
+2024-07-19 15:01:08,588 - INFO - Appended content from amplify/backend.ts
+2024-07-19 15:01:08,588 - INFO - Appended content from amplify/auth/resource.ts
+2024-07-19 15:01:08,589 - INFO - Appended content from amplify/storage/resource.ts
+2024-07-19 15:01:08,589 - INFO - Appended content from amplify/data/resource.ts
+2024-07-19 15:01:08,589 - INFO - Searched through /Users/jmlima/Desktop/working/growatale/amplify
+2024-07-19 15:01:08,591 - INFO - Operation completed. All code written to current-code.txt
+2024-07-22 12:19:26,454 - INFO - Appended content from app/fonts.ts
+2024-07-22 12:19:26,454 - INFO - Appended content from app/layout.tsx
+2024-07-22 12:19:26,454 - INFO - Appended content from app/page.tsx
+2024-07-22 12:19:26,454 - INFO - Appended content from app/globals.css
+2024-07-22 12:19:26,455 - INFO - Appended content from app/api/openai/image/route.ts
+2024-07-22 12:19:26,455 - INFO - Appended content from app/api/openai/audio/route.ts
+2024-07-22 12:19:26,455 - INFO - Appended content from app/api/openai/primary/route.ts
+2024-07-22 12:19:26,455 - INFO - Appended content from app/play/types.ts
+2024-07-22 12:19:26,455 - INFO - Appended content from app/play/gameSettings.ts
+2024-07-22 12:19:26,456 - INFO - Appended content from app/play/genreSettings.ts
+2024-07-22 12:19:26,456 - INFO - Appended content from app/play/layout.tsx
+2024-07-22 12:19:26,456 - INFO - Appended content from app/play/baseSettings.ts
+2024-07-22 12:19:26,456 - INFO - Appended content from app/play/page.tsx
+2024-07-22 12:19:26,456 - INFO - Appended content from app/play/utils/generateContentBackup.ts
+2024-07-22 12:19:26,456 - INFO - Appended content from app/play/utils/apiCalls.ts
+2024-07-22 12:19:26,457 - INFO - Appended content from app/play/utils/generateContent.ts
+2024-07-22 12:19:26,457 - INFO - Appended content from app/play/utils/gameUtils.ts
+2024-07-22 12:19:26,457 - INFO - Appended content from app/play/components/AudioPlayer.tsx
+2024-07-22 12:19:26,457 - INFO - Appended content from app/play/components/GameScreen.tsx
+2024-07-22 12:19:26,457 - INFO - Appended content from app/play/hooks/useGameEngine.ts
+2024-07-22 12:19:26,457 - INFO - Appended content from app/play/[gameId]/layout.tsx
+2024-07-22 12:19:26,458 - INFO - Appended content from app/play/[gameId]/page.tsx
+2024-07-22 12:19:26,458 - INFO - Searched through /Users/jmlima/Desktop/working/growatale/app
+2024-07-22 12:19:26,458 - INFO - Appended content from context/AuthContext.tsx
+2024-07-22 12:19:26,458 - INFO - Appended content from context/MessagingContext.tsx
+2024-07-22 12:19:26,458 - INFO - Searched through /Users/jmlima/Desktop/working/growatale/context
+2024-07-22 12:19:26,458 - INFO - Appended content from amplify/backend.ts
+2024-07-22 12:19:26,458 - INFO - Appended content from amplify/auth/resource.ts
+2024-07-22 12:19:26,459 - INFO - Appended content from amplify/storage/resource.ts
+2024-07-22 12:19:26,459 - INFO - Appended content from amplify/data/resource.ts
+2024-07-22 12:19:26,459 - INFO - Searched through /Users/jmlima/Desktop/working/growatale/amplify
+2024-07-22 12:19:26,460 - INFO - Operation completed. All code written to current-code.txt

@@ -4,7 +4,7 @@
 
 @layer base {
   body {
-    @apply text-white bg-gradient-to-br from-black via-black to-gray-900 h-screen;
+    @apply text-white bg-black h-screen;
   }
   .gamescreen-component {
     @apply bg-black bg-opacity-40 p-2 rounded-2xl;

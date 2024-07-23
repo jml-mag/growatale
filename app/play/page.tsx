@@ -91,8 +91,8 @@ const Play = (): JSX.Element => {
 
   return (
     <div className="text-white">
-      <div className="fixed top-0 right-0 p-4">
-        <button onClick={signOut} className="py-2 px-4 bg-black text-white border border-white">
+      <div className="fixed top-0 right-0 p-4 bg-none">
+        <button onClick={signOut} className="py-2 px-4 bg-gradient-to-br from-red-700 to-red-950 via-red-500 text-white border border-red-600">
           Sign Out
         </button>
       </div>
@@ -135,9 +135,9 @@ const Play = (): JSX.Element => {
                   <div className="text-center">
                     <button
                       onClick={() => startStory(name)}
-                      className="mt-2 py-2 px-4 rounded-lg bg-green-600 text-white font-light"
+                      className="mt-2 py-2 px-4 rounded-lg bg-green-950 bg-opacity-95 border border-green-800 text-white font-light"
                     >
-                      New Story
+                      Begin a new {name} Story
                     </button>
                   </div>
                 )}
