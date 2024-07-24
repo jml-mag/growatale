@@ -104,7 +104,7 @@ const Play = (): JSX.Element => {
       <div className="fixed top-0 right-0 p-4 bg-none">
         <button
           onClick={signOut}
-          className="py-2 px-4 bg-gradient-to-br from-red-700 to-red-950 via-red-700 text-white border border-red-600 hover:from-red-600"
+          className="py-2 px-4 rounded bg-gradient-to-br from-red-700 to-red-950 via-red-700 text-white border border-red-600 hover:from-red-600"
         >
           Sign Out
         </button>
@@ -118,7 +118,7 @@ const Play = (): JSX.Element => {
             return (
               <div
                 key={name}
-                className={`rounded-3xl w-3/4 mt-4 mb-12 m-auto sm:w-1/3 sm:flex-shrink-0 sm:m-2 shadow-lg shadow-blue-300 hover:shadow-sky-300 bg-blue-950 hover:bg-sky-700 bg-opacity-50 hover:bg-opacity-30 pb-4`}
+                className={`rounded-3xl w-3/4 mt-4 mb-12 m-auto shadow-lg shadow-blue-300 hover:shadow-sky-300 bg-blue-950 hover:bg-sky-700 bg-opacity-50 hover:bg-opacity-30 pb-4`}
               >
                 <Image
                   src={image}
@@ -134,7 +134,7 @@ const Play = (): JSX.Element => {
                         Continue Story
                       </button>
                     </Link>
-                    <p className={`text-sm p-4`}>
+                    <p className={`text-sm mx-4 py-4`}>
                       To start a new {name} story you must delete the existing
                       one.
                     </p>

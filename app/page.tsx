@@ -36,7 +36,6 @@ export default function Home() {
           alt="Welcome to Grow a Tale"
           fill
           style={{ objectFit: "cover" }}
-          priority
         />
       </motion.div>
       <main className="flex flex-col sm:flex-row items-center justify-center">
@@ -45,6 +44,7 @@ export default function Home() {
             className="mx-auto"
             src={logo}
             alt="Grow A Tale logo"
+            priority
           />
         </div>
         <motion.div
