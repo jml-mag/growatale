@@ -4,13 +4,12 @@
 
 import { Authenticator } from "@aws-amplify/ui-react";
 import { Amplify } from "aws-amplify";
-import "@aws-amplify/ui-react/styles.css";
 import outputs from "@/amplify_outputs.json";
 import { AuthProvider } from "@/context/AuthContext";
 import { MessagingProvider } from "@/context/MessagingContext";
 import Image from "next/image";
-
 import playBg from "@/public/play-bg.webp";
+import "@aws-amplify/ui-react/styles.css";
 
 Amplify.configure(outputs);
 
@@ -21,9 +20,8 @@ export default function Layout({
     <Authenticator variation="modal" hideSignUp={true}>
       {({ signOut = () => {}, user }) => {
         if (!user) {
-          return <div>Loading...</div>;
+          return <div>creating story</div>;
         }
-
         return (
           <AuthProvider signOut={signOut} user={user}>
             <MessagingProvider messages={{}}>

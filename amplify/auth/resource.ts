@@ -5,7 +5,7 @@ export const auth = defineAuth({
     email: {
       verificationEmailStyle: "CODE",
       verificationEmailSubject: "Welcome to Grow A Tale",
-      verificationEmailBody: (createCode) => `Use this code to confirm your account: ${createCode()}`,
+      verificationEmailBody: (createCode) => `Use this code to confirm your Grow A Tale account: ${createCode()}`,
     },
   },
 });

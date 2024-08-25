@@ -14,8 +14,6 @@ import { Story } from "@/app/play/types";
 import { generateClient } from "aws-amplify/data";
 import { Schema } from "@/amplify/data/resource";
 import { motion } from "framer-motion";
-import { josefin_slab, inter } from "@/app/fonts";
-
 import GothicHorror from "@/public/gothichorror.webp";
 import ScienceFiction from "@/public/sciencefiction.webp";
 import Western from "@/public/western.webp";
