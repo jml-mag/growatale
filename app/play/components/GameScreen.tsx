@@ -26,93 +26,89 @@ const GameScreen: React.FC<GameScreenProps> = ({ scene, handlePlayerAction, show
   const [actionsVisible, setActionsVisible] = useState<boolean>(false);
   const [audioReady, setAudioReady] = useState<boolean>(false);
   const [readyForNewScene, setReadyForNewScene] = useState<boolean>(true);
+  const [newAudioReady, setNewAudioReady] = useState<boolean>(false);
+  const [newImageReady, setNewImageReady] = useState<boolean>(false);
   const currentSceneRef = useRef<string | null>(null);
 
   useEffect(() => {
     if (scene && scene.id !== currentSceneRef.current) {
-      console.log('New scene detected', { current: currentSceneRef.current, incoming: scene });
-
       if (readyForNewScene) {
         currentSceneRef.current = scene.id ?? null;
         resetState();
         setDisplayState(scene);
 
-        // Delay the rendering of the new primary text until the transition text is fully gone
         setTimeout(() => {
-          setShowPrimary(true); // Show the new text
-        }, 4500); // Ensures the primary text only renders after transition text fades out
+          setShowPrimary(true); // Show the new primary text
+        }, 4500); // Ensure primary text only renders after transition text fades out
 
-        // Delay to ensure text is rendered first
+        // Set audioReady after primary text is rendered
         setTimeout(() => {
-          setAudioReady(true); // Render audio first
-          console.log('Audio displayed');
+          setAudioReady(true); // Allow audio to render
         }, 5000);
 
         setTimeout(() => {
           setActionsVisible(true);
-          console.log('Buttons displayed');
         }, 5500);
 
         setTimeout(() => {
-          setImageLoaded(true);
-          console.log('Image displayed');
+          setImageLoaded(true); // Image renders independently when ready
         }, 6000);
       }
     }
   }, [scene, readyForNewScene]);
 
+  useEffect(() => {
+    if (audioFile) {
+      setNewAudioReady(true);
+    }
+  }, [audioFile]);
+
+  useEffect(() => {
+    if (imageFile) {
+      setNewImageReady(true);
+    }
+  }, [imageFile]);
+
   const resetState = () => {
-    // Reset visibility states
     setShowPrimary(false);
     setShowTransition(false);
     setImageLoaded(false);
     setActionsVisible(false);
     setAudioReady(false);
-    console.log('State reset');
+    setNewAudioReady(false);
+    setNewImageReady(false);
   };
 
   const handleAction = (action: Action) => {
-    // Handle graceful exit of the scene components
     setTransitionText(action.transition_text);
-    setShowPrimary(false); // Start fading out the primary text when transition begins
-    setActionsVisible(false); // Start hiding buttons
-    console.log('Buttons hidden for transition');
+    setShowPrimary(false);
+    setActionsVisible(false);
 
     setTimeout(() => {
       setAudioReady(false); // Hide audio after buttons are gone
-      console.log('Audio hidden for transition');
-    }, 500); // Delay between buttons and audio hiding
+    }, 500);
 
     setTimeout(() => {
       setImageLoaded(false); // Hide image after audio is gone
-      console.log('Image hidden for transition');
     }, 1000);
 
     setTimeout(() => {
-      // Display the transition text
-      setShowTransition(true);
-      console.log('Transition text displayed');
+      setShowTransition(true); // Display the transition text
     }, 1500);
 
     setTimeout(() => {
-      // Keep the transition text visible for 3 seconds before fading it out
-      setTimeout(() => {
-        setShowTransition(false); // Fade out the transition text
-        setTransitionText("");
-        setReadyForNewScene(true); // Indicate that it’s safe to render new content
-        console.log('Transition text hidden after delay, action processed:', action);
-      }, 3000); // 3-second delay
-
-      handlePlayerAction(action); // Process the action
-      setReadyForNewScene(false); // Prevent new content from rendering during the transition
-    }, 4500); // Total delay to ensure everything fades out smoothly
+      setShowTransition(false); // Fade out the transition text after 3 seconds
+      setTransitionText("");
+      setReadyForNewScene(true); // Indicate that it’s safe to render new content
+      handlePlayerAction(action);
+    }, 4500);
   };
 
   return (
     <div className="text-white w-full h-screen overflow-hidden">
       <div className="fixed top-0 left-0 w-full h-full -z-50">
         <AnimatePresence>
-          {imageFile && imageLoaded && (
+          {imageFile && imageLoaded && newImageReady && (
             <motion.div
               className="fixed w-full h-screen object-fill"
               initial={{ opacity: 0 }}
@@ -147,9 +143,8 @@ const GameScreen: React.FC<GameScreenProps> = ({ scene, handlePlayerAction, show
               }}
               dragElastic={0.2}
               dragMomentum={false}
-              onAnimationComplete={() => console.log('Text animation complete')}
             >
-              {displayState.primary_text || "Loading text..."}
+              {displayState.primary_text || "Loading text."}
             </motion.div>
           )}
         </AnimatePresence>
@@ -162,9 +157,6 @@ const GameScreen: React.FC<GameScreenProps> = ({ scene, handlePlayerAction, show
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0, transition: { duration: 5 } }}
-              onAnimationComplete={() => {
-                console.log('Transition text faded out');
-              }}
             >
               {transitionText}
             </motion.div>
@@ -176,19 +168,18 @@ const GameScreen: React.FC<GameScreenProps> = ({ scene, handlePlayerAction, show
           <div className="w-full flex justify-center">
             <div className="flex w-full max-w-sm justify-around">
               <AnimatePresence>
-                {actionsVisible && displayState.actions_available?.map((action) => (
-                    <motion.button
-                      key={action.direction}
-                      onClick={() => handleAction(action)}
-                      className="gamescreen-button m-2 first-letter:uppercase"
-                      initial={{ opacity: 0 }}
-                      animate={{ opacity: 1 }}
-                      exit={{ opacity: 0, transition: { duration: 0.3 } }}
-                      onAnimationComplete={() => console.log('Button animation complete', action)}
-                    >
-                      {action.command_text}
-                    </motion.button>
-                  ))}
+                {actionsVisible && audioReady && displayState.actions_available?.map((action) => (
+                  <motion.button
+                    key={action.direction}
+                    onClick={() => handleAction(action)}
+                    className="gamescreen-button m-2 first-letter:uppercase"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0, transition: { duration: 0.3 } }}
+                  >
+                    {action.command_text}
+                  </motion.button>
+                ))}
               </AnimatePresence>
             </div>
           </div>
@@ -196,13 +187,12 @@ const GameScreen: React.FC<GameScreenProps> = ({ scene, handlePlayerAction, show
         <div className="w-full sm:w-1/2 sm:order-first">
           <div className="w-full flex justify-center">
             <AnimatePresence>
-              {audioFile && audioReady && (
+              {audioFile && audioReady && newAudioReady && (
                 <motion.div
                   className="audio-player-wrapper"
                   initial={{ opacity: 0, y: 100 }}
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: 100, transition: { duration: 0.5 } }}
-                  onAnimationComplete={() => console.log('Audio animation complete')}
                 >
                   <AudioPlayer audioFile={audioFile} />
                 </motion.div>
