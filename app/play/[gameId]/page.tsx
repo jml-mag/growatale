@@ -2,7 +2,8 @@
 
 "use client";
 import { useAuth } from "@/context/AuthContext";
-import GameScreen from "@/app/play/components/GameScreen";
+//import GameScreen from "@/app/play/components/GameScreen";
+import GameScreen from "@/app/play/components/GameScreen2";
 import useGameEngine from "@/app/play/hooks/useGameEngine";
 import { usePathname } from "next/navigation";
 

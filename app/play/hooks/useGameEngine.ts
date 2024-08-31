@@ -24,9 +24,9 @@ const useGameEngine = (gameId: any) => {
     try {
       setShowActions(false);
       setLoading(true);
-  
+
       let fetchedScene = await fetchSceneById(sceneId);
-  
+
       if (!fetchedScene.primary_text && fetchedScene.actions_available.length === 0) {
         const generatedContent = await createScene(fetchedScene, '', '', settings);
         fetchedScene = {
@@ -36,18 +36,15 @@ const useGameEngine = (gameId: any) => {
         };
         await saveScene(fetchedScene);
       }
-  
+
       setScene(fetchedScene);
       await saveSceneIdToStory(fetchedScene.id || '', storyId);
-  
+
       const story = await fetchStoryById(storyId);
-  
-      console.log("Starting image and audio API calls...");
-  
+
       const fetchImagePromise = (async () => {
-        console.log("Image API call started...");
         const imageStartTime = Date.now();
-  
+
         if (!fetchedScene.image) {
           const imageUrl = await getImage(fetchedScene.scene_description, story.time, weatherDescriptions[story.weather as keyof typeof weatherDescriptions], settings);
           if (imageUrl) {
@@ -56,16 +53,14 @@ const useGameEngine = (gameId: any) => {
             setScene((prevScene: Scene | null) => prevScene ? { ...prevScene, image: imageUrl } : prevScene);
           }
         }
-  
+
         const imageEndTime = Date.now();
-        console.log(`Image API call finished. Duration: ${(imageEndTime - imageStartTime) / 1000} seconds`);
-  
+
       })();
-  
+
       const fetchAudioPromise = (async () => {
-        console.log("Audio API call started...");
         const audioStartTime = Date.now();
-  
+
         if (!fetchedScene.audio) {
           const audioUrl = await getAudio(fetchedScene.primary_text, settings);
           if (audioUrl) {
@@ -77,29 +72,26 @@ const useGameEngine = (gameId: any) => {
         } else {
           setShowActions(true);
         }
-  
+
         const audioEndTime = Date.now();
-        console.log(`Audio API call finished. Duration: ${(audioEndTime - audioStartTime) / 1000} seconds`);
-  
+
       })();
-  
+
       // Run both fetch operations concurrently
       await Promise.all([fetchImagePromise, fetchAudioPromise]);
-  
+
       if (fetchedScene.image) {
         const downloadResult = await downloadData({ path: fetchedScene.image });
         const blob = await (await downloadResult.result).body.blob();
         setImageFile(new File([blob], "image-file.png", { type: blob.type }));
       }
-  
+
       if (fetchedScene.audio) {
         const downloadResult = await downloadData({ path: fetchedScene.audio });
         const blob = await (await downloadResult.result).body.blob();
         setAudioFile(new File([blob], "audio-file.mp3", { type: blob.type }));
       }
-  
-      console.log("Both image and audio API calls completed.");
-  
+
     } catch (error) {
       console.error('Error fetching and setting scene:', error);
       setError(error instanceof Error ? error.message : "Unknown error fetching the scene.");
@@ -107,7 +99,7 @@ const useGameEngine = (gameId: any) => {
       setLoading(false);
     }
   }, []);
-  
+
 
   useEffect(() => {
     if (!gameId) return;
