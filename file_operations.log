@@ -149,3 +149,37 @@
 2024-08-30 11:22:46,426 - INFO - Appended content from app/play/[gameId]/page.tsx
 2024-08-30 11:22:46,426 - INFO - Searched through /Users/jmlima/Desktop/working/growatale/app/play
 2024-08-30 11:22:46,426 - INFO - Operation completed. All code written to current-code.txt
+2026-02-26 13:56:30,993 - INFO - Appended content from amplify/backend.ts
+2026-02-26 13:56:30,993 - INFO - Appended content from amplify/auth/resource.ts
+2026-02-26 13:56:30,993 - INFO - Appended content from amplify/storage/resource.ts
+2026-02-26 13:56:30,993 - INFO - Appended content from amplify/data/resource.ts
+2026-02-26 13:56:30,993 - INFO - Searched through /Users/jmlima/Desktop/growatale/amplify
+2026-02-26 13:56:30,994 - INFO - Appended content from app/fonts.ts
+2026-02-26 13:56:30,994 - INFO - Appended content from app/layout.tsx
+2026-02-26 13:56:30,994 - INFO - Appended content from app/page.tsx
+2026-02-26 13:56:30,994 - INFO - Appended content from app/globals.css
+2026-02-26 13:56:30,995 - INFO - Appended content from app/about/layout.tsx
+2026-02-26 13:56:30,995 - INFO - Appended content from app/about/page.tsx
+2026-02-26 13:56:30,995 - INFO - Appended content from app/api/openai/image/route.ts
+2026-02-26 13:56:30,995 - INFO - Appended content from app/api/openai/audio/route.ts
+2026-02-26 13:56:30,995 - INFO - Appended content from app/api/openai/primary/route.ts
+2026-02-26 13:56:30,995 - INFO - Appended content from app/play/types.ts
+2026-02-26 13:56:30,995 - INFO - Appended content from app/play/gameSettings.ts
+2026-02-26 13:56:30,995 - INFO - Appended content from app/play/genreSettings.ts
+2026-02-26 13:56:30,996 - INFO - Appended content from app/play/layout.tsx
+2026-02-26 13:56:30,996 - INFO - Appended content from app/play/baseSettings.ts
+2026-02-26 13:56:30,997 - INFO - Appended content from app/play/page.tsx
+2026-02-26 13:56:30,997 - INFO - Appended content from app/play/utils/apiCalls.ts
+2026-02-26 13:56:30,997 - INFO - Appended content from app/play/utils/generateContent.ts
+2026-02-26 13:56:30,997 - INFO - Appended content from app/play/utils/gameUtils.ts
+2026-02-26 13:56:30,997 - INFO - Appended content from app/play/components/AudioPlayer.tsx
+2026-02-26 13:56:30,998 - INFO - Appended content from app/play/components/GameScreen.tsx
+2026-02-26 13:56:30,998 - INFO - Appended content from app/play/components/GameScreen2.tsx
+2026-02-26 13:56:30,998 - INFO - Appended content from app/play/hooks/useGameEngine.ts
+2026-02-26 13:56:30,998 - INFO - Appended content from app/play/[gameId]/layout.tsx
+2026-02-26 13:56:30,999 - INFO - Appended content from app/play/[gameId]/page.tsx
+2026-02-26 13:56:30,999 - INFO - Searched through /Users/jmlima/Desktop/growatale/app
+2026-02-26 13:56:30,999 - INFO - Appended content from context/AuthContext.tsx
+2026-02-26 13:56:30,999 - INFO - Appended content from context/MessagingContext.tsx
+2026-02-26 13:56:30,999 - INFO - Searched through /Users/jmlima/Desktop/growatale/context
+2026-02-26 13:56:30,999 - INFO - Operation completed. All code written to growatale-code.txt
